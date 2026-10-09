@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Account · Finora</title>
+    <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { font-family: Poppins, sans-serif; color: #3a2e10; background: #fffdf4; }
+        * { box-sizing: border-box; }
+        body { margin: 0; }
+        main { width: min(100% - 28px, 460px); margin: 32px auto; }
+        header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+        header a { color: #8e6100; text-decoration: none; font-size: 14px; }
+        h1 { margin: 0; font-size: 23px; }
+        .card { background: #fff; border: 1px solid #f2e8c8; border-radius: 20px; padding: 20px; margin: 14px 0; }
+        .muted { color: #85764c; font-size: 13px; line-height: 1.6; }
+        .field { padding: 13px 0; border-bottom: 1px solid #f2e8c8; }
+        .field:last-child { border-bottom: 0; }
+        .label { color: #85764c; font-size: 12px; }
+        .value { margin-top: 3px; font-weight: 600; overflow-wrap: anywhere; }
+        .notice { background: #fff8df; border-radius: 12px; padding: 13px; }
+        .history { display:grid; gap:8px; }
+        .history-row { display:grid; grid-template-columns:1fr auto; gap:8px; padding:10px 0; border-bottom:1px solid #f2e8c8; font-size:12px; }
+        .history-row:last-child { border-bottom:0; }
+        .history-meta { color:#85764c; margin-top:3px; }
+        .status { border-radius:15px; padding:4px 8px; align-self:center; text-transform:capitalize; background:#fff1c2; color:#795000; font-size:11px; }
+        .status.approved { background:#dcfae6; color:#067647; }
+        .status.rejected { background:#fee4e2; color:#b42318; }
+        .empty { color:#85764c; font-size:13px; }
+        input { width:100%; padding:12px; border:1px solid #e4d6b0; border-radius:10px; font:inherit; margin:5px 0 12px; }
+        label { display:block; color:#85764c; font-size:12px; }
+        .button-link { display:inline-block; width:auto; padding:10px 16px; text-decoration:none; text-align:center; }
+        .product-row { padding:12px 0; border-bottom:1px solid #f2e8c8; }
+        .product-row:last-child { border-bottom:0; }
+        .product-row small { display:block; color:#85764c; margin-top:4px; }
+        button { width: 100%; padding: 14px; border: 0; border-radius: 24px; background: #d68f00; color: #fff; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
+        button:disabled { opacity: .6; cursor: wait; }
+        #status { min-height: 24px; color: #9a3600; font-size: 13px; }
+    </style>
+    <link rel="stylesheet" href="/assets/css/customer-ui.css">
+</head>
+<body>
+    <main>
+        <header>
+            <a href="/mine.html" aria-label="Back to profile">← Profile</a>
+            <h1>Account</h1>
+        </header>
+        <section class="card" aria-labelledby="profile-heading">
+            <h2 id="profile-heading">Profile details</h2>
+            <div class="field"><div class="label">Name</div><div class="value" id="name">Loading…</div></div>
+            <div class="field"><div class="label">Mobile number</div><div class="value" id="phone">Loading…</div></div>
+        </section>
+        <section class="card" id="bank-setup" aria-labelledby="bank-heading">
+            <h2 id="bank-heading">Bank account</h2>
+            <p class="muted notice">Bank details are encrypted when saved. Only masked details are shown here. Withdrawals are manually reviewed; this site does not send payouts automatically.</p>
+            <p class="muted" id="bankSummary">Loading bank setup…</p>
+            <form id="bankForm">
+                <label for="bankHolder">Account holder name</label><input id="bankHolder" maxlength="80" autocomplete="name" required>
+                <label for="bankName">Bank name</label><input id="bankName" maxlength="80" autocomplete="organization" required>
+                <label for="bankAccount">Account number (8–18 digits)</label><input id="bankAccount" inputmode="numeric" autocomplete="off" minlength="8" maxlength="18" pattern="[0-9]{8,18}" required>
+                <label for="bankIfsc">IFSC code</label><input id="bankIfsc" maxlength="11" autocapitalize="characters" autocomplete="off" pattern="[A-Za-z]{4}0[A-Za-z0-9]{6}" required>
+                <button id="saveBank" type="submit">Save encrypted bank details</button>
+            </form>
+            <p class="muted">To change saved details, enter the new account information. Details cannot be changed while a withdrawal is pending.</p>
+        </section>
+        <section class="card" aria-labelledby="wallet-heading">
+            <h2 id="wallet-heading">Wallet</h2>
+            <div class="field"><div class="label">Available balance</div><div class="value" id="walletBalance">Loading…</div></div>
+            <h3>Recent requests</h3>
+            <div class="history" id="walletHistory"><p class="empty">Loading…</p></div>
+            <h3>Product and mission requests</h3>
+            <div class="history" id="requestHistory"><p class="empty">Loading…</p></div>
+        </section>
+        <section class="card" id="my-products" aria-labelledby="products-heading">
+            <h2 id="products-heading">My products</h2>
+            <p class="muted">Purchased products activate immediately. Product listings do not promise returns or rewards.</p>
+            <div id="myProducts"><p class="empty">Loading…</p></div>
+            <a class="button-link" href="/home.html">Browse products</a>
+        </section>
+        <section class="card">
+            <button id="logout" type="button">Log out</button>
+            <p id="status" role="status" aria-live="polite"></p>
+        </section>
+    </main>
+    <script>
+        (async function() {
+            const status = document.getElementById("status");
+            try {
+                const response = await fetch("/api/session", { credentials: "include" });
+                if (!response.ok) {
+                    window.location.replace("/index.html");
+                    return;
+                }
+                const result = await response.json();
+                document.getElementById("name").textContent = result.user.name;
+                document.getElementById("phone").textContent = "+91 " + result.user.phone;
+                const walletResponse = await fetch("/api/wallet", { credentials:"include", cache:"no-store" });
+                if (!walletResponse.ok) throw new Error("Could not load wallet history.");
+                const wallet = await walletResponse.json();
+                document.getElementById("walletBalance").textContent =
+                    "₹" + (Math.max(0, wallet.balancePaise - wallet.pendingWithdrawalsPaise) / 100)
+                        .toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2});
+                const bankResponse = await fetch("/api/bank-account", {credentials:"include", cache:"no-store"});
+                if (!bankResponse.ok) throw new Error("Could not load bank setup.");
+                const bankResult = await bankResponse.json();
+                const bankSummary = document.getElementById("bankSummary");
+                if (bankResult.account) {
+                    document.getElementById("bankHolder").value = bankResult.account.holderName;
+                    document.getElementById("bankName").value = bankResult.account.bankName;
+                    document.getElementById("bankIfsc").value = bankResult.account.ifsc;
+                    bankSummary.textContent = bankResult.account.bankName + " · Account ending "
+                        + bankResult.account.accountLast4 + " · IFSC " + bankResult.account.ifsc;
+                } else {
+                    bankSummary.textContent = "No payout bank account saved yet.";
+                }
+                const history = document.getElementById("walletHistory");
+                if (!wallet.transactions.length) {
+                    history.innerHTML = '<p class="empty">No wallet requests yet.</p>';
+                } else {
+                    history.replaceChildren();
+                    wallet.transactions.forEach(function(transaction) {
+                        const row = document.createElement("div");
+                        row.className = "history-row";
+                        const summary = document.createElement("div");
+                        const title = document.createElement("strong");
+                        const transactionLabel = transaction.type === "adjustment"
+                            ? (transaction.amountPaise < 0 ? "Product purchase" : "Wallet adjustment")
+                            : transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1);
+                        title.textContent = transactionLabel + " · ₹" + (Math.abs(transaction.amountPaise) / 100)
+                            .toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2});
+                        const meta = document.createElement("div");
+                        meta.className = "history-meta";
+                        meta.textContent = transaction.createdAt + (transaction.note ? " · " + transaction.note : "");
+                        const status = document.createElement("span");
+                        status.className = "status " + transaction.status;
+                        status.textContent = transaction.status;
+                        summary.append(title, meta);
+                        row.append(summary, status);
+                        history.appendChild(row);
+                    });
+                }
+                const productsResponse = await fetch("/api/my-products", {credentials:"include", cache:"no-store"});
+                if (!productsResponse.ok) throw new Error("Could not load purchased products.");
+                const productsResult = await productsResponse.json();
+                const productList = document.getElementById("myProducts");
+                if (!productsResult.products.length) {
+                    productList.innerHTML = '<p class="empty">No products purchased yet.</p>';
+                } else {
+                    productList.replaceChildren();
+                    productsResult.products.forEach(function(product) {
+                        const row = document.createElement("div");
+                        row.className = "product-row";
+                        const title = document.createElement("strong");
+                        title.textContent = product.productName;
+                        const detail = document.createElement("small");
+                        detail.textContent = "₹" + (product.pricePaise / 100).toFixed(2)
+                            + " · " + product.durationDays + " days · " + product.status
+                            + " · Expires " + product.expiresAt;
+                        row.append(title, detail);
+                        productList.appendChild(row);
+                    });
+                }
+                const requests = document.getElementById("requestHistory");
+                if (!wallet.requests.length) {
+                    requests.innerHTML = '<p class="empty">No product or mission requests yet.</p>';
+                } else {
+                    requests.replaceChildren();
+                    wallet.requests.forEach(function(item) {
+                        const row = document.createElement("div");
+                        row.className = "history-row";
+                        const summary = document.createElement("div");
+                        const title = document.createElement("strong");
+                        title.textContent = item.type.charAt(0).toUpperCase() + item.type.slice(1)
+                            + " request · " + item.title + " · ₹" + (item.amountPaise / 100).toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2});
+                        const meta = document.createElement("div");
+                        meta.className = "history-meta";
+                        meta.textContent = item.createdAt + (item.note ? " · " + item.note : "");
+                        const status = document.createElement("span");
+                        status.className = "status " + item.status;
+                        status.textContent = item.status;
+                        summary.append(title, meta);
+                        row.append(summary, status);
+                        requests.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                status.textContent = "Could not load account details. Please refresh.";
+                console.error(error);
+            }
+        })();
+
+        document.getElementById("bankForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const button = document.getElementById("saveBank");
+            button.disabled = true;
+            try {
+                const csrfResponse = await fetch("/api/csrf", {credentials:"include"});
+                const csrf = await csrfResponse.json();
+                if (!csrfResponse.ok || !csrf.csrfToken) throw new Error("Refresh and sign in again before saving bank details.");
+                const response = await fetch("/api/bank-account", {
+                    method:"PUT", credentials:"include",
+                    headers:{"Content-Type":"application/json","X-CSRF-Token":csrf.csrfToken},
+                    body:JSON.stringify({
+                        holderName:document.getElementById("bankHolder").value,
+                        bankName:document.getElementById("bankName").value,
+                        accountNumber:document.getElementById("bankAccount").value,
+                        ifsc:document.getElementById("bankIfsc").value
+                    })
+                });
+                const result = await response.json();
+                if (!response.ok || !result.success) throw new Error(result.message || "Could not save bank details.");
+                document.getElementById("bankAccount").value = "";
+                document.getElementById("bankSummary").textContent = result.account.bankName
+                    + " · Account ending " + result.account.accountLast4 + " · IFSC " + result.account.ifsc;
+                status.textContent = result.message;
+            } catch (error) {
+                status.textContent = error.message;
+            } finally {
+                button.disabled = false;
+            }
+        });
+
+        document.getElementById("logout").addEventListener("click", async function() {
+            const button = this;
+            const status = document.getElementById("status");
+            button.disabled = true;
+            try {
+                const csrfResponse = await fetch("/api/csrf", { credentials: "include" });
+                const csrf = await csrfResponse.json();
+                if (!csrfResponse.ok || !csrf.csrfToken) {
+                    throw new Error(csrf.message || "Could not start a secure session.");
+                }
+                const response = await fetch("/api/logout", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "X-CSRF-Token": csrf.csrfToken }
+                });
+                const result = await response.json();
+                if (!response.ok || result.success !== true) {
+                    throw new Error(result.message || "Logout failed.");
+                }
+                window.location.replace("/index.html");
+            } catch (error) {
+                status.textContent = error.message || "Logout failed.";
+                button.disabled = false;
+                console.error(error);
+            }
+        });
+    </script>
+    <nav class="footer" aria-label="Main navigation">
+        <a href="/pages/home" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.5 11.6 12.9 4.7a1.5 1.5 0 0 0-1.8 0L2.5 11.6a.75.75 0 0 0 .94 1.17l.81-.65V21H3a.75.75 0 0 0 0 1.5h18a.75.75 0 0 0 0-1.5h-1.25v-8.88l.81.65a.75.75 0 0 0 .94-1.17Z"/></svg>Home</a>
+        <a href="/pages/invite" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-8 8a8 8 0 0 1 16 0v1H4v-1Zm15-9a3 3 0 1 0-2.4-4.8 5.5 5.5 0 0 1 1.1 4.8h1.3ZM19 14a6 6 0 0 1 3 5.2V21h-2v-1a9.8 9.8 0 0 0-1-4.2V14Z"/></svg>Share</a>
+        <a href="/pages/spin" class="nav-fab" aria-label="Spin"><span class="fab-circle"><img src="/assets/images/Speener.svg" alt="" width="60" height="60"></span></a>
+        <a href="/pages/team" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 0a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM1 20a7 7 0 0 1 14 0v1H1v-1Zm15.5-6a6.5 6.5 0 0 1 6.5 6v1h-6v-1a8.9 8.9 0 0 0-2.1-5.8 6.4 6.4 0 0 1 1.6-.2Z"/></svg>Team</a>
+        <a href="/pages/mine" class="nav-item active" aria-current="page"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5 0-9 2.6-9 5.8V22h18v-2.2c0-3.2-4-5.8-9-5.8Z"/></svg>Profile</a>
+    </nav>
+</body>
+</html>

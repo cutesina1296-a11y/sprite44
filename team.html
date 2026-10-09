@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Team · Finora</title>
+        <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+        <meta name="robots" content="noindex,nofollow">
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <style>
+            body {
+                --g-primary: #f5b400;
+                --g-deep: #d68f00;
+                --g-light: #ffd23f;
+                --g-glow: #fff06a;
+                --g-soft: #fffbe6;
+                --g-tint: rgba(245,180,0,.10);
+                --ink: #3a2e10;
+                --muted: #9a8748;
+                --field: #fdf8e8;
+                --line: #f2e8c8;
+                --bg-page: #fffdf4;
+                --on-brand: #ffffff
+            }
+
+            .ht-bell svg { width: 18px; height: 18px }
+            .ht-avatar svg { width: 20px; height: 20px }
+            .rc-spark svg { width: 100%; height: 100%; display: block }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                -webkit-tap-highlight-color: transparent
+            }
+
+            body,p,span,div,input,button,a,label,h1,h2,h3 { font-weight: 400 }
+
+            html,body {
+                font-family: "Poppins",ui-sans-serif,system-ui,sans-serif;
+                background: var(--bg-page);
+                color: var(--ink);
+                font-size: 14px;
+                line-height: 1.5;
+                -webkit-font-smoothing: antialiased
+            }
+
+            body {
+                max-width: 480px;
+                margin: 0 auto;
+                min-height: 100vh;
+                position: relative;
+                padding-bottom: calc(96px + env(safe-area-inset-bottom))
+            }
+
+            /* ─── HERO TOP BAR ─── */
+            .hero-top {
+                position: relative;
+                z-index: 2;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                min-height: 48px;
+                gap: 12px;
+                margin-bottom: 10px
+            }
+
+            .hero-top .ht-title {
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%,-50%);
+                font-size: 23px;
+                font-weight: 700;
+                color: var(--on-brand);
+                letter-spacing: -.3px;
+                white-space: nowrap;
+                text-shadow: 0 1px 2px rgba(255,255,255,.3)
+            }
+
+            .ht-bell {
+                position: relative;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.18);
+                border: 1px solid rgba(255,255,255,.32);
+                -webkit-backdrop-filter: blur(4px);
+                backdrop-filter: blur(4px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--on-brand);
+                padding: 0;
+                cursor: pointer
+            }
+
+            .ht-bell::after {
+                content: "";
+                position: absolute;
+                top: 3px;
+                right: 4px;
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+                background: var(--on-brand);
+                border: 2px solid var(--g-deep)
+            }
+
+            .ht-avatar {
+                width: 42px;
+                height: 42px;
+                border-radius: 50%;
+                border: 2px solid #fff;
+                background: rgba(255,255,255,.18);
+                overflow: hidden;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--on-brand);
+                box-shadow: 0 6px 14px -6px rgba(0,0,0,.35);
+                text-decoration: none
+            }
+
+            .ht-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block
+            }
+
+            /* ─── HERO ─── */
+            .rc-hero-wrap { padding: 0 }
+
+            .rc-hero {
+                position: relative;
+                background: radial-gradient(130% 100% at 88% -12%,#a7f3c5 0%,transparent 55%),linear-gradient(160deg,#42c982 0%,#159957 48%,#087443 100%);
+                color: var(--on-brand);
+                padding: calc(14px + env(safe-area-inset-top)) 18px 64px;
+                border-radius: 0 0 30px 30px;
+                overflow: hidden;
+                box-shadow: 0 22px 44px -22px rgba(8,116,67,.55);
+                min-height: 220px
+            }
+
+            .rc-hero::before {
+                content: "";
+                position: absolute;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.10);
+                right: -70px;
+                top: -90px
+            }
+
+            .rc-hero::after {
+                content: "";
+                position: absolute;
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.07);
+                left: -50px;
+                bottom: -60px
+            }
+
+            .rc-spark {
+                position: absolute;
+                z-index: 1;
+                color: rgba(255,255,255,.95);
+                width: 11px;
+                height: 11px;
+                animation: sparkTwinkle 2.2s ease-in-out infinite;
+                pointer-events: none
+            }
+
+            .rc-spark.s1 { right: 190px; top: 30px; width: 13px; height: 13px; animation-delay: 0s }
+            .rc-spark.s2 { right: 30px; top: 22px; width: 9px; height: 9px; animation-delay: .7s }
+            .rc-spark.s3 { right: 205px; top: 110px; width: 10px; height: 10px; animation-delay: 1.3s }
+
+            @keyframes sparkTwinkle {
+                0%,100% { opacity: .25; transform: scale(.7) rotate(0deg) }
+                50% { opacity: 1; transform: scale(1.15) rotate(20deg) }
+            }
+
+            .rc-bal {
+                position: relative;
+                z-index: 2
+            }
+
+            .rc-bal-label {
+                font-size: 13.5px;
+                font-weight: 600;
+                opacity: .95
+            }
+
+            .rc-bal-amt {
+                font-size: 38px;
+                font-weight: 800;
+                letter-spacing: -1.5px;
+                line-height: 1.1;
+                margin-top: 4px;
+                display: flex;
+                align-items: baseline;
+                gap: 3px;
+                text-shadow: 0 1px 2px rgba(255,255,255,.25)
+            }
+
+            .rc-bal-amt .cur {
+                font-size: 26px;
+                font-weight: 700
+            }
+
+            .rc-body {
+                padding: 0 14px;
+                position: relative;
+                z-index: 3
+            }
+
+            /* ─── STATS CARD ─── */
+            .stats-card {
+                background: #ffffffcc;
+                border-radius: 22px;
+                margin-top: -38px;
+                padding: 16px 14px;
+                border: 1px solid var(--line);
+                box-shadow: 0 18px 40px -22px rgba(214,143,0,.35);
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 5px
+            }
+
+            .stat {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                background: #ffffff;
+                border: 1px solid var(--line);
+                border-radius: 16px;
+                padding: 12px 14px;
+                min-width: 0
+            }
+
+            .stat .st-ic {
+                width: 40px;
+                height: 40px;
+                border-radius: 14px;
+                background: var(--g-soft);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0
+            }
+
+            .stat .st-ic svg {
+                width: 22px;
+                height: 22px;
+                color: var(--g-primary)
+            }
+
+            .stat .st-val {
+                font-size: 18px;
+                font-weight: 800;
+                color: var(--ink);
+                line-height: 1.2;
+                letter-spacing: -.3px
+            }
+
+            .stat .st-lbl {
+                font-size: 11px;
+                color: var(--muted);
+                font-weight: 500
+            }
+
+            /* ─── LEVEL LIST ─── */
+            .lv-list {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin: 14px 0
+            }
+
+            .lv-card {
+                display: block;
+                background: #fff;
+                border: 1px solid var(--line);
+                border-radius: 20px;
+                padding: 14px 14px 0;
+                text-decoration: none;
+                color: var(--ink);
+                box-shadow: 0 10px 22px -18px rgba(214,143,0,.5);
+                transition: transform .12s,box-shadow .12s
+            }
+
+            .lv-card:active { transform: translateY(1px) }
+
+            .lv-card.lead { border-color: rgba(245,180,0,.55) }
+
+            .lv-head {
+                display: flex;
+                align-items: center;
+                gap: 11px
+            }
+
+            .lv-rank {
+                width: 42px;
+                height: 42px;
+                flex-shrink: 0;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                font-weight: 800;
+                letter-spacing: -.3px;
+                color: var(--on-brand);
+                background: linear-gradient(160deg,var(--g-light),var(--g-primary) 60%,var(--g-deep));
+                box-shadow: 0 8px 16px -8px rgba(214,143,0,.7)
+            }
+
+            .lv-card:not(.lead) .lv-rank {
+                background: var(--g-tint);
+                color: var(--g-deep);
+                box-shadow: none
+            }
+
+            .lv-name {
+                flex: 1;
+                min-width: 0
+            }
+
+            .lv-t {
+                font-size: 15px;
+                font-weight: 700;
+                letter-spacing: -.2px
+            }
+
+            .lv-s {
+                font-size: 11px;
+                color: var(--muted);
+                margin-top: 1px
+            }
+
+            .lv-rate {
+                text-align: right;
+                flex-shrink: 0
+            }
+
+            .lv-pct {
+                display: block;
+                font-size: 22px;
+                font-weight: 800;
+                color: var(--g-primary);
+                letter-spacing: -.8px;
+                line-height: 1
+            }
+
+            .lv-pct-l {
+                font-size: 9.5px;
+                font-weight: 600;
+                color: var(--muted);
+                letter-spacing: .2px
+            }
+
+            .lv-foot {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-top: 13px;
+                padding: 11px 0;
+                border-top: 1px solid var(--line)
+            }
+
+            .lv-stat {
+                flex: 1;
+                min-width: 0
+            }
+
+            .lv-k {
+                display: block;
+                font-size: 10px;
+                color: var(--muted);
+                font-weight: 500
+            }
+
+            .lv-v {
+                display: block;
+                font-size: 14px;
+                font-weight: 700;
+                margin-top: 2px
+            }
+
+            .lv-v small {
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--muted)
+            }
+
+            .lv-sep {
+                width: 1px;
+                align-self: stretch;
+                background: var(--line)
+            }
+
+            .lv-go {
+                width: 26px;
+                height: 26px;
+                flex-shrink: 0;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--g-tint);
+                color: var(--g-primary)
+            }
+
+            .lv-go svg {
+                width: 13px;
+                height: 13px
+            }
+
+            /* ─── REWARD CARD ─── */
+            .reward-card {
+                background: #fff;
+                border: 1px solid var(--line);
+                border-radius: 22px;
+                margin-top: 14px;
+                padding: 18px;
+                box-shadow: 0 10px 24px -16px rgba(214,143,0,.3)
+            }
+
+            .rw-block {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                padding: 4px 0 16px;
+                border-bottom: 1px dashed var(--line)
+            }
+
+            .rw-block:last-child {
+                border-bottom: none;
+                padding: 16px 0 4px
+            }
+
+            .rw-info {
+                flex: 1;
+                min-width: 0
+            }
+
+            .rw-title {
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--g-primary);
+                padding-bottom: 4px;
+                margin-bottom: 8px;
+                border-bottom: 2px solid var(--g-soft);
+                display: inline-block
+            }
+
+            .rw-text {
+                font-size: 12.5px;
+                color: var(--ink);
+                line-height: 1.55
+            }
+
+            .rw-text .badge-ic {
+                display: inline-flex;
+                width: 28px;
+                height: 28px;
+                background: var(--g-soft);
+                border-radius: 9px;
+                align-items: center;
+                justify-content: center;
+                vertical-align: middle;
+                margin-right: 7px
+            }
+
+            .rw-text .badge-ic svg {
+                width: 16px;
+                height: 16px;
+                color: var(--g-primary)
+            }
+
+            .rw-art {
+                width: 86px;
+                height: 86px;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center
+            }
+
+            .rw-art svg {
+                width: 100%;
+                height: 100%
+            }
+
+            /* ─── FOOTER NAV ─── */
+            .footer {
+                position: fixed;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                max-width: 480px;
+                background: #fff;
+                border-top: 1px solid var(--line);
+                padding: 8px 10px calc(6px + env(safe-area-inset-bottom));
+                display: flex;
+                justify-content: space-around;
+                align-items: flex-end;
+                z-index: 100;
+                box-shadow: 0 -8px 30px rgba(214,143,0,.08);
+                overflow: visible
+            }
+
+            .nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-decoration: none;
+                padding: 6px 0;
+                color: var(--muted);
+                position: relative;
+                font-size: 11px;
+                transition: color .15s
+            }
+
+            .nav-item svg {
+                width: 24px;
+                height: 24px
+            }
+
+            .nav-item.active {
+                color: var(--g-deep);
+                font-weight: 600
+            }
+
+            .nav-item.active::before {
+                content: "";
+                position: absolute;
+                top: -8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 28px;
+                height: 3px;
+                background: linear-gradient(90deg,var(--g-light),var(--g-primary));
+                border-radius: 0 0 3px 3px
+            }
+
+            .nav-fab {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-decoration: none;
+                color: var(--g-deep);
+                font-size: 11px;
+                font-weight: 600
+            }
+
+            .nav-fab .fab-circle {
+                width: 72px;
+                height: 72px;
+                margin-top: -34px;
+                padding: 7px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(145deg,#ffffff,#f0e6e4);
+                border: 0;
+                overflow: hidden;
+                box-shadow: 8px 8px 18px rgba(214,143,0,.20),-6px -6px 14px rgba(255,255,255,.95),inset 3px 3px 6px rgba(255,255,255,.90),inset -4px -4px 9px rgba(214,143,0,.14);
+                transition: transform .18s ease,box-shadow .18s ease
+            }
+
+            .nav-fab .fab-circle img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                display: block;
+                border-radius: 50%;
+                animation: fabWheel 9s linear infinite
+            }
+
+            @keyframes fabWheel { to { transform: rotate(360deg) } }
+
+            .nav-fab:active .fab-circle {
+                transform: scale(.94);
+                box-shadow: 4px 4px 10px rgba(214,143,0,.18),-3px -3px 8px rgba(255,255,255,.85),inset 4px 4px 9px rgba(214,143,0,.18),inset -3px -3px 7px rgba(255,255,255,.85)
+            }
+
+            .nav-fab:active .fab-circle img { animation-play-state: paused }
+
+            @media (prefers-reduced-motion:reduce) {
+                .nav-fab .fab-circle img { animation: none }
+            }
+
+            /* ─── TOAST ─── */
+            #gToast {
+                position: fixed;
+                z-index: 100000;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%) scale(.9);
+                min-width: 160px;
+                max-width: 92%;
+                padding: 14px 24px;
+                border-radius: 16px;
+                background: rgba(20,18,24,.88);
+                color: #fff;
+                font-size: 14px;
+                font-weight: 600;
+                text-align: center;
+                box-shadow: 0 22px 54px -14px rgba(0,0,0,.55);
+                opacity: 0;
+                pointer-events: none;
+                transition: transform .3s cubic-bezier(.2,1,.3,1),opacity .28s ease;
+                white-space: nowrap
+            }
+
+            #gToast.show {
+                transform: translate(-50%,-50%) scale(1);
+                opacity: 1;
+                pointer-events: auto
+            }
+        </style>
+        <meta name="csrf-token" content="">
+        <link rel="stylesheet" href="/assets/css/customer-ui.css">
+    </head>
+    <body>
+
+        <!-- ═══ HERO ═══ -->
+        <div class="rc-hero-wrap">
+            <div class="rc-hero">
+                <span class="rc-spark s1">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
+                </span>
+                <span class="rc-spark s2">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
+                </span>
+                <span class="rc-spark s3">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
+                </span>
+
+                <div class="hero-top">
+                    <div class="ht-title">Team</div>
+                    <button class="ht-bell" id="notificationsButton" type="button" aria-label="Notifications">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path opacity=".55" d="M18.75 9.7V9a6.75 6.75 0 0 0-13.5 0v.7c0 .84-.25 1.66-.71 2.36l-1.13 1.7c-1.03 1.55-.24 3.66 1.55 4.14a29.4 29.4 0 0 0 15.08 0c1.79-.48 2.58-2.59 1.55-4.14l-1.13-1.7a4.25 4.25 0 0 1-.71-2.36Z" fill="currentColor"/>
+                            <path d="M9 20a3.2 3.2 0 0 0 3 2 3.2 3.2 0 0 0 3-2 32 32 0 0 1-6 0Z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                    <a class="ht-avatar" href="/mine.html" aria-label="Profile">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="6" r="4" fill="currentColor"/>
+                            <path fill="currentColor" opacity=".6" d="M20 17.5C20 19.99 20 22 12 22s-8-2.01-8-4.5C4 15.01 7.58 13 12 13s8 2.01 8 4.5Z"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <div class="rc-bal">
+                    <div class="rc-bal-label">Commission feature unavailable</div>
+                    <div class="rc-bal-amt">
+                        <span class="cur">₹</span>
+                        <span id="commissionAmt">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ BODY ═══ -->
+        <div class="rc-body">
+
+            <!-- STATS CARD -->
+            <div class="stats-card">
+                <div class="stat">
+                    <span class="st-ic">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="9" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/>
+                            <path opacity="0.5" d="M15 9C16.6569 9 18 7.65685 18 6C18 4.34315 16.6569 3 15 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M9 20.5C12.866 20.5 16 18.7091 16 16.5C16 14.2909 12.866 12.5 9 12.5C5.13401 12.5 2 14.2909 2 16.5C2 18.7091 5.13401 20.5 9 20.5Z" stroke="currentColor" stroke-width="1.5"/>
+                            <path opacity="0.5" d="M18 14C19.7542 14.3847 21 15.3589 21 16.5C21 17.5293 19.9863 18.4229 18.5 18.8704" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <div>
+                        <div class="st-val" id="totalUsers">0</div>
+                        <div class="st-lbl">Total Users</div>
+                    </div>
+                </div>
+                <div class="stat">
+                    <span class="st-ic">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M7 9C7 9 7.5 9.9 7.5 12C7.5 14.1 7 15 7 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M10.5 9C10.5 9 11 9.9 11 12C11 14.1 10.5 15 10.5 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M20 10C20.9428 10 21.4142 10 21.7071 10.2929C22 10.5858 22 11.0572 22 12C22 12.9428 22 13.4142 21.7071 13.7071C21.4142 14 20.9428 14 20 14V10Z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M2 12C2 8.22876 2 6.34315 3.17157 5.17157C4.34315 4 6.22876 4 10 4H11.5C15.2712 4 17.1569 4 18.3284 5.17157C19.5 6.34315 19.5 8.22876 19.5 12C19.5 15.7712 19.5 17.6569 18.3284 18.8284C17.1569 20 15.2712 20 11.5 20H10C6.22876 20 4.34315 20 3.17157 18.8284C2.51839 18.1752 2.22937 17.3001 2.10149 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <div>
+                        <div class="st-val" id="totalRecharge">₹0</div>
+                        <div class="st-lbl">All Recharge</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEVEL CARDS -->
+            <div class="lv-list">
+                <!-- Level 1 -->
+                <div class="lv-card lead">
+                    <div class="lv-head">
+                        <span class="lv-rank">L1</span>
+                        <div class="lv-name">
+                            <div class="lv-t">Level 1</div>
+                            <div class="lv-s">Direct referrals</div>
+                        </div>
+                        <div class="lv-rate">
+                            <span class="lv-pct">—</span>
+                            <span class="lv-pct-l">Not enabled</span>
+                        </div>
+                    </div>
+                    <div class="lv-foot">
+                        <div class="lv-stat">
+                            <span class="lv-k">Active members</span>
+                            <span class="lv-v">
+                                <span id="l1Active">0</span><small>/<span id="l1Total">0</span></small>
+                            </span>
+                        </div>
+                        <span class="lv-sep"></span>
+                        <div class="lv-stat">
+                            <span class="lv-k">Team recharge</span>
+                            <span class="lv-v" id="l1Recharge">₹0</span>
+                        </div>
+                        <span class="lv-go">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Level 2 -->
+                <div class="lv-card">
+                    <div class="lv-head">
+                        <span class="lv-rank">L2</span>
+                        <div class="lv-name">
+                            <div class="lv-t">Level 2</div>
+                            <div class="lv-s">Indirect referrals</div>
+                        </div>
+                        <div class="lv-rate">
+                            <span class="lv-pct">—</span>
+                            <span class="lv-pct-l">Not enabled</span>
+                        </div>
+                    </div>
+                    <div class="lv-foot">
+                        <div class="lv-stat">
+                            <span class="lv-k">Active members</span>
+                            <span class="lv-v">
+                                <span id="l2Active">0</span><small>/<span id="l2Total">0</span></small>
+                            </span>
+                        </div>
+                        <span class="lv-sep"></span>
+                        <div class="lv-stat">
+                            <span class="lv-k">Team recharge</span>
+                            <span class="lv-v" id="l2Recharge">₹0</span>
+                        </div>
+                        <span class="lv-go">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Level 3 -->
+                <div class="lv-card">
+                    <div class="lv-head">
+                        <span class="lv-rank">L3</span>
+                        <div class="lv-name">
+                            <div class="lv-t">Level 3</div>
+                            <div class="lv-s">Extended team</div>
+                        </div>
+                        <div class="lv-rate">
+                            <span class="lv-pct">—</span>
+                            <span class="lv-pct-l">Not enabled</span>
+                        </div>
+                    </div>
+                    <div class="lv-foot">
+                        <div class="lv-stat">
+                            <span class="lv-k">Active members</span>
+                            <span class="lv-v">
+                                <span id="l3Active">0</span><small>/<span id="l3Total">0</span></small>
+                            </span>
+                        </div>
+                        <span class="lv-sep"></span>
+                        <div class="lv-stat">
+                            <span class="lv-k">Team recharge</span>
+                            <span class="lv-v" id="l3Recharge">₹0</span>
+                        </div>
+                        <span class="lv-go">
+                            <svg viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REWARD CARD -->
+            <div class="reward-card">
+                <div class="rw-block">
+                    <div class="rw-info">
+                        <div class="rw-title">Reward Description</div>
+                        <div class="rw-text">If your friend upgrades to VIP1 or above, you will receive generous rewards.</div>
+                    </div>
+                    <div class="rw-art">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <ellipse cx="26" cy="46" rx="16" ry="6" fill="#d9a400"/>
+                            <ellipse cx="26" cy="43" rx="16" ry="6" fill="#ffce1f"/>
+                            <ellipse cx="24" cy="36" rx="14" ry="5.4" fill="#d9a400"/>
+                            <ellipse cx="24" cy="33.5" rx="14" ry="5.4" fill="#ffd84d"/>
+                            <ellipse cx="27" cy="27" rx="12" ry="4.8" fill="#d9a400"/>
+                            <ellipse cx="27" cy="24.8" rx="12" ry="4.8" fill="#ffce1f"/>
+                            <circle cx="45" cy="38" r="12" fill="#d9a400"/>
+                            <circle cx="45" cy="36.5" r="12" fill="#ffd84d"/>
+                            <path d="M45 30.5l1.8 3.7 4.1.6-3 2.9.7 4.1-3.6-1.9-3.6 1.9.7-4.1-3-2.9 4.1-.6z" fill="#d9a400"/>
+                            <path d="M14 18l1 2.2 2.2 1-2.2 1-1 2.2-1-2.2-2.2-1 2.2-1z" fill="#ffce1f"/>
+                            <path d="M52 14l.8 1.8 1.8.8-1.8.8-.8 1.8-.8-1.8-1.8-.8 1.8-.8z" fill="#ffd84d"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="rw-block">
+                    <div class="rw-info">
+                        <div class="rw-title">Quest Rewards</div>
+                        <div class="rw-text">
+                            <span class="badge-ic">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 7.7l5.4-.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                                </svg>
+                            </span>
+                            Use your activity to unlock exciting rewards.
+                        </div>
+                    </div>
+                    <div class="rw-art">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <rect x="12" y="26" width="40" height="28" rx="4" fill="#f5b400"/>
+                            <rect x="12" y="26" width="40" height="10" rx="4" fill="#ffd23f"/>
+                            <rect x="28" y="26" width="8" height="28" fill="#ffce1f"/>
+                            <rect x="9" y="19" width="46" height="9" rx="3" fill="#ffd23f"/>
+                            <rect x="28" y="19" width="8" height="9" fill="#ffd84d"/>
+                            <path d="M32 19c-6-1-10-4-9-8 1-3 6-3 8 0 1.4 2 1.4 5 1 8z" fill="#ffce1f"/>
+                            <path d="M32 19c6-1 10-4 9-8-1-3-6-3-8 0-1.4 2-1.4 5-1 8z" fill="#ffd84d"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ FOOTER NAV ═══ -->
+        <nav class="footer">
+            <a href="/home.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M21.53 11.59 20.75 10.96V21.25H22a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1 0-1.5h1.25V10.96l-.78.63a.75.75 0 1 1-.94-1.17l8.13-6.5a3.75 3.75 0 0 1 4.68 0l8.13 6.5a.75.75 0 1 1-.94 1.17ZM12 6.75a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5Zm1.75 6.56c-.46-.06-1.03-.06-1.7-.06h-.1c-.66 0-1.24 0-1.7.06-.49.07-.96.22-1.34.6-.39.39-.54.86-.6 1.35-.07.46-.07 1.03-.07 1.7v4.29h7.5v-4.42c0-.62 0-1.15-.06-1.58-.07-.49-.22-.96-.6-1.34-.39-.38-.86-.53-1.35-.6Z"/>
+                </svg>
+                Home
+            </a>
+            <a href="/invite.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path opacity=".5" d="M2 12c0-3.77 0-5.66 1.17-6.83C4.34 4 6.23 4 10 4h4c3.77 0 5.66 0 6.83 1.17C22 6.34 22 8.23 22 12s0 5.66-1.17 6.83C19.66 20 17.77 20 14 20h-4c-3.77 0-5.66 0-6.83-1.17C2 17.66 2 15.77 2 12Z" fill="currentColor"/>
+                    <path d="M6.35 7.2a.75.75 0 1 0-.96 1.15l2.6 2.17c1.06.88 1.72 1.44 2.48 1.66.76.23 1.58.23 2.34 0 .76-.22 1.42-.78 2.48-1.66l2.6-2.17a.75.75 0 1 0-.96-1.15l-2.56 2.13c-1.17.98-1.62 1.34-2.08 1.48-.47.14-.96.14-1.42 0-.46-.14-.91-.5-2.08-1.48L6.35 7.2Z" fill="currentColor"/>
+                </svg>
+                Share
+            </a>
+            <a href="/spin.html" class="nav-fab" aria-label="Spin">
+                <span class="fab-circle">
+                    <img src="/assets/images/Speener.svg" alt="" width="72" height="72" loading="lazy" decoding="async">
+                </span>
+            </a>
+            <a href="/team.html" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M15.5 7.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" fill="currentColor"/>
+                    <path opacity=".4" d="M19.5 7.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-15 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0Z" fill="currentColor"/>
+                    <path d="M18 16.5c0 1.93-2.69 3.5-6 3.5s-6-1.57-6-3.5S8.69 13 12 13s6 1.57 6 3.5Z" fill="currentColor"/>
+                    <path opacity=".4" d="M22 16.5c0 1.38-1.79 2.5-4 2.5s-4-1.12-4-2.5 1.79-2.5 4-2.5 4 1.12 4 2.5Zm-20 0C2 17.88 3.79 19 6 19s4-1.12 4-2.5S8.21 14 6 14s-4 1.12-4 2.5Z" fill="currentColor"/>
+                </svg>
+                Team
+            </a>
+            <a href="/mine.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="6" r="4" fill="currentColor"/>
+                    <path fill="currentColor" opacity=".5" d="M20 17.5C20 19.99 20 22 12 22s-8-2.01-8-4.5C4 15.01 7.58 13 12 13s8 2.01 8 4.5Z"/>
+                </svg>
+                Profile
+            </a>
+        </nav>
+
+        <!-- ═══ TOAST ═══ -->
+        <div id="gToast" role="alert" aria-live="polite"></div>
+
+        <script>
+            /* ─── TOAST ─── */
+            (function() {
+                if (window.showToast) return;
+                var hideTimer = null;
+                window.showToast = function(message, type, time) {
+                    var toast = document.getElementById('gToast');
+                    if (!toast) return;
+                    type = type || 'success';
+                    time = (typeof time === 'number' && time > 0) ? time : 3;
+                    clearTimeout(hideTimer);
+                    toast.textContent = message;
+                    toast.classList.add('show');
+                    hideTimer = setTimeout(function() {
+                        toast.classList.remove('show');
+                    }, time * 1000);
+                };
+            })();
+        </script>
+
+        <script>
+            /* ═════════════════════════════════════════
+               TEAM LOGIC
+               ═════════════════════════════════════════ */
+            document.addEventListener("DOMContentLoaded", function() {
+                document.getElementById("notificationsButton").addEventListener("click", function() {
+                    window.showToast("There is no notification inbox yet. Check Account for request status.", "success");
+                });
+
+                function fmt(n) {
+                    return Number(n).toLocaleString("en-IN", {
+                        maximumFractionDigits: 0
+                    });
+                }
+                fetch("/api/team", {credentials:"include", cache:"no-store"})
+                    .then(function(response) {
+                        if (response.status === 401) {
+                            window.location.replace("/index.html");
+                            throw new Error("Please sign in again.");
+                        }
+                        if (!response.ok) throw new Error("Could not load team information.");
+                        return response.json();
+                    })
+                    .then(function(data) {
+                        document.getElementById("commissionAmt").textContent = fmt(data.commissionPaise / 100);
+                        document.getElementById("totalUsers").textContent = fmt(data.totalMembers);
+                        document.getElementById("totalRecharge").textContent = "₹" + fmt(data.totalRechargePaise / 100);
+                        data.levels.forEach(function(level) {
+                            var prefix = "l" + level.level;
+                            document.getElementById(prefix + "Active").textContent = fmt(level.active);
+                            document.getElementById(prefix + "Total").textContent = fmt(level.total);
+                            document.getElementById(prefix + "Recharge").textContent = "₹" + fmt(level.rechargePaise / 100);
+                        });
+                    })
+                    .catch(function(error) {
+                        console.error(error);
+                        window.showToast(error.message, "error");
+                    });
+            });
+        </script>
+    </body>
+</html>

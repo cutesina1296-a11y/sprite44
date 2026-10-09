@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Mission · Finora</title>
+        <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+        <meta name="robots" content="noindex,nofollow">
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --g-primary: #16a34a;
+                --g-deep: #15803d;
+                --g-light: #4ade80;
+                --g-glow: #86efac;
+                --g-soft: #f0fdf4;
+                --g-tint: rgba(22,163,74,.10);
+                --ink: #183b27;
+                --muted: #66816f;
+                --field: #f0fdf4;
+                --line: #dcfce7;
+                --bg-page: #f7fef9;
+                --on-brand: #ffffff
+            }
+
+            .tb-back svg { width: 18px; height: 18px }
+            .sm-ic svg { width: 22px; height: 22px }
+            .sm-chip svg { width: 11px; height: 11px; vertical-align: -1px; margin-right: 3px }
+            .ti-btn svg { width: 13px; height: 13px; flex-shrink: 0 }
+            .nav-item svg { width: 24px; height: 24px }
+
+            * {
+                box-sizing: border-box;
+                -webkit-tap-highlight-color: transparent
+            }
+
+            body,p,span,div,button,a,h1,h2,h3 { font-weight: 400 }
+
+            html,body {
+                margin: 0;
+                padding: 0;
+                font-family: "Poppins",ui-sans-serif,system-ui,sans-serif;
+                background: var(--bg-page);
+                color: var(--ink);
+                font-size: 14px;
+                line-height: 1.5;
+                -webkit-font-smoothing: antialiased
+            }
+
+            .page {
+                max-width: 480px;
+                margin: 0 auto;
+                padding: 0 0 96px;
+                position: relative
+            }
+
+            .content { padding: 0 12px }
+
+            /* ─── TOPBAR ─── */
+            .topbar {
+                position: relative;
+                display: flex;
+                align-items: flex-start;
+                padding: calc(16px + env(safe-area-inset-top)) 14px 10px;
+                height: 155px;
+                border-radius: 0 0 30px 30px;
+                overflow: hidden;
+                background: radial-gradient(120% 100% at 88% -15%,#86efac 0%,transparent 55%),linear-gradient(160deg,#4ade80,#16a34a 55%,#15803d);
+                box-shadow: 0 14px 30px -18px rgba(21,128,61,.55)
+            }
+
+            .topbar::before,.topbar::after {
+                content: "";
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255,255,255,.10);
+                pointer-events: none
+            }
+
+            .topbar::before { width: 190px; height: 190px; top: -80px; right: -55px }
+            .topbar::after { width: 120px; height: 120px; bottom: -50px; left: -40px; background: rgba(255,255,255,.07) }
+
+            .tb-back {
+                position: relative;
+                z-index: 2;
+                width: 40px;
+                height: 40px;
+                border-radius: 14px;
+                background: rgba(255,255,255,.18);
+                border: 1px solid rgba(255,255,255,.32);
+                -webkit-backdrop-filter: blur(4px);
+                backdrop-filter: blur(4px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--on-brand);
+                text-decoration: none;
+                transition: transform .12s
+            }
+
+            .tb-back:active { transform: scale(.93) }
+
+            .tb-title {
+                position: absolute;
+                left: 50%;
+                top: calc(34px + env(safe-area-inset-top));
+                transform: translateX(-50%);
+                z-index: 2;
+                font-size: 21px;
+                font-weight: 700;
+                color: var(--on-brand);
+                letter-spacing: -.3px;
+                text-shadow: 0 2px 6px rgba(0,0,0,.18)
+            }
+
+            /* ─── SUMMARY ─── */
+            .summary {
+                position: relative;
+                z-index: 3;
+                margin: -48px 12px 0;
+                background: #fff;
+                border: 1px solid var(--line);
+                padding: 18px 16px 16px;
+                border-radius: 22px;
+                box-shadow: 0 18px 34px -20px rgba(21,128,61,.20);
+                overflow: hidden;
+                color: var(--ink)
+            }
+
+            .summary::before {
+                content: "";
+                position: absolute;
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.12);
+                right: -50px;
+                top: -70px;
+                pointer-events: none
+            }
+
+            .sm-top {
+                position: relative;
+                z-index: 1;
+                display: flex;
+                align-items: center;
+                gap: 14px
+            }
+
+            .sm-ic {
+                width: 52px;
+                height: 52px;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--g-primary);
+                flex-shrink: 0;
+                background: var(--g-tint)
+            }
+
+            .sm-txt { flex: 1; min-width: 0 }
+
+            .sm-lbl {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--muted)
+            }
+
+            .sm-val {
+                font-size: 32px;
+                font-weight: 800;
+                letter-spacing: -1.2px;
+                line-height: 1.15;
+                display: flex;
+                align-items: baseline;
+                gap: 7px
+            }
+
+            .sm-val small {
+                font-size: 11.5px;
+                font-weight: 600;
+                color: var(--muted);
+                letter-spacing: 0
+            }
+
+            .sm-chip {
+                flex-shrink: 0;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+                background: var(--g-tint);
+                border: 1px solid rgba(22,163,74,.35);
+                color: var(--g-deep);
+                padding: 7px 10px;
+                border-radius: 11px;
+                font-size: 10.5px;
+                font-weight: 700
+            }
+
+            .sm-prog {
+                position: relative;
+                z-index: 1;
+                margin-top: 15px
+            }
+
+            .smp-info {
+                display: flex;
+                justify-content: space-between;
+                font-size: 11px;
+                font-weight: 600;
+                margin-bottom: 6px;
+                color: var(--muted)
+            }
+
+            .smp-bar {
+                height: 7px;
+                background: var(--field);
+                border-radius: 20px;
+                overflow: hidden
+            }
+
+            .smp-fill {
+                height: 100%;
+                border-radius: 20px;
+                background: linear-gradient(90deg,var(--g-light),var(--g-primary));
+                transition: width .5s ease
+            }
+
+            /* ─── SECTION ─── */
+            .sec {
+                display: flex;
+                align-items: center;
+                margin: 20px 4px 12px
+            }
+
+            .sec .st {
+                font-size: 15px;
+                font-weight: 700;
+                color: var(--ink)
+            }
+
+            .sec .sc {
+                margin-left: auto;
+                font-size: 11.5px;
+                font-weight: 700;
+                color: var(--g-deep);
+                background: var(--g-soft);
+                border: 1px solid var(--line);
+                padding: 4px 11px;
+                border-radius: 20px
+            }
+
+            /* ─── TIER LIST ─── */
+            .tier-list {
+                display: grid;
+                grid-template-columns: repeat(2,1fr);
+                gap: 9px
+            }
+
+            .tier {
+                background: #fff;
+                border-radius: 18px;
+                overflow: hidden;
+                border: 1px solid var(--line);
+                box-shadow: 0 10px 24px -16px rgba(21,128,61,.20);
+                display: flex;
+                flex-direction: column;
+                transition: transform .15s
+            }
+
+            .tier:active { transform: scale(.99) }
+
+            .tier.on { border-color: var(--g-primary) }
+
+            .ti-top {
+                position: relative;
+                height: 84px;
+                background: var(--g-soft);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-bottom: 1px solid var(--line)
+            }
+
+            .tier.now { border-color: var(--g-primary) }
+            .tier.now .ti-top {
+                background: linear-gradient(160deg,var(--g-glow),var(--g-light) 55%,var(--g-primary))
+            }
+            .tier.on .ti-top {
+                background: linear-gradient(160deg,var(--g-light),var(--g-primary) 60%,var(--g-deep))
+            }
+
+            .ti-num {
+                font-size: 32px;
+                font-weight: 800;
+                color: var(--g-primary);
+                letter-spacing: -1.5px;
+                line-height: 1
+            }
+
+            .tier.on .ti-num,.tier.now .ti-num {
+                color: var(--on-brand);
+                text-shadow: 0 1px 0 rgba(255,255,255,.55),0 3px 6px rgba(20,83,45,.35),0 8px 16px rgba(20,83,45,.24)
+            }
+
+            .ti-badge {
+                position: absolute;
+                top: 7px;
+                right: 7px;
+                padding: 3px 9px;
+                border-radius: 20px;
+                font-size: 9px;
+                font-weight: 700;
+                letter-spacing: .3px;
+                background: #fff;
+                color: var(--g-deep);
+                border: 1px solid rgba(22,163,74,.4)
+            }
+
+            .tier.on .ti-badge {
+                background: #fff;
+                color: var(--g-deep);
+                border-color: var(--g-primary)
+            }
+
+            .tier.now .ti-badge {
+                background: var(--g-deep);
+                color: #fff;
+                border-color: var(--g-deep)
+            }
+
+            .ti-info {
+                padding: 10px 12px 4px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px
+            }
+
+            .ti-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                font-size: 11.5px
+            }
+
+            .ti-k { color: var(--muted) }
+            .ti-v { color: var(--ink); font-weight: 700 }
+            .ti-v.hi { color: var(--g-deep) }
+
+            .ti-foot {
+                padding: 8px 10px 11px;
+                margin-top: auto
+            }
+
+            .ti-btn {
+                width: 100%;
+                border: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 6px;
+                font-size: 12.5px;
+                padding: 10px;
+                border-radius: 26px;
+                font-family: inherit;
+                font-weight: 700;
+                letter-spacing: .3px;
+                background: linear-gradient(180deg,#166534,#14532d);
+                color: var(--on-brand);
+                box-shadow: 0 6px 14px -6px rgba(20,83,45,.5),inset 0 1px 0 rgba(255,255,255,.18)
+            }
+
+            .tier.on .ti-btn {
+                background: linear-gradient(180deg,#22c55e,#166534 65%,#14532d);
+                box-shadow: 0 8px 18px -6px rgba(20,83,45,.5),inset 0 1px 0 rgba(255,255,255,.3);
+                cursor: pointer
+            }
+
+            .tier.on .ti-btn:active { transform: scale(.97) }
+            .ti-btn:disabled { opacity: .72; cursor: not-allowed }
+
+            /* ─── CLAIM ─── */
+            .claim {
+                margin: 16px 12px 0;
+                background: #fff;
+                border: 1px solid var(--line);
+                border-radius: 22px;
+                padding: 15px 16px;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                box-shadow: 0 10px 24px -16px rgba(21,128,61,.20)
+            }
+
+            .cl-left { flex: 1; min-width: 0 }
+
+            .cl-k {
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--muted)
+            }
+
+            .cl-v {
+                font-size: 27px;
+                font-weight: 800;
+                color: var(--g-deep);
+                letter-spacing: -1px;
+                line-height: 1.2;
+                margin-top: 1px
+            }
+
+            .cl-btn {
+                border: 0;
+                border-radius: 26px;
+                padding: 14px 22px;
+                font-size: 13.5px;
+                font-weight: 700;
+                font-family: inherit;
+                cursor: pointer;
+                white-space: nowrap;
+                flex-shrink: 0;
+                background: linear-gradient(180deg,#166534,#14532d);
+                color: var(--on-brand);
+                box-shadow: 0 8px 18px -8px rgba(20,83,45,.5),inset 0 1px 0 rgba(255,255,255,.25);
+                transition: transform .1s
+            }
+
+            .cl-btn:active { transform: translateY(1px) }
+
+            .cl-btn:disabled {
+                background: linear-gradient(180deg,#166534,#14532d);
+                color: #fff;
+                box-shadow: 0 8px 18px -8px rgba(20,83,45,.35);
+                cursor: not-allowed;
+                opacity: .72
+            }
+
+            /* ─── HOW TO ─── */
+            .how {
+                margin: 14px 12px 0;
+                background: #fff;
+                border: 1px solid var(--line);
+                border-radius: 18px;
+                padding: 2px 16px
+            }
+
+            .how-row {
+                display: flex;
+                gap: 11px;
+                padding: 12px 0;
+                border-bottom: 1px dashed var(--line)
+            }
+
+            .how-row:last-child { border-bottom: none }
+
+            .how-n {
+                width: 22px;
+                height: 22px;
+                border-radius: 7px;
+                background: var(--g-soft);
+                color: var(--g-deep);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 11px;
+                font-weight: 800;
+                flex-shrink: 0
+            }
+
+            .how-t {
+                font-size: 12.5px;
+                color: var(--muted);
+                line-height: 1.55
+            }
+
+            .how-t b { color: var(--ink); font-weight: 700 }
+
+            /* ─── FOOTER NAV ─── */
+            .footer {
+                position: fixed;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                max-width: 480px;
+                background: #fff;
+                border-top: 1px solid var(--line);
+                padding: 8px 10px calc(6px + env(safe-area-inset-bottom));
+                display: flex;
+                justify-content: space-around;
+                align-items: flex-end;
+                z-index: 100;
+                box-shadow: 0 -8px 30px rgba(21,128,61,.08);
+                overflow: visible
+            }
+
+            .nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-decoration: none;
+                padding: 6px 0;
+                color: var(--muted);
+                position: relative;
+                font-size: 11px
+            }
+
+            .nav-item.active {
+                color: var(--g-deep);
+                font-weight: 600
+            }
+
+            .nav-item.active::before {
+                content: "";
+                position: absolute;
+                top: -8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 28px;
+                height: 3px;
+                background: linear-gradient(90deg,var(--g-light),var(--g-primary));
+                border-radius: 0 0 3px 3px
+            }
+
+            .nav-fab {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-decoration: none;
+                color: var(--g-deep);
+                font-size: 11px;
+                font-weight: 600
+            }
+
+            .nav-fab .fab-circle {
+                width: 72px;
+                height: 72px;
+                margin-top: -34px;
+                padding: 7px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(145deg,#ffffff,#e8f7ed);
+                border: 0;
+                overflow: hidden;
+                box-shadow: 8px 8px 18px rgba(21,128,61,.12),-6px -6px 14px rgba(255,255,255,.95),inset 3px 3px 6px rgba(255,255,255,.90),inset -4px -4px 9px rgba(21,128,61,.08);
+                transition: transform .18s ease,box-shadow .18s ease
+            }
+
+            .nav-fab .fab-circle img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                display: block;
+                border-radius: 50%;
+                animation: navWheel 9s linear infinite
+            }
+
+            @keyframes navWheel { to { transform: rotate(360deg) } }
+
+            .nav-fab:active .fab-circle {
+                transform: scale(.94);
+                box-shadow: 4px 4px 10px rgba(21,128,61,.12),-3px -3px 8px rgba(255,255,255,.85),inset 4px 4px 9px rgba(21,128,61,.12),inset -3px -3px 7px rgba(255,255,255,.85)
+            }
+
+            .nav-fab:active .fab-circle img { animation-play-state: paused }
+
+            @media (prefers-reduced-motion:reduce) {
+                .nav-fab .fab-circle img { animation: none }
+            }
+
+            /* ─── TOAST ─── */
+            #gToast {
+                position: fixed;
+                z-index: 100000;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%) scale(.9);
+                min-width: 160px;
+                max-width: 92%;
+                padding: 14px 24px;
+                border-radius: 16px;
+                white-space: nowrap;
+                background: rgba(20,18,24,.88);
+                color: #fff;
+                font-size: 14px;
+                font-weight: 600;
+                text-align: center;
+                box-shadow: 0 22px 54px -14px rgba(0,0,0,.55);
+                opacity: 0;
+                pointer-events: none;
+                transition: transform .3s cubic-bezier(.2,1,.3,1),opacity .28s ease
+            }
+
+            #gToast.show {
+                transform: translate(-50%,-50%) scale(1);
+                opacity: 1;
+                pointer-events: auto
+            }
+        </style>
+        <meta name="csrf-token" content="">
+        <link rel="stylesheet" href="/assets/css/customer-ui.css">
+    </head>
+    <body>
+
+        <div class="page">
+
+            <!-- TOPBAR -->
+            <div class="topbar">
+                <a class="tb-back" href="/home.html" aria-label="Back">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                <div class="tb-title">Mission</div>
+            </div>
+
+            <!-- SUMMARY -->
+            <div class="summary">
+                <div class="sm-top">
+                    <div class="sm-ic">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M15.5 7.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" fill="currentColor"/>
+                            <path opacity=".4" d="M19.5 7.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-15 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0Z" fill="currentColor"/>
+                            <path d="M18 16.5c0 1.93-2.69 3.5-6 3.5s-6-1.57-6-3.5S8.69 13 12 13s6 1.57 6 3.5Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="sm-txt">
+                        <div class="sm-lbl">Active team members</div>
+                        <div class="sm-val">
+                            <span id="activeMembers">0</span>
+                            <small>registered and active</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="sm-prog">
+                    <div class="smp-info">
+                        <span id="nextTierText">3 more to unlock ₹50</span>
+                        <span id="tierProgress">0/3</span>
+                    </div>
+                    <div class="smp-bar">
+                        <div class="smp-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="content">
+                <div class="sec">
+                    <span class="st">Reward Milestones</span>
+                    <span class="sc"><span id="unlockedCount">0</span>/<span id="missionTotal">0</span> unlocked</span>
+                </div>
+
+                <div class="tier-list" id="tierList">
+                    <!-- Tier cards will be generated by JS -->
+                </div>
+            </div>
+
+            <!-- CLAIM -->
+            <div class="claim">
+                <div class="cl-left">
+                    <div class="cl-k">Available to claim</div>
+                    <div class="cl-v">₹<span id="claimAmount">0</span></div>
+                </div>
+                <button type="button" class="cl-btn" id="claimBtn" disabled>
+                    Locked
+                </button>
+            </div>
+
+            <!-- HOW -->
+            <div class="how">
+                <div class="how-row">
+                    <span class="how-n">1</span>
+                    <div class="how-t">
+                        Share your personal invite link. Registered active members in your referral team count toward milestones.
+                    </div>
+                </div>
+                <div class="how-row">
+                    <span class="how-n">2</span>
+                    <div class="how-t">
+                        Submit a claim for each eligible milestone. An administrator verifies the team before any internal wallet credit.
+                    </div>
+                </div>
+                <div class="how-row">
+                    <span class="how-n">3</span>
+                    <div class="how-t">
+                        No automatic payout occurs. Approved amounts are internal wallet credits only.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER NAV -->
+        <nav class="footer">
+            <a href="/home.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M21.53 11.59 20.75 10.96V21.25H22a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1 0-1.5h1.25V10.96l-.78.63a.75.75 0 1 1-.94-1.17l8.13-6.5a3.75 3.75 0 0 1 4.68 0l8.13 6.5a.75.75 0 1 1-.94 1.17ZM12 6.75a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5Zm1.75 6.56c-.46-.06-1.03-.06-1.7-.06h-.1c-.66 0-1.24 0-1.7.06-.49.07-.96.22-1.34.6-.39.39-.54.86-.6 1.35-.07.46-.07 1.03-.07 1.7v4.29h7.5v-4.42c0-.62 0-1.15-.06-1.58-.07-.49-.22-.96-.6-1.34-.39-.38-.86-.53-1.35-.6Z"/></svg>
+                Home
+            </a>
+            <a href="/invite.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M2 12c0-3.77 0-5.66 1.17-6.83C4.34 4 6.23 4 10 4h4c3.77 0 5.66 0 6.83 1.17C22 6.34 22 8.23 22 12s0 5.66-1.17 6.83C19.66 20 17.77 20 14 20h-4c-3.77 0-5.66 0-6.83-1.17C2 17.66 2 15.77 2 12Z" fill="currentColor"/><path d="M6.35 7.2a.75.75 0 1 0-.96 1.15l2.6 2.17c1.06.88 1.72 1.44 2.48 1.66.76.23 1.58.23 2.34 0 .76-.22 1.42-.78 2.48-1.66l2.6-2.17a.75.75 0 1 0-.96-1.15l-2.56 2.13c-1.17.98-1.62 1.34-2.08 1.48-.47.14-.96.14-1.42 0-.46-.14-.91-.5-2.08-1.48L6.35 7.2Z" fill="currentColor"/></svg>
+                Share
+            </a>
+            <a href="/spin.html" class="nav-fab" aria-label="Spin">
+                <span class="fab-circle">
+                    <img src="/assets/images/Speener.svg" alt="" width="72" height="72" loading="lazy" decoding="async">
+                </span>
+            </a>
+            <a href="/team.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M15.5 7.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" fill="currentColor"/><path opacity=".4" d="M19.5 7.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-15 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0Z" fill="currentColor"/><path d="M18 16.5c0 1.93-2.69 3.5-6 3.5s-6-1.57-6-3.5S8.69 13 12 13s6 1.57 6 3.5Z" fill="currentColor"/><path opacity=".4" d="M22 16.5c0 1.38-1.79 2.5-4 2.5s-4-1.12-4-2.5 1.79-2.5 4-2.5 4 1.12 4 2.5Zm-20 0C2 17.88 3.79 19 6 19s4-1.12 4-2.5S8.21 14 6 14s-4 1.12-4 2.5Z" fill="currentColor"/></svg>
+                Team
+            </a>
+            <a href="/mine.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="4" fill="currentColor"/><path fill="currentColor" opacity=".5" d="M20 17.5C20 19.99 20 22 12 22s-8-2.01-8-4.5C4 15.01 7.58 13 12 13s8 2.01 8 4.5Z"/></svg>
+                Profile
+            </a>
+        </nav>
+
+        <!-- TOAST -->
+        <div id="gToast" role="alert" aria-live="polite"></div>
+
+        <script>
+            /* ─── TOAST ─── */
+            (function() {
+                if (window.showToast) return;
+                var hideTimer = null;
+                window.showToast = function(message, type, time) {
+                    var toast = document.getElementById('gToast');
+                    if (!toast) return;
+                    type = type || 'success';
+                    time = (typeof time === 'number' && time > 0) ? time : 3;
+                    clearTimeout(hideTimer);
+                    toast.textContent = message;
+                    toast.classList.add('show');
+                    hideTimer = setTimeout(function() { toast.classList.remove('show'); }, time * 1000);
+                };
+            })();
+        </script>
+
+        <script>
+            /* ═════════════════════════════════════════
+               MISSION DISPLAY — rewards are configuration only
+               ═════════════════════════════════════════ */
+            (function() {
+                "use strict";
+
+                var CUR = "\u20b9";
+                function fmt(n) {
+                    return Number(n).toLocaleString("en-IN");
+                }
+                function fmtMoney(n) {
+                    return Number(n).toLocaleString("en-IN", {minimumFractionDigits:2, maximumFractionDigits:2});
+                }
+                function escapeHtml(value) {
+                    return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) {
+                        return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+                    });
+                }
+                function renderMissions(TIERS, activeMembers) {
+
+                /* ─── FIND NEXT TIER ─── */
+                var nextTierIdx = -1;
+                for (var i = 0; i < TIERS.length; i++) {
+                    if (activeMembers < TIERS[i].members) {
+                        nextTierIdx = i;
+                        break;
+                    }
+                }
+
+                /* ─── COMPUTE UNLOCKED TIER (highest reached) ─── */
+                /* ─── SUMMARY ─── */
+                document.getElementById("activeMembers").textContent = fmt(activeMembers);
+
+                if (nextTierIdx >= 0) {
+                    var needed = TIERS[nextTierIdx].members - activeMembers;
+                    var reward = TIERS[nextTierIdx].reward;
+                    document.getElementById("nextTierText").textContent =
+                        needed + " more to unlock " + CUR + fmtMoney(reward);
+                    document.getElementById("tierProgress").textContent =
+                        activeMembers + "/" + TIERS[nextTierIdx].members;
+                    var pct = (activeMembers / TIERS[nextTierIdx].members) * 100;
+                    document.getElementById("progressFill").style.width = pct + "%";
+                } else {
+                    /* All tiers reached */
+                    document.getElementById("nextTierText").textContent = "All milestones unlocked!";
+                    document.getElementById("tierProgress").textContent = activeMembers + "/" + TIERS[TIERS.length - 1].members;
+                    document.getElementById("progressFill").style.width = "100%";
+                }
+
+                /* ─── RENDER TIERS ─── */
+                var tierList = document.getElementById("tierList");
+                tierList.replaceChildren();
+                var unlockedCount = 0;
+
+                TIERS.forEach(function(tier, idx) {
+                    var reached = activeMembers >= tier.members;
+                    var isNext = (idx === nextTierIdx);
+                    var isClaimed = tier.claimStatus === "approved";
+                    var isPending = tier.claimStatus === "pending";
+
+                    if (reached) unlockedCount++;
+
+                    var card = document.createElement("div");
+                    card.className = "tier" +
+                        (isClaimed ? " on" : "") +
+                        (isNext ? " now" : "");
+
+                    var badge = isClaimed ? "Approved" : (isPending ? "Pending review" : (reached ? "Unlocked" : (isNext ? "Next" : "Locked")));
+                    var btnText = isClaimed ? "Approved" : (isPending ? "Pending review" : (reached ? "Request review" : "Locked"));
+
+                    card.innerHTML =
+                        '<div class="ti-top">' +
+                            '<span class="ti-badge">' + badge + '</span>' +
+                            '<div class="ti-num">' + tier.members + '</div>' +
+                        '</div>' +
+                        '<div class="ti-info">' +
+                            '<div class="ti-row">' +
+                                '<span class="ti-k">Mission</span>' +
+                                '<span class="ti-v">' + escapeHtml(tier.name || (tier.members + " members")) + '</span>' +
+                            '</div>' +
+                            '<div class="ti-row">' +
+                                '<span class="ti-k">Members</span>' +
+                                '<span class="ti-v">' + tier.members + ' active</span>' +
+                            '</div>' +
+                            '<div class="ti-row">' +
+                                '<span class="ti-k">Reward</span>' +
+                                '<span class="ti-v hi">' + CUR + fmtMoney(tier.reward) + '</span>' +
+                            '</div>' +
+                            '<div class="ti-row">' +
+                                '<span class="ti-k">Status</span>' +
+                                '<span class="ti-v">' +
+                                    (isClaimed ? "Reward credited to wallet" : (isPending ? "Awaiting admin verification" : (reached ? "Eligible to request" : (tier.members - activeMembers) + " to go"))) +
+                                '</span>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="ti-foot">' +
+                            '<button type="button" class="ti-btn" data-tier="' + idx + '" ' +
+                                (reached && !isClaimed && !isPending ? '' : 'disabled') + '>' +
+                                '<svg viewBox="0 0 24 24" fill="none">' +
+                                    '<path d="M6.5 10V8a5.5 5.5 0 1 1 11 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' +
+                                    '<path opacity=".55" d="M3.8 14.5c0-1.9 0-2.85.6-3.43.58-.57 1.53-.57 3.4-.57h8.4c1.87 0 2.82 0 3.4.57.6.58.6 1.53.6 3.43v1.5c0 1.9 0 2.85-.6 3.43-.58.57-1.53.57-3.4.57H7.8c-1.87 0-2.82 0-3.4-.57-.6-.58-.6-1.53-.6-3.43v-1.5Z" fill="currentColor"/>' +
+                                    '<circle cx="12" cy="15.2" r="1.7" fill="currentColor"/>' +
+                                '</svg>' +
+                                btnText +
+                            '</button>' +
+                        '</div>';
+
+                    tierList.appendChild(card);
+                });
+
+                document.getElementById("unlockedCount").textContent = unlockedCount;
+                document.getElementById("missionTotal").textContent = TIERS.length;
+
+                /* ─── CLAIM AMOUNT ─── */
+                var claimBtn = document.getElementById("claimBtn");
+                var claimAmountEl = document.getElementById("claimAmount");
+
+                var claimableTier = -1;
+                for (var k = TIERS.length - 1; k >= 0; k--) {
+                    if (activeMembers >= TIERS[k].members
+                        && TIERS[k].claimStatus !== "approved" && TIERS[k].claimStatus !== "pending") {
+                        claimableTier = k;
+                        break;
+                    }
+                }
+
+                var claimableAmount = claimableTier >= 0 ? TIERS[claimableTier].reward : 0;
+                claimAmountEl.textContent = fmtMoney(claimableAmount);
+
+                if (claimableTier >= 0) {
+                    claimBtn.disabled = false;
+                    claimBtn.textContent = "Request review " + CUR + fmtMoney(claimableAmount);
+                } else {
+                    claimBtn.disabled = true;
+                    claimBtn.textContent = TIERS.some(function(tier) { return tier.claimStatus === "pending"; })
+                        ? "Claim pending review" : "Locked";
+                }
+
+                async function doClaim(tierIdx) {
+                    if (tierIdx < 0 || tierIdx >= TIERS.length) return;
+                    if (activeMembers < TIERS[tierIdx].members) {
+                        showToast("Milestone not reached yet", "error");
+                        return;
+                    }
+                    var buttons = tierList.querySelectorAll(".ti-btn");
+                    buttons.forEach(function(button) { button.disabled = true; });
+                    claimBtn.disabled = true;
+                    try {
+                        var csrfResponse = await fetch("/api/csrf", {credentials:"include"});
+                        var csrf = await csrfResponse.json();
+                        if (!csrfResponse.ok || !csrf.csrfToken) throw new Error(csrf.message || "Secure session expired.");
+                        var response = await fetch("/api/missions/claim", {
+                            method:"POST", credentials:"include",
+                            headers:{"Content-Type":"application/json","X-CSRF-Token":csrf.csrfToken},
+                            body:JSON.stringify({missionId:TIERS[tierIdx].id})
+                        });
+                        var result = await response.json();
+                        if (response.status === 401) {
+                            window.location.replace("/index.html");
+                            return;
+                        }
+                        if (!response.ok || !result.success) throw new Error(result.message || "Claim request failed.");
+                        showToast(result.message, "success");
+                        window.location.reload();
+                    } catch (error) {
+                        showToast(error.message || "Claim request failed.", "error");
+                        buttons.forEach(function(button) { button.disabled = false; });
+                        claimBtn.disabled = false;
+                        console.error(error);
+                    }
+                }
+
+                claimBtn.addEventListener("click", function() {
+                    if (claimableTier >= 0) {
+                        doClaim(claimableTier);
+                    }
+                });
+
+                /* Tier buttons */
+                tierList.addEventListener("click", function(e) {
+                    var btn = e.target.closest(".ti-btn");
+                    if (!btn || btn.disabled) return;
+                    var idx = parseInt(btn.getAttribute("data-tier"), 10);
+                    doClaim(idx);
+                });
+
+                }
+
+                fetch("/api/missions", {credentials:"include", cache:"no-store"})
+                    .then(function(response) {
+                        if (response.status === 401) {
+                            window.location.replace("/index.html");
+                            throw new Error("Please sign in again.");
+                        }
+                        if (!response.ok) throw new Error("Could not load missions.");
+                        return response.json();
+                    })
+                    .then(function(result) {
+                        if (!result.success || !Array.isArray(result.missions)) {
+                            throw new Error("Mission response was invalid.");
+                        }
+                        renderMissions(result.missions.map(function(mission) {
+                            return {
+                                id: mission.id,
+                                name: mission.name,
+                                members: mission.targetMembers,
+                                reward: Number(mission.rewardPaise) / 100,
+                                claimStatus: mission.claimStatus
+                            };
+                        }), result.activeMembers);
+                    })
+                    .catch(function(error) {
+                        console.error(error);
+                        document.getElementById("tierList").textContent = "Mission data is temporarily unavailable.";
+                    });
+            })();
+        </script>
+
+    </body>
+</html>

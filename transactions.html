@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Transactions · Finora</title>
+    <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
+            color: #3a2e10;
+            background: #fffaf7;
+            --brand: #ed1717;
+            --brand-dark: #b90000;
+            --line: #f5ded9;
+            --muted: #9b7770;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0 auto; max-width: 480px; min-height: 100vh; padding-bottom: 36px; }
+        .topbar { position: relative; display: flex; align-items: center; min-height: 64px; padding: 12px 16px; }
+        .back {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: #fff;
+            color: var(--brand-dark);
+            text-decoration: none;
+            box-shadow: 0 8px 20px -10px rgba(214,143,0,.35);
+        }
+        .back svg { width: 18px; height: 18px; }
+        h1 { position: absolute; left: 50%; margin: 0; transform: translateX(-50%); font-size: 21px; font-weight: 700; }
+        main { padding: 0 14px; }
+        .tabs-card {
+            position: relative;
+            overflow: hidden;
+            padding: 9px;
+            border-radius: 22px;
+            background: radial-gradient(130% 100% at 88% -12%, #ff7164 0%, transparent 55%),
+                linear-gradient(160deg, #ef2520 0%, #d90000 55%, #a90000 100%);
+            box-shadow: 0 16px 34px -18px rgba(185,0,0,.45);
+        }
+        .tabs { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .tab {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 46px;
+            padding: 8px 6px;
+            border-radius: 18px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background .15s, color .15s;
+        }
+        .tab[aria-current="page"] { background: #fff; color: #b90000; box-shadow: 0 5px 14px -9px rgba(65,0,0,.5); }
+        .list { display: grid; gap: 10px; margin-top: 14px; }
+        .transaction {
+            display: grid;
+            grid-template-columns: 42px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 11px;
+            padding: 13px 12px;
+            border: 1px solid #f5ded9;
+            border-radius: 19px;
+            background: #fff;
+            box-shadow: 0 9px 22px -19px rgba(110,80,0,.4);
+        }
+        .icon {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 14px;
+            background: #fff0ed;
+            color: var(--brand-dark);
+            border-radius: 50%;
+            box-shadow: 0 5px 12px -7px rgba(185,0,0,.55);
+        }
+        .icon.withdrawal { background: linear-gradient(160deg, #f32222, #a90000); color: #fff; }
+        .icon.adjustment { background: #eef8ed; color: #398044; }
+        .icon svg { width: 21px; height: 21px; }
+        .details { min-width: 0; }
+        .title { overflow: hidden; color: #3a2e10; font-size: 13px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+        .meta { margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.45; overflow-wrap: anywhere; }
+        .right { display: grid; justify-items: end; gap: 5px; }
+        .amount { color: #3a2e10; font-size: 13px; font-weight: 700; white-space: nowrap; }
+        .amount.credit { color: #29804a; }
+        .amount.debit { color: #a90000; }
+        .badge { padding: 5px 10px; border-radius: 20px; background: #fff4d5; color: #936400; font-size: 9px; font-weight: 600; white-space: nowrap; }
+        .badge.approved { background: linear-gradient(160deg, #22a36a, #087443); color: #fff; }
+        .badge.approved::before { content: "✓"; display: inline-grid; place-items: center; width: 13px; height: 13px; margin-right: 5px; border-radius: 50%; background: rgba(255,255,255,.32); color: #fff; font-size: 9px; line-height: 1; }
+        .badge.processing { background: linear-gradient(160deg, #54c98a, #168451); color: #fff; }
+        .badge.rejected { background: #fff0e8; color: #ae4c2d; }
+        .empty, .error {
+            padding: 32px 18px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: #fff;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        .error { color: #a13d21; }
+        .retry { margin-top: 12px; padding: 8px 14px; border: 0; border-radius: 20px; background: var(--brand-dark); color: #fff; font: inherit; cursor: pointer; }
+        @media (max-width: 360px) {
+            .transaction { grid-template-columns: 36px minmax(0, 1fr) auto; gap: 8px; padding: 11px 9px; }
+            .icon { width: 36px; height: 36px; }
+            .amount { font-size: 12px; }
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+    </style>
+    <link rel="stylesheet" href="/assets/css/customer-ui.css">
+    <style>
+        body { max-width: 480px !important; container-type: inline-size; padding-bottom: calc(104px + env(safe-area-inset-bottom)) !important; }
+        .topbar { min-height: 72px; padding: 12px 16px; }
+        .back { width: 46px; height: 46px; border-radius: 17px; }
+        .back svg { width: 21px; height: 21px; }
+        h1 { font-size: 22px; }
+        main { padding: 0 14px; }
+        .tabs-card { padding: 8px; border-radius: 24px; }
+        .tabs { gap: 4px; }
+        .tabs-card .tab { min-height: 52px; border-radius: 18px; font-size: 14px; }
+        .tabs-card .tab[aria-current="page"] { background: #fff; color: #9d0000; }
+        .all-icon { width: 17px; height: 17px; margin-right: 6px; }
+        .list { gap: 12px; margin-top: 16px; }
+        .transaction {
+            grid-template-columns: 48px minmax(0, 1fr) auto;
+            gap: 12px;
+            min-height: clamp(96px, 21cqi, 112px);
+            padding: 12px;
+            border-radius: 21px;
+            box-shadow: 0 12px 28px -20px rgba(110, 0, 0, .38);
+        }
+        .transaction { grid-template-columns: clamp(48px, 13cqi, 60px) minmax(0, 1fr) auto; }
+        .icon { width: clamp(48px, 13cqi, 60px); height: clamp(48px, 13cqi, 60px); border-radius: 50%; background: linear-gradient(160deg, #f32222, #a90000); color: #fff; }
+        .icon.adjustment { background: #eef8ed; color: #398044; }
+        .icon svg { width: 24px; height: 24px; }
+        .title { font-size: clamp(14px, 3.5cqi, 17px); font-weight: 700; }
+        .meta { margin-top: 5px; font-size: clamp(10px, 2.5cqi, 12px); }
+        .right { gap: 6px; }
+        .amount { color: #990000; font-size: clamp(14px, 3.7cqi, 18px); font-weight: 800; }
+        .amount.credit, .amount.debit { color: #990000; }
+        .badge { min-width: clamp(88px, 24cqi, 108px); padding: 8px 10px; text-align: center; font-size: clamp(10px, 2.8cqi, 12px); }
+        .badge.approved { background: linear-gradient(160deg, #22a36a 0%, #11804f 58%, #08653d 100%); color: #fff; }
+        .badge.processing { background: linear-gradient(160deg, #54c98a, #168451); color: #fff; }
+        .badge.processing::before { content: "◷"; margin-right: 5px; }
+        .badge.rejected { background: #fff0e8; color: #ae4c2d; }
+        @media (max-width: 360px) {
+            .transaction { grid-template-columns: 40px minmax(0, 1fr) auto; gap: 8px; padding: 10px 9px; }
+            .icon { width: 40px; height: 40px; }
+            .icon svg { width: 21px; height: 21px; }
+            .badge { min-width: 0; padding: 7px 8px; }
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a class="back" href="/mine.html" aria-label="Back to profile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>
+        </a>
+        <h1>Transactions</h1>
+    </header>
+    <main>
+        <nav class="tabs-card" aria-label="Filter transactions">
+            <div class="tabs">
+                <a class="tab" data-filter="all" href="/transactions.html?tab=all"><svg class="all-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4 16 5-5 4 3 7-8m-5 0h5v5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>All</a>
+                <a class="tab" data-filter="deposit" href="/transactions.html?tab=deposit">Deposit</a>
+                <a class="tab" data-filter="withdrawal" href="/transactions.html?tab=withdrawal">Withdraw</a>
+            </div>
+        </nav>
+        <section class="list" id="transactions" aria-live="polite" aria-label="Wallet transactions">
+            <p class="empty">Loading transactions…</p>
+        </section>
+    </main>
+    <script>
+        (function() {
+            var list = document.getElementById("transactions");
+            var params = new URLSearchParams(window.location.search);
+            var selectedFilter = params.get("tab");
+            if (!["all", "deposit", "withdrawal"].includes(selectedFilter)) selectedFilter = "all";
+
+            document.querySelectorAll(".tab").forEach(function(tab) {
+                if (tab.dataset.filter === selectedFilter) tab.setAttribute("aria-current", "page");
+            });
+
+            function money(amountPaise) {
+                return "₹" + (Math.abs(amountPaise) / 100).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+
+            function formatDate(value) {
+                var date = new Date(String(value).replace(" ", "T") + "Z");
+                if (Number.isNaN(date.getTime())) return value;
+                var parts = new Intl.DateTimeFormat("en-GB", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hourCycle: "h12"
+                }).formatToParts(date);
+                var values = Object.fromEntries(parts.map(function(part) { return [part.type, part.value]; }));
+                return values.day + "/" + values.month + "/" + values.year
+                    + " · " + values.hour + ":" + values.minute + " " + values.dayPeriod.toUpperCase();
+            }
+
+            function transactionName(transaction) {
+                if (transaction.type === "recharge") return "Topup";
+                if (transaction.type === "withdrawal") return "Withdrawal";
+                if (transaction.amountPaise < 0) return "Wallet debit";
+                return "Wallet credit";
+            }
+
+            function appendTransaction(transaction) {
+                var row = document.createElement("article");
+                row.className = "transaction";
+
+                var icon = document.createElement("span");
+                icon.className = "icon " + (transaction.type === "withdrawal" ? "withdrawal"
+                    : transaction.type === "adjustment" ? "adjustment" : "");
+                icon.setAttribute("aria-hidden", "true");
+                icon.innerHTML = transaction.type === "withdrawal"
+                    ? '<svg viewBox="0 0 24 24" fill="none"><path d="M3 9h18L12 4 3 9Zm2 2v7m4-7v7m6-7v7m4-7v7M3 20h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                    : transaction.type === "adjustment"
+                        ? '<svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18m9-9H3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>'
+                        : '<svg viewBox="0 0 24 24" fill="none"><path d="M4 3h16v18l-3-2-3 2-3-2-3 2-4-2V3Zm4 5h8m-8 4h8m-8 4h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+                var details = document.createElement("div");
+                details.className = "details";
+                var title = document.createElement("div");
+                title.className = "title";
+                title.textContent = transactionName(transaction);
+                var meta = document.createElement("div");
+                meta.className = "meta";
+                meta.textContent = formatDate(transaction.createdAt);
+                details.append(title, meta);
+
+                var right = document.createElement("div");
+                right.className = "right";
+                var amount = document.createElement("div");
+                amount.className = "amount";
+                var debit = transaction.type === "withdrawal"
+                    || (transaction.type === "adjustment" && transaction.amountPaise < 0);
+                amount.classList.add(debit ? "debit" : "credit");
+                amount.textContent = money(transaction.amountPaise);
+
+                var badge = document.createElement("span");
+                var statusClass = transaction.status === "pending" ? "processing" : transaction.status;
+                badge.className = "badge " + statusClass;
+                badge.textContent = transaction.status === "pending" ? "Processing"
+                    : transaction.status === "processing" ? "Processing"
+                        : transaction.status === "approved" ? "Success" : "Rejected";
+                right.append(amount, badge);
+                row.append(icon, details, right);
+                list.appendChild(row);
+            }
+
+            function showError(message) {
+                list.replaceChildren();
+                var error = document.createElement("div");
+                error.className = "error";
+                error.append(document.createTextNode(message));
+                var retry = document.createElement("button");
+                retry.className = "retry";
+                retry.type = "button";
+                retry.textContent = "Try again";
+                retry.addEventListener("click", loadTransactions);
+                error.appendChild(document.createElement("br"));
+                error.appendChild(retry);
+                list.appendChild(error);
+            }
+
+            async function loadTransactions() {
+                list.innerHTML = '<p class="empty">Loading transactions…</p>';
+                try {
+                    var response = await fetch("/api/wallet", {
+                        credentials: "include",
+                        cache: "no-store"
+                    });
+                    var result = await response.json();
+                    if (!response.ok || result.success !== true || !Array.isArray(result.transactions)) {
+                        throw new Error(result.message || "Could not load transactions. Please try again.");
+                    }
+                    var transactions = result.transactions.filter(function(transaction) {
+                        if (selectedFilter === "deposit") return transaction.type === "recharge";
+                        if (selectedFilter === "withdrawal") return transaction.type === "withdrawal";
+                        return true;
+                    });
+                    list.replaceChildren();
+                    if (!transactions.length) {
+                        var empty = document.createElement("p");
+                        empty.className = "empty";
+                        empty.textContent = selectedFilter === "deposit" ? "No deposit transactions yet."
+                            : selectedFilter === "withdrawal" ? "No withdrawal transactions yet."
+                                : "No transactions yet.";
+                        list.appendChild(empty);
+                        return;
+                    }
+                    transactions.forEach(appendTransaction);
+                } catch (error) {
+                    showError(error.message || "Could not load transactions. Please try again.");
+                }
+            }
+
+            loadTransactions();
+        })();
+    </script>
+    <nav class="footer" aria-label="Main navigation">
+        <a href="/pages/home" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.5 11.6 12.9 4.7a1.5 1.5 0 0 0-1.8 0L2.5 11.6a.75.75 0 0 0 .94 1.17l.81-.65V21H3a.75.75 0 0 0 0 1.5h18a.75.75 0 0 0 0-1.5h-1.25v-8.88l.81.65a.75.75 0 0 0 .94-1.17Z"/></svg>Home</a>
+        <a href="/pages/invite" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-8 8a8 8 0 0 1 16 0v1H4v-1Zm15-9a3 3 0 1 0-2.4-4.8 5.5 5.5 0 0 1 1.1 4.8h1.3ZM19 14a6 6 0 0 1 3 5.2V21h-2v-1a9.8 9.8 0 0 0-1-4.2V14Z"/></svg>Share</a>
+        <a href="/pages/spin" class="nav-fab" aria-label="Spin"><span class="fab-circle"><img src="/assets/images/Speener.svg" alt="" width="60" height="60"></span></a>
+        <a href="/pages/team" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 0a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM1 20a7 7 0 0 1 14 0v1H1v-1Zm15.5-6a6.5 6.5 0 0 1 6.5 6v1h-6v-1a8.9 8.9 0 0 0-2.1-5.8 6.4 6.4 0 0 1 1.6-.2Z"/></svg>Team</a>
+        <a href="/pages/mine" class="nav-item active" aria-current="page"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5 0-9 2.6-9 5.8V22h18v-2.2c0-3.2-4-5.8-9-5.8Z"/></svg>Profile</a>
+    </nav>
+</body>
+</html>

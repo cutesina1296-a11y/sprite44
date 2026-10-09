@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Share · Finora</title>
+        <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+        <meta name="robots" content="noindex,nofollow">
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <style>
+            body {
+                --g-primary: #f5b400;
+                --g-deep: #d68f00;
+                --g-light: #ffd23f;
+                --g-glow: #fff06a;
+                --g-soft: #fffbe6;
+                --g-tint: rgba(245,180,0,.10);
+                --ink: #3a2e10;
+                --muted: #9a8748;
+                --field: #fdf8e8;
+                --line: #f2e8c8;
+                --bg-page: #fffdf4;
+                --on-brand: #ffffff
+            }
+
+            .ch-copy svg { width: 17px; height: 17px }
+            .s-circle svg { width: 22px; height: 22px; color: #fff }
+            .rule svg { width: 15px; height: 15px; color: var(--g-primary); margin-top: 3px; flex-shrink: 0 }
+
+            :root {
+                --premium: rgba(255,255,255,.20) 5px -1px 9px inset,rgba(255,255,255,.07) 0 3px 9px inset,rgba(255,255,255,.00) 0 1px 1px inset,rgba(0,0,0,.05) 0 -8px 36px inset,rgb(255 255 255 / 36%) 0 1px 5px inset,rgba(0,0,0,.10) 2px 19px 31px
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                -webkit-tap-highlight-color: transparent
+            }
+
+            body,p,span,div,input,button,a,label,h1,h2,h3,h4,h5,h6 { font-weight: 400 }
+
+            body {
+                font-family: "Poppins",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+                background: var(--bg-page);
+                color: var(--ink);
+                font-size: 14px;
+                line-height: 1.5;
+                min-height: 100vh;
+                padding-bottom: 100px;
+                max-width: 480px;
+                margin: 0 auto;
+                -webkit-font-smoothing: antialiased
+            }
+
+            /* ─── POSTER ─── */
+            .poster {
+                position: relative;
+                width: 100%;
+                height: 250px;
+                overflow: hidden;
+                background-size: cover;
+                background-position: center;
+                background-color: #b77500;
+                background-image: radial-gradient(95% 115% at 95% 5%,rgba(255,244,155,.92) 0%,rgba(255,210,63,.35) 36%,transparent 70%),radial-gradient(90% 120% at 10% 100%,rgba(167,91,0,.55) 0%,transparent 70%),linear-gradient(145deg,#f5bd12 0%,#eda800 48%,#cb7900 100%)
+            }
+
+            .poster::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(90deg,rgba(103,57,0,.28),transparent 78%),linear-gradient(to bottom,rgba(0,0,0,.12),transparent 42%,rgba(111,57,0,.24))
+            }
+
+            .poster-image {
+                position: absolute;
+                z-index: 0;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover
+            }
+
+            .topbar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 62px;
+                display: flex;
+                align-items: center;
+                padding: 0 12px;
+                z-index: 4
+            }
+
+            .tb-title {
+                flex: 1;
+                text-align: center;
+                color: #fff;
+                font-size: 20px;
+                font-weight: 700;
+                letter-spacing: .3px;
+                text-shadow: 0 2px 8px rgba(0,0,0,.4)
+            }
+
+            .poster-art {
+                position: absolute;
+                z-index: 1;
+                right: 10px;
+                bottom: 16px;
+                width: 154px;
+                height: 154px;
+                filter: drop-shadow(0 12px 14px rgba(96,52,0,.22))
+            }
+
+            .poster-art svg {
+                display: block;
+                width: 100%;
+                height: 100%
+            }
+
+            /* ─── SHEET ─── */
+            .sheet {
+                position: relative;
+                z-index: 3;
+                margin-top: -30px;
+                background: var(--bg-page);
+                border-radius: 28px 28px 0 0;
+                padding: 22px 16px 8px;
+                box-shadow: 0 -10px 30px rgba(214,143,0,.12)
+            }
+
+            /* ─── CODE HERO ─── */
+            .code-hero {
+                background: linear-gradient(135deg,#42c982,#11804f,#045b35);
+                border-radius: 20px;
+                padding: 20px;
+                color: var(--on-brand);
+                position: relative;
+                overflow: hidden;
+                box-shadow: var(--premium);
+                margin-bottom: 16px
+            }
+
+            .code-hero::before {
+                content: '';
+                position: absolute;
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.18);
+                right: -50px;
+                top: -50px
+            }
+
+            .code-hero::after {
+                content: '';
+                position: absolute;
+                width: 90px;
+                height: 90px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.12);
+                right: 30px;
+                bottom: -45px
+            }
+
+            .ch-label {
+                font-size: 11px;
+                opacity: .85;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                position: relative;
+                z-index: 1
+            }
+
+            .ch-code {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-top: 8px;
+                position: relative;
+                z-index: 1
+            }
+
+            .ch-code .code-val {
+                font-size: 32px;
+                font-weight: 700;
+                letter-spacing: 3px;
+                flex: 1;
+                text-shadow: 0 2px 10px rgba(0,0,0,.22)
+            }
+
+            .ch-copy {
+                width: 42px;
+                height: 42px;
+                background: rgba(255,255,255,.3);
+                border: 1.5px solid rgba(255,255,255,.5);
+                border-radius: 12px;
+                color: var(--on-brand);
+                font-size: 14px;
+                cursor: pointer;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: transform .12s,background .12s;
+                box-shadow: var(--premium)
+            }
+
+            .ch-copy:active {
+                transform: scale(.9);
+                background: rgba(255,255,255,.45)
+            }
+
+            /* ─── LINK PILL ─── */
+            .link-pill {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background: #fff;
+                border-radius: 16px;
+                padding: 9px 9px 9px 16px;
+                margin-bottom: 24px;
+                box-shadow: var(--premium);
+                border: 1px solid var(--line)
+            }
+
+            .link-pill .lp-icon {
+                width: 18px;
+                height: 18px;
+                flex-shrink: 0;
+                display: flex;
+                color: var(--g-primary)
+            }
+
+            .link-pill .lp-icon svg {
+                width: 100%;
+                height: 100%
+            }
+
+            .link-pill .lp-val {
+                flex: 1;
+                min-width: 0;
+                font-size: 12.5px;
+                color: var(--ink);
+                font-weight: 500;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis
+            }
+
+            .link-pill .lp-copy {
+                background: linear-gradient(180deg,#34d399 0%,#16a34a 55%,#15803d 100%);
+                color: var(--on-brand);
+                border: 0;
+                border-radius: 12px;
+                padding: 11px 16px;
+                font-size: 12.5px;
+                font-weight: 700;
+                cursor: pointer;
+                font-family: inherit;
+                flex-shrink: 0;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,.25),0 6px 16px -6px rgba(21,128,61,.45);
+                transition: transform .12s;
+                white-space: nowrap
+            }
+
+            .link-pill .lp-copy:active { transform: scale(.96) }
+
+            /* ─── SECTION TITLE ─── */
+            .section-title {
+                font-size: 13.5px;
+                font-weight: 700;
+                color: var(--ink);
+                margin: 0 4px 14px;
+                display: flex;
+                align-items: center;
+                gap: 8px
+            }
+
+            .section-title .st-ic {
+                width: 17px;
+                height: 17px;
+                display: flex;
+                color: var(--g-primary)
+            }
+
+            .section-title .st-ic svg {
+                width: 100%;
+                height: 100%
+            }
+
+            /* ─── SOCIAL ROW ─── */
+            .social-row {
+                display: flex;
+                justify-content: space-between;
+                gap: 7px;
+                margin-bottom: 26px
+            }
+
+            .social-btn {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 7px;
+                text-decoration: none;
+                cursor: pointer;
+                color: var(--ink);
+                font-size: 10px;
+                font-weight: 600;
+                background: none;
+                border: 0;
+                font-family: inherit
+            }
+
+            .social-btn .s-circle {
+                width: 50px;
+                height: 50px;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #fff;
+                font-size: 20px;
+                box-shadow: var(--premium);
+                transition: transform .14s;
+                border: 2px solid #fff;
+                overflow: hidden
+            }
+
+            .social-btn .s-circle img {
+                width: 30px;
+                height: 30px;
+                display: block
+            }
+
+            .social-btn:active .s-circle { transform: scale(.9) }
+
+            .s-wa { background: linear-gradient(160deg,#2ee36b,#1ebd55) }
+            .s-tg { background: linear-gradient(160deg,#36b6ed,#1f93cf) }
+            .s-fb { background: linear-gradient(160deg,#4e92ff,#1877F2) }
+            .s-x  { background: linear-gradient(160deg,#2b2f33,#14171a) }
+            .s-more { background: linear-gradient(160deg,var(--g-light),var(--g-primary)) }
+
+            /* ─── RULES ─── */
+            .rules-card {
+                background: #fff;
+                border-radius: 18px;
+                padding: 6px 16px;
+                box-shadow: var(--premium);
+                margin-bottom: 6px;
+                border: 1px solid var(--line)
+            }
+
+            .rule {
+                display: flex;
+                align-items: flex-start;
+                gap: 11px;
+                padding: 13px 0;
+                border-bottom: 1px dashed var(--line)
+            }
+
+            .rule:last-child { border-bottom: none }
+
+            .rule .r-text {
+                font-size: 12.5px;
+                color: var(--ink);
+                line-height: 1.5
+            }
+
+            .rule .r-text b {
+                color: var(--g-deep);
+                font-weight: 700
+            }
+
+            /* ─── FOOTER NAV ─── */
+            .footer {
+                position: fixed;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                max-width: 480px;
+                background: #fff;
+                border-top: 1px solid var(--line);
+                padding: 8px 10px calc(6px + env(safe-area-inset-bottom));
+                display: flex;
+                justify-content: space-around;
+                align-items: flex-end;
+                z-index: 100;
+                box-shadow: 0 -8px 30px rgba(214,143,0,.10);
+                overflow: visible
+            }
+
+            .nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-decoration: none;
+                padding: 6px 0;
+                color: var(--muted);
+                position: relative;
+                font-size: 11px;
+                transition: color .15s
+            }
+
+            .nav-item svg {
+                width: 24px;
+                height: 24px
+            }
+
+            .nav-item.active {
+                color: var(--g-deep);
+                font-weight: 600
+            }
+
+            .nav-item.active::before {
+                content: "";
+                position: absolute;
+                top: -8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 28px;
+                height: 3px;
+                background: linear-gradient(90deg,var(--g-light),var(--g-primary));
+                border-radius: 0 0 3px 3px
+            }
+
+            .nav-fab {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-decoration: none;
+                color: var(--g-deep);
+                font-size: 11px;
+                font-weight: 600
+            }
+
+            .nav-fab .fab-circle {
+                width: 72px;
+                height: 72px;
+                margin-top: -34px;
+                padding: 7px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(145deg,#ffffff,#f0e6e4);
+                border: 0;
+                overflow: hidden;
+                box-shadow: 8px 8px 18px rgba(214,143,0,.20),-6px -6px 14px rgba(255,255,255,.95),inset 3px 3px 6px rgba(255,255,255,.90),inset -4px -4px 9px rgba(214,143,0,.14);
+                transition: transform .18s ease,box-shadow .18s ease
+            }
+
+            .nav-fab .fab-circle img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                display: block;
+                border-radius: 50%;
+                animation: fabWheel 9s linear infinite
+            }
+
+            @keyframes fabWheel { to { transform: rotate(360deg) } }
+
+            .nav-fab:active .fab-circle {
+                transform: scale(.94);
+                box-shadow: 4px 4px 10px rgba(214,143,0,.18),-3px -3px 8px rgba(255,255,255,.85),inset 4px 4px 9px rgba(214,143,0,.18),inset -3px -3px 7px rgba(255,255,255,.85)
+            }
+
+            .nav-fab:active .fab-circle img { animation-play-state: paused }
+
+            @media (prefers-reduced-motion:reduce) {
+                .nav-fab .fab-circle img { animation: none }
+            }
+
+            /* ─── TOAST ─── */
+            #gToast {
+                position: fixed;
+                z-index: 100000;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%) scale(.9);
+                min-width: 160px;
+                max-width: 92%;
+                padding: 14px 24px;
+                border-radius: 16px;
+                background: rgba(20,18,24,.88);
+                color: #fff;
+                font-size: 14px;
+                font-weight: 600;
+                text-align: center;
+                box-shadow: 0 22px 54px -14px rgba(0,0,0,.55);
+                opacity: 0;
+                pointer-events: none;
+                transition: transform .3s cubic-bezier(.2,1,.3,1),opacity .28s ease;
+                white-space: nowrap
+            }
+
+            #gToast.show {
+                transform: translate(-50%,-50%) scale(1);
+                opacity: 1;
+                pointer-events: auto
+            }
+
+            @media (max-width: 360px) {
+                .poster { height: 232px }
+                .poster-art { right: 2px; bottom: 10px; width: 132px; height: 132px }
+            }
+        </style>
+        <meta name="csrf-token" content="">
+        <link rel="stylesheet" href="/assets/css/customer-ui.css">
+    </head>
+    <body>
+
+        <!-- ═══ POSTER ═══ -->
+        <div class="poster">
+            <img class="poster-image" id="inviteBannerImage" alt="" hidden>
+            <div class="topbar">
+                <div class="tb-title">Share</div>
+            </div>
+            <div class="poster-art" aria-hidden="true">
+                <svg viewBox="0 0 180 180" fill="none">
+                    <circle cx="91" cy="91" r="77" fill="white" fill-opacity=".16" stroke="white" stroke-opacity=".42" stroke-width="1.5"/>
+                    <circle cx="91" cy="91" r="61" stroke="white" stroke-opacity=".3" stroke-width="1.5" stroke-dasharray="4 7"/>
+                    <path d="M53 77 88 54m39 23L92 54m-2 75V99" stroke="white" stroke-opacity=".8" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="49" cy="78" r="25" fill="#fff9df"/>
+                    <circle cx="49" cy="71" r="7" fill="#eda800"/>
+                    <path d="M35 91c2-9 7-13 14-13s12 4 14 13" fill="#f5b400"/>
+                    <circle cx="131" cy="78" r="25" fill="#fff9df"/>
+                    <circle cx="131" cy="71" r="7" fill="#eda800"/>
+                    <path d="M117 91c2-9 7-13 14-13s12 4 14 13" fill="#f5b400"/>
+                    <circle cx="90" cy="130" r="25" fill="#fff9df"/>
+                    <circle cx="90" cy="123" r="7" fill="#eda800"/>
+                    <path d="M76 143c2-9 7-13 14-13s12 4 14 13" fill="#f5b400"/>
+                    <circle cx="90" cy="51" r="17" fill="#fff" fill-opacity=".92"/>
+                    <path d="M83 51h14m-7-7v14" stroke="#d68f00" stroke-width="3" stroke-linecap="round"/>
+                    <path d="m145 34 3.5 7.5 8.5 1-6.2 5.8 1.5 8.4-7.3-4.2-7.4 4.2 1.5-8.4-6.1-5.8 8.5-1L145 34Z" fill="#fff5b4"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- ═══ SHEET ═══ -->
+        <div class="sheet">
+
+            <!-- CODE HERO -->
+            <div class="code-hero">
+                <div class="ch-label">Your Invite Code</div>
+                <div class="ch-code">
+                    <div class="code-val" id="refCodeVal">------</div>
+                    <button class="ch-copy" onclick="copyText('refCodeVal')" aria-label="Copy code">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path opacity=".5" d="M8 10c0-2.83 0-4.24.88-5.12C9.76 4 11.17 4 14 4h1c2.83 0 4.24 0 5.12.88C21 5.76 21 7.17 21 10v5c0 2.83 0 4.24-.88 5.12C19.24 21 17.83 21 15 21h-1c-2.83 0-4.24 0-5.12-.88C8 19.24 8 17.83 8 15v-5Z" fill="currentColor"/>
+                            <path d="M3.88 3.88C3 4.76 3 6.17 3 9v5c0 2.83 0 4.24.88 5.12.5.5 1.17.72 2.2.81C6 19.15 6 17.68 6 16V9c0-1.68 0-3.15.08-4.93-1.03.09-1.7.31-2.2.81Z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- LINK PILL -->
+            <div class="link-pill">
+                <span class="lp-icon">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12.7917 15.7991L14.2223 14.3676C16.5926 11.9959 16.5926 8.15054 14.2223 5.7788C11.8521 3.40707 8.0091 3.40707 5.63885 5.7788L2.77769 8.64174C0.407436 11.0135 0.407436 14.8588 2.77769 17.2306C3.87688 18.3304 5.29279 18.9202 6.73165 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <path opacity="0.5" d="M11.2083 8.20092L9.77769 9.63239C7.40744 12.0041 7.40744 15.8495 9.77769 18.2212C12.1479 20.5929 15.9909 20.5929 18.3612 18.2212L21.2223 15.3583C23.5926 12.9865 23.5926 9.14118 21.2223 6.76945C20.1231 5.66957 18.7072 5.07976 17.2683 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                <div class="lp-val" id="refLinkVal">Loading...</div>
+                <button class="lp-copy" onclick="copyText('refLinkVal')">Copy Link</button>
+            </div>
+
+            <!-- SHARE SECTION -->
+            <div class="section-title">
+                <span class="st-ic">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 9C10.3431 9 9 7.65685 9 6C9 4.34315 10.3431 3 12 3C13.6569 3 15 4.34315 15 6C15 7.65685 13.6569 9 12 9Z" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M5.5 21C3.84315 21 2.5 19.6569 2.5 18C2.5 16.3431 3.84315 15 5.5 15C7.15685 15 8.5 16.3431 8.5 18C8.5 19.6569 7.15685 21 5.5 21Z" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M18.5 21C16.8431 21 15.5 19.6569 15.5 18C15.5 16.3431 16.8431 15 18.5 15C20.1569 15 21.5 16.3431 21.5 18C21.5 19.6569 20.1569 21 18.5 21Z" stroke="currentColor" stroke-width="1.5"/>
+                        <path opacity="0.5" d="M20 13C20 10.6106 18.9525 8.46589 17.2916 7M4 13C4 10.6106 5.04752 8.46589 6.70838 7M10 20.748C10.6392 20.9125 11.3094 21 12 21C12.6906 21 13.3608 20.9125 14 20.748" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                Share via
+            </div>
+
+            <div class="social-row">
+                <button class="social-btn" onclick="shareWhatsApp()">
+                    <span class="s-circle s-wa">
+                        <img src="https://img.icons8.com/?size=100&id=A1JUR9NRH7sC&format=png&color=FFFFFF" alt="WhatsApp" loading="lazy">
+                    </span>
+                    WhatsApp
+                </button>
+                <button class="social-btn" onclick="shareTelegram()">
+                    <span class="s-circle s-tg">
+                        <img src="https://img.icons8.com/?size=100&id=5mIvDYZUWDCF&format=png&color=FFFFFF" alt="Telegram" loading="lazy">
+                    </span>
+                    Telegram
+                </button>
+                <button class="social-btn" onclick="shareFacebook()">
+                    <span class="s-circle s-fb">
+                        <img src="https://img.icons8.com/?size=100&id=z657ovoGgS2o&format=png&color=FFFFFF" alt="Facebook" loading="lazy">
+                    </span>
+                    Facebook
+                </button>
+                <button class="social-btn" onclick="shareX()">
+                    <span class="s-circle s-x">
+                        <img src="https://img.icons8.com/?size=100&id=phOKFKYpe00C&format=png&color=FFFFFF" alt="X" loading="lazy">
+                    </span>
+                    X
+                </button>
+                <button class="social-btn" onclick="shareMore()">
+                    <span class="s-circle s-more">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="5" cy="12" r="2" fill="currentColor"/>
+                            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                            <circle cx="19" cy="12" r="2" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    More
+                </button>
+            </div>
+
+            <!-- RULES -->
+            <div class="section-title">
+                <span class="st-ic">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 9C10.3431 9 9 7.65685 9 6C9 4.34315 10.3431 3 12 3C13.6569 3 15 4.34315 15 6C15 7.65685 13.6569 9 12 9Z" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M5.5 21C3.84315 21 2.5 19.6569 2.5 18C2.5 16.3431 3.84315 15 5.5 15C7.15685 15 8.5 16.3431 8.5 18C8.5 19.6569 7.15685 21 5.5 21Z" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M18.5 21C16.8431 21 15.5 19.6569 15.5 18C15.5 16.3431 16.8431 15 18.5 15C20.1569 15 21.5 16.3431 21.5 18C21.5 19.6569 20.1569 21 18.5 21Z" stroke="currentColor" stroke-width="1.5"/>
+                        <path opacity="0.5" d="M20 13C20 10.6106 18.9525 8.46589 17.2916 7M4 13C4 10.6106 5.04752 8.46589 6.70838 7M10 20.748C10.6392 20.9125 11.3094 21 12 21C12.6906 21 13.3608 20.9125 14 20.748" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                Referral Rules
+            </div>
+
+            <div class="rules-card">
+                <div class="rule">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/>
+                        <path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/>
+                    </svg>
+                    <div class="r-text">
+                        Your invite link records direct and team referrals for mission eligibility.
+                    </div>
+                </div>
+                <div class="rule">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/>
+                        <path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/>
+                    </svg>
+                    <div class="r-text">
+                        Referral commissions are unavailable until verified payments and team tracking are configured.
+                    </div>
+                </div>
+                <div class="rule">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/>
+                        <path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/>
+                    </svg>
+                    <div class="r-text">
+                        There is <b>no limit</b> on invites. Team members may qualify for individually reviewed missions; referral commissions are not enabled.
+                    </div>
+                </div>
+                <div class="rule">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/>
+                        <path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/>
+                    </svg>
+                    <div class="r-text">Do not create fake or duplicate accounts. Misuse may lead to account suspension.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ FOOTER NAV ═══ -->
+        <nav class="footer">
+            <a href="/home.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M21.53 11.59 20.75 10.96V21.25H22a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1 0-1.5h1.25V10.96l-.78.63a.75.75 0 1 1-.94-1.17l8.13-6.5a3.75 3.75 0 0 1 4.68 0l8.13 6.5a.75.75 0 1 1-.94 1.17ZM12 6.75a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5Zm1.75 6.56c-.46-.06-1.03-.06-1.7-.06h-.1c-.66 0-1.24 0-1.7.06-.49.07-.96.22-1.34.6-.39.39-.54.86-.6 1.35-.07.46-.07 1.03-.07 1.7v4.29h7.5v-4.42c0-.62 0-1.15-.06-1.58-.07-.49-.22-.96-.6-1.34-.39-.38-.86-.53-1.35-.6Z"/>
+                </svg>
+                Home
+            </a>
+            <a href="/invite.html" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path opacity=".5" d="M2 12c0-3.77 0-5.66 1.17-6.83C4.34 4 6.23 4 10 4h4c3.77 0 5.66 0 6.83 1.17C22 6.34 22 8.23 22 12s0 5.66-1.17 6.83C19.66 20 17.77 20 14 20h-4c-3.77 0-5.66 0-6.83-1.17C2 17.66 2 15.77 2 12Z" fill="currentColor"/>
+                    <path d="M6.35 7.2a.75.75 0 1 0-.96 1.15l2.6 2.17c1.06.88 1.72 1.44 2.48 1.66.76.23 1.58.23 2.34 0 .76-.22 1.42-.78 2.48-1.66l2.6-2.17a.75.75 0 1 0-.96-1.15l-2.56 2.13c-1.17.98-1.62 1.34-2.08 1.48-.47.14-.96.14-1.42 0-.46-.14-.91-.5-2.08-1.48L6.35 7.2Z" fill="currentColor"/>
+                </svg>
+                Share
+            </a>
+            <a href="/spin.html" class="nav-fab" aria-label="Spin">
+                <span class="fab-circle">
+                    <img src="/assets/images/Speener.svg" alt="" width="72" height="72" loading="lazy" decoding="async">
+                </span>
+            </a>
+            <a href="/team.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M15.5 7.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" fill="currentColor"/>
+                    <path opacity=".4" d="M19.5 7.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-15 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0Z" fill="currentColor"/>
+                    <path d="M18 16.5c0 1.93-2.69 3.5-6 3.5s-6-1.57-6-3.5S8.69 13 12 13s6 1.57 6 3.5Z" fill="currentColor"/>
+                    <path opacity=".4" d="M22 16.5c0 1.38-1.79 2.5-4 2.5s-4-1.12-4-2.5 1.79-2.5 4-2.5 4 1.12 4 2.5Zm-20 0C2 17.88 3.79 19 6 19s4-1.12 4-2.5S8.21 14 6 14s-4 1.12-4 2.5Z" fill="currentColor"/>
+                </svg>
+                Team
+            </a>
+            <a href="/mine.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="6" r="4" fill="currentColor"/>
+                    <path fill="currentColor" opacity=".5" d="M20 17.5C20 19.99 20 22 12 22s-8-2.01-8-4.5C4 15.01 7.58 13 12 13s8 2.01 8 4.5Z"/>
+                </svg>
+                Profile
+            </a>
+        </nav>
+
+        <!-- ═══ TOAST ═══ -->
+        <div id="gToast" role="alert" aria-live="polite"></div>
+
+        <script>
+            /* ─── TOAST ─── */
+            (function() {
+                if (window.showToast) return;
+                var hideTimer = null;
+                window.showToast = function(message, type, time) {
+                    var toast = document.getElementById('gToast');
+                    if (!toast) return;
+                    type = type || 'success';
+                    time = (typeof time === 'number' && time > 0) ? time : 3;
+                    clearTimeout(hideTimer);
+                    toast.textContent = message;
+                    toast.classList.add('show');
+                    hideTimer = setTimeout(function() {
+                        toast.classList.remove('show');
+                    }, time * 1000);
+                };
+            })();
+        </script>
+
+        <script>
+            /* ═════════════════════════════════════════
+               INVITE / SHARE LOGIC
+               ═════════════════════════════════════════ */
+            (function() {
+
+                var referralCode = "";
+                var inviteLink = "";
+                var shareMsg = "Join me on Finora: ";
+                var appTitle = "Finora";
+                var socialSupportLink = "https://t.me/spritesupport65";
+                var inviteReady = false;
+                fetch("/api/public/settings", {credentials:"include", cache:"no-store"})
+                    .then(function(response) {
+                        if (!response.ok) throw new Error("Could not load invite banner settings.");
+                        return response.json();
+                    })
+                    .then(function(result) {
+                        var imageUrl = result.settings && result.settings.invite_banner_url;
+                        if (typeof imageUrl === "string" && imageUrl) {
+                            var image = document.getElementById("inviteBannerImage");
+                            image.src = imageUrl;
+                            image.hidden = false;
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error("Invite banner settings failed to load:", error);
+                    });
+                fetch("/api/session", {credentials:"include", cache:"no-store"})
+                    .then(function(response) {
+                        if (response.status === 401) {
+                            window.location.replace("/index.html");
+                            throw new Error("Please sign in again.");
+                        }
+                        if (!response.ok) throw new Error("Could not load your invite code.");
+                        return response.json();
+                    })
+                    .then(function(result) {
+                        referralCode = result.user.referralCode;
+                        inviteLink = location.origin + "/index.html?ref=" + encodeURIComponent(referralCode);
+                        shareMsg = "Join me on Finora. Use my invite code " + referralCode + " to register: " + inviteLink;
+                        inviteReady = true;
+                        document.getElementById("refCodeVal").textContent = referralCode;
+                        document.getElementById("refLinkVal").textContent = inviteLink;
+                    })
+                    .catch(function(error) {
+                        console.error(error);
+                        document.getElementById("refCodeVal").textContent = "Unavailable";
+                        document.getElementById("refLinkVal").textContent = "Sign in to load your invite link";
+                        showToast(error.message, "error");
+                    });
+
+                /* ─── COPY TEXT ─── */
+                window.copyText = function(id) {
+                    if (!inviteReady) {
+                        showToast("Your invite code is still loading.", "error");
+                        return;
+                    }
+                    var val = document.getElementById(id).textContent.trim();
+                    if (!val || val === "——" || val === "Loading...") {
+                        showToast("Nothing to copy", "error");
+                        return;
+                    }
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(val)
+                            .then(function() { showToast("Copied to clipboard!", "success"); })
+                            .catch(function() { fallbackCopy(val); });
+                    } else {
+                        fallbackCopy(val);
+                    }
+                };
+
+                function fallbackCopy(text) {
+                    try {
+                        var el = document.createElement("textarea");
+                        el.value = text;
+                        el.style.position = "fixed";
+                        el.style.opacity = "0";
+                        document.body.appendChild(el);
+                        el.focus();
+                        el.select();
+                        document.execCommand("copy");
+                        document.body.removeChild(el);
+                        showToast("Copied to clipboard!", "success");
+                    } catch (err) {
+                        showToast("Copy failed", "error");
+                    }
+                }
+
+                /* ─── SHARE HANDLERS ─── */
+                function canShare() {
+                    if (inviteReady) return true;
+                    showToast("Your invite link is still loading.", "error");
+                    return false;
+                }
+                window.shareWhatsApp = function() {
+                    if (!canShare()) return;
+                    window.open("https://wa.me/?text=" + encodeURIComponent(shareMsg), "_blank");
+                };
+                window.shareTelegram = function() {
+                    window.open(socialSupportLink, "_blank", "noopener,noreferrer");
+                };
+                window.shareFacebook = function() {
+                    window.open(socialSupportLink, "_blank", "noopener,noreferrer");
+                };
+                window.shareX = function() {
+                    window.open(socialSupportLink, "_blank", "noopener,noreferrer");
+                };
+                window.shareMore = function() {
+                    if (!canShare()) return;
+                    if (navigator.share) {
+                        navigator.share({
+                            title: "Join me on " + appTitle,
+                            text: shareMsg,
+                            url: inviteLink
+                        }).catch(function(err) {
+                            if (err.name !== "AbortError") fallbackCopy(inviteLink);
+                        });
+                    } else {
+                        fallbackCopy(shareMsg);
+                    }
+                };
+
+            })();
+        </script>
+    </body>
+</html>

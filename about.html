@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>About · Finora</title>
+<link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+<meta name="author" content="ErikCoder">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+    --g-primary:#f5b400;
+    --g-deep:#d68f00;
+    --g-light:#ffd23f;
+    --g-glow:#fff06a;
+    --g-dark:#a06800;
+    --g-soft:#fffbe6;
+    --g-tint:rgba(245,180,0,.10);
+    --ink:#3a2e10;
+    --muted:#9a8748;
+    --field:#fdf8e8;
+    --line:#f2e8c8;
+    --bg-page:#fffdf4;
+    --on-brand:#ffffff
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body,p,span,div,button,a,h1,h2,h3,h4{font-weight:400}
+body{
+    font-family:"Poppins",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg-page);
+    color:var(--ink);
+    font-size:14px;
+    line-height:1.5;
+    min-height:100vh;
+    padding-bottom:calc(96px + env(safe-area-inset-bottom));
+    max-width:480px;
+    margin:0 auto;
+    -webkit-font-smoothing:antialiased
+}
+svg{display:block}
+
+/* ─── TOPBAR ─── */
+.topbar{
+    position:fixed;
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:480px;
+    z-index:1000;
+    display:flex;
+    align-items:center;
+    padding:calc(14px + env(safe-area-inset-top)) 16px 14px
+}
+.back-btn{
+    width:42px;
+    height:42px;
+    background:rgba(0,0,0,.26);
+    -webkit-backdrop-filter:blur(6px);
+    backdrop-filter:blur(6px);
+    border:0;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    cursor:pointer;
+    transition:transform .15s;
+    text-decoration:none
+}
+.back-btn svg{width:22px;height:22px}
+.back-btn:active{transform:scale(.92)}
+
+/* ─── BANNER ─── */
+.banner{
+    position:relative;
+    height:200px;
+    overflow:hidden;
+    border-radius:0 0 32px 32px;
+    background:linear-gradient(140deg,var(--g-light),var(--g-primary) 55%,var(--g-dark))
+}
+.banner-img{
+    position:absolute;
+    inset:0;
+    background-size:cover;
+    background-position:center;
+    transform:scale(1.02)
+}
+.banner-fade{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg,rgba(80,50,0,.28) 0%,rgba(80,50,0,.02) 45%,var(--bg-page) 99%)
+}
+
+/* ─── IDENTITY ─── */
+.identity{
+    position:relative;
+    z-index:5;
+    margin-top:-56px;
+    text-align:center;
+    padding:0 20px
+}
+.logo-tile{
+    width:100px;
+    height:100px;
+    margin:0 auto;
+    border-radius:30px;
+    background:#fff;
+    overflow:hidden;
+    box-shadow:0 20px 40px -16px rgba(160,104,0,.42);
+    border:4px solid #fff;
+    display:flex;
+    align-items:center;
+    justify-content:center
+}
+.logo-tile img{
+    width:100%;
+    height:100%;
+    object-fit:contain
+}
+.logo-ph{
+    font-size:30px;
+    font-weight:800;
+    color:var(--g-primary)
+}
+.app-name{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    font-size:23px;
+    font-weight:800;
+    color:var(--ink);
+    letter-spacing:-.4px;
+    margin-top:14px
+}
+.verified{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    background:linear-gradient(135deg,var(--g-light),var(--g-primary));
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    box-shadow:0 4px 10px -3px rgba(245,180,0,.7)
+}
+.verified svg{width:13px;height:13px}
+.app-tag{
+    font-size:12.5px;
+    color:var(--muted);
+    font-weight:500;
+    margin-top:4px
+}
+
+/* ─── WRAP ─── */
+.wrap{padding:22px 16px 0}
+
+/* ─── CARD ─── */
+.card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:22px;
+    box-shadow:0 14px 32px -26px rgba(214,143,0,.42)
+}
+
+/* ─── INTRO ─── */
+.intro{padding:20px}
+.intro-h{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    margin-bottom:12px
+}
+.intro-ic{
+    width:44px;
+    height:44px;
+    border-radius:14px;
+    background:linear-gradient(135deg,var(--g-light),var(--g-primary),var(--g-deep));
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 10px 18px -9px rgba(245,180,0,.6);
+    flex-shrink:0
+}
+.intro-ic svg{width:22px;height:22px}
+.intro-h b{
+    font-size:16px;
+    font-weight:800;
+    color:var(--ink)
+}
+.intro-h small{
+    display:block;
+    font-size:11px;
+    color:var(--muted);
+    font-weight:600;
+    margin-top:1px
+}
+.intro-x{
+    font-size:13px;
+    color:var(--muted);
+    line-height:1.8
+}
+.intro-x b{
+    color:var(--g-deep);
+    font-weight:700
+}
+
+/* ─── STATS ─── */
+.stats{
+    display:flex;
+    margin-top:14px;
+    padding:16px 0
+}
+.stat{
+    flex:1;
+    text-align:center;
+    min-width:0;
+    padding:0 4px
+}
+.stat+.stat{border-left:1px solid var(--line)}
+.stat-ic{
+    width:34px;
+    height:34px;
+    margin:0 auto 8px;
+    border-radius:11px;
+    background:var(--g-soft);
+    color:var(--g-primary);
+    display:flex;
+    align-items:center;
+    justify-content:center
+}
+.stat-ic svg{width:17px;height:17px}
+.stat-val{
+    font-size:15px;
+    font-weight:800;
+    color:var(--ink);
+    letter-spacing:-.3px
+}
+.stat-lbl{
+    font-size:9px;
+    color:var(--muted);
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+    margin-top:2px
+}
+
+/* ─── SECTION TITLE ─── */
+.sec-title{
+    font-size:16.5px;
+    font-weight:800;
+    color:var(--ink);
+    margin:26px 4px 13px;
+    letter-spacing:-.2px;
+    display:flex;
+    align-items:center;
+    gap:8px
+}
+.sec-title::before{
+    content:"";
+    width:4px;
+    height:17px;
+    border-radius:3px;
+    background:linear-gradient(180deg,var(--g-light),var(--g-deep))
+}
+
+/* ─── LIST ─── */
+.list{overflow:hidden}
+.row{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:15px 17px;
+    border-bottom:1px solid var(--line)
+}
+.row:last-child{border-bottom:none}
+.row-ic{
+    width:46px;
+    height:46px;
+    flex-shrink:0;
+    border-radius:15px;
+    background:var(--g-soft);
+    color:var(--g-primary);
+    display:flex;
+    align-items:center;
+    justify-content:center
+}
+.row-ic svg{width:23px;height:23px}
+.row-body{flex:1;min-width:0}
+.row-name{
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--ink);
+    letter-spacing:-.1px
+}
+.row-desc{
+    font-size:11.5px;
+    color:var(--muted);
+    margin-top:2px;
+    line-height:1.5
+}
+.row-arw{
+    color:#d8c8a0;
+    flex-shrink:0
+}
+.row-arw svg{width:18px;height:18px}
+
+/* ─── TRUST ─── */
+.trust{
+    background:linear-gradient(158deg,var(--g-primary),var(--g-deep) 72%,var(--g-dark));
+    border-radius:22px;
+    padding:8px 18px;
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 20px 40px -22px rgba(160,104,0,.55)
+}
+.trust::before{
+    content:"";
+    position:absolute;
+    right:-46px;
+    top:-46px;
+    width:150px;
+    height:150px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08)
+}
+.trust-row{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    position:relative;
+    z-index:1;
+    padding:15px 0
+}
+.trust-row+.trust-row{border-top:1px solid rgba(255,255,255,.13)}
+.tr-ic{
+    width:44px;
+    height:44px;
+    border-radius:14px;
+    background:rgba(255,255,255,.16);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    color:#fff
+}
+.tr-ic svg{width:22px;height:22px}
+.tr-body{flex:1;min-width:0}
+.tr-name{
+    font-size:14px;
+    font-weight:800
+}
+.tr-desc{
+    font-size:11.5px;
+    line-height:1.5;
+    opacity:.9;
+    margin-top:1px
+}
+
+/* ─── CTA ─── */
+.cta{
+    margin-top:16px;
+    padding:26px 20px;
+    text-align:center
+}
+.cta-ic{
+    width:62px;
+    height:62px;
+    margin:0 auto 14px;
+    border-radius:20px;
+    background:var(--g-soft);
+    color:var(--g-primary);
+    display:flex;
+    align-items:center;
+    justify-content:center
+}
+.cta-ic svg{width:31px;height:31px}
+.cta-title{
+    font-size:17.5px;
+    font-weight:800;
+    color:var(--ink);
+    letter-spacing:-.2px
+}
+.cta-sub{
+    font-size:12.5px;
+    color:var(--muted);
+    margin-top:6px;
+    line-height:1.6
+}
+.cta-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    margin-top:18px;
+    background:linear-gradient(180deg,var(--g-light),var(--g-primary),var(--g-deep));
+    color:#fff;
+    font-size:14.5px;
+    font-weight:800;
+    padding:15px 34px;
+    border-radius:30px;
+    text-decoration:none;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 14px 26px -10px rgba(245,180,0,.7);
+    transition:transform .12s
+}
+.cta-btn svg{width:18px;height:18px}
+.cta-btn:active{transform:translateY(1px)}
+
+/* ─── FOOT ─── */
+.foot{
+    text-align:center;
+    font-size:11px;
+    color:var(--muted);
+    margin-top:22px;
+    font-weight:500
+}
+
+/* ─── FOOTER NAV ─── */
+.footer{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:480px;
+    background:#fff;
+    border-top:1px solid var(--line);
+    padding:8px 10px calc(6px + env(safe-area-inset-bottom));
+    display:flex;
+    justify-content:space-around;
+    align-items:flex-end;
+    z-index:100;
+    box-shadow:0 -8px 30px rgba(214,143,0,.08);
+    overflow:visible
+}
+.nav-item{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    text-decoration:none;
+    padding:6px 0;
+    color:var(--muted);
+    position:relative;
+    font-size:11px;
+    transition:color .15s
+}
+.nav-item svg{width:24px;height:24px}
+.nav-item.active{
+    color:var(--g-deep);
+    font-weight:600
+}
+.nav-item.active::before{
+    content:"";
+    position:absolute;
+    top:-8px;
+    left:50%;
+    transform:translateX(-50%);
+    width:28px;
+    height:3px;
+    background:linear-gradient(90deg,var(--g-light),var(--g-primary));
+    border-radius:0 0 3px 3px
+}
+.nav-fab{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    text-decoration:none;
+    color:var(--g-deep);
+    font-size:11px;
+    font-weight:600
+}
+.nav-fab .fab-circle{
+    width:72px;
+    height:72px;
+    margin-top:-34px;
+    padding:7px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(145deg,#ffffff,#f0e6d6);
+    border:0;
+    overflow:hidden;
+    box-shadow:8px 8px 18px rgba(214,143,0,.20),-6px -6px 14px rgba(255,255,255,.95),inset 3px 3px 6px rgba(255,255,255,.90),inset -4px -4px 9px rgba(214,143,0,.14);
+    transition:transform .18s ease,box-shadow .18s ease
+}
+.nav-fab .fab-circle img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+    border-radius:50%;
+    animation:navWheel 9s linear infinite
+}
+@keyframes navWheel{to{transform:rotate(360deg)}}
+.nav-fab:active .fab-circle{
+    transform:scale(.94);
+    box-shadow:4px 4px 10px rgba(214,143,0,.18),-3px -3px 8px rgba(255,255,255,.85),inset 4px 4px 9px rgba(214,143,0,.18),inset -3px -3px 7px rgba(255,255,255,.85)
+}
+.nav-fab:active .fab-circle img{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){
+    .nav-fab .fab-circle img{animation:none}
+}
+</style>
+    <link rel="stylesheet" href="/assets/css/customer-ui.css">
+</head>
+<body>
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="topbar">
+    <a href="/mine.html" class="back-btn" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 6-6 6 6 6"/>
+        </svg>
+    </a>
+</div>
+
+<div>
+
+    <!-- ═══ BANNER ═══ -->
+    <div class="banner">
+        <div class="banner-img" style="background-image:url('/assets/images/hero.svg');"></div>
+        <div class="banner-fade"></div>
+    </div>
+
+    <!-- ═══ IDENTITY ═══ -->
+    <div class="identity">
+        <div class="logo-tile">
+            <img src="/assets/images/kingfisher-logo.svg" alt="Finora">
+        </div>
+        <div class="app-name">
+            Finora
+            <span class="verified">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 13l4 4L19 7"/>
+                </svg>
+            </span>
+        </div>
+        <div class="app-tag">Smart plans. Steady growth. Real rewards.</div>
+    </div>
+
+    <!-- ═══ WRAP ═══ -->
+    <div class="wrap">
+
+        <!-- INTRO -->
+        <div class="card intro">
+            <div class="intro-h">
+                <span class="intro-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"/>
+                        <path d="M12 8.4a3.6 3.6 0 1 0 0 7.2 3.6 3.6 0 0 0 0-7.2Zm0 2a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2Z"/>
+                    </svg>
+                </span>
+                <div>
+                    <b>Welcome to Finora</b>
+                    <small>Our mission</small>
+                </div>
+            </div>
+            <div class="intro-x">
+                <b>Smart aur transparent earning</b> ka mauka — simple plans, daily rewards aur ek strong community ke saath. Yahan <b>trust, security aur growth</b> hamesha saath chalte hain.
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="card stats">
+            <div class="stat">
+                <div class="stat-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M2 19a5 5 0 0 1 10 0v.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V19Z"/>
+                        <circle cx="7" cy="8" r="3.2"/>
+                        <path d="M15.5 6a2.8 2.8 0 0 1 0 5.5.9.9 0 0 1-.6-1.6 1.1 1.1 0 0 0 0-2.3.9.9 0 0 1 .6-1.6ZM22 19.2a.9.9 0 0 1-1.8.1 4 4 0 0 0-2.6-3.6.9.9 0 0 1 .6-1.7 5.6 5.6 0 0 1 3.8 5.2Z"/>
+                    </svg>
+                </div>
+                <div class="stat-val">25K+</div>
+                <div class="stat-lbl">Members</div>
+            </div>
+            <div class="stat">
+                <div class="stat-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <ellipse cx="12" cy="6" rx="7" ry="3" opacity=".4"/>
+                        <path d="M5 6v5c0 1.66 3.13 3 7 3s7-1.34 7-3V6c0 1.66-3.13 3-7 3S5 7.66 5 6Z" opacity=".4"/>
+                        <path d="M5 11v5c0 1.66 3.13 3 7 3s7-1.34 7-3v-5c0 1.66-3.13 3-7 3s-7-1.34-7-3Z"/>
+                    </svg>
+                </div>
+                <div class="stat-val">99.9%</div>
+                <div class="stat-lbl">Uptime</div>
+            </div>
+            <div class="stat">
+                <div class="stat-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M13.5 2 4 13.2c-.5.6-.1 1.6.7 1.6H10l-1.5 7.2 9.5-11.2c.5-.6.1-1.6-.7-1.6H12l1.5-7.2Z"/>
+                        <path d="M12 9.8h5.3c.8 0 1.2 1 .7 1.6L8.5 22l1.5-7.2H10Z"/>
+                    </svg>
+                </div>
+                <div class="stat-val">24/7</div>
+                <div class="stat-lbl">Active</div>
+            </div>
+        </div>
+
+        <!-- WHAT WE OFFER -->
+        <div class="sec-title">What We Offer</div>
+        <div class="card list">
+            <div class="row">
+                <span class="row-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <ellipse cx="12" cy="6" rx="7" ry="3" opacity=".4"/>
+                        <path d="M5 6v5c0 1.66 3.13 3 7 3s7-1.34 7-3V6c0 1.66-3.13 3-7 3S5 7.66 5 6Z" opacity=".4"/>
+                        <path d="M5 11v5c0 1.66 3.13 3 7 3s7-1.34 7-3v-5c0 1.66-3.13 3-7 3s-7-1.34-7-3Z"/>
+                    </svg>
+                </span>
+                <div class="row-body">
+                    <div class="row-name">Simple Plans</div>
+                    <div class="row-desc">Aasaan plans jo har budget me fit hote hain — bina kisi hidden charge ke.</div>
+                </div>
+                <span class="row-arw">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 6 6 6-6 6"/>
+                    </svg>
+                </span>
+            </div>
+            <div class="row">
+                <span class="row-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M3 20a1 1 0 0 1 1-1h16a1 1 0 1 1 0 2H4a1 1 0 0 1-1-1Z"/>
+                        <path d="M6 12a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Zm5-4a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V9a1 1 0 0 1 1-1Zm5-4a1 1 0 0 1 1 1v11a1 1 0 1 1-2 0V5a1 1 0 0 1 1-1Z"/>
+                    </svg>
+                </span>
+                <div class="row-body">
+                    <div class="row-name">Daily Rewards</div>
+                    <div class="row-desc">Har din apni growth track karo, transparent aur real-time reward system ke saath.</div>
+                </div>
+                <span class="row-arw">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 6 6 6-6 6"/>
+                    </svg>
+                </span>
+            </div>
+            <div class="row">
+                <span class="row-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M2 8a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V8Z"/>
+                        <path d="M22 11v4h-4a2 2 0 1 1 0-4h4Z"/>
+                        <circle cx="18" cy="13" r="1"/>
+                    </svg>
+                </span>
+                <div class="row-body">
+                    <div class="row-name">Instant Wallet</div>
+                    <div class="row-desc">Apni earnings ek secure wallet me — deposit aur balance sab ek jagah.</div>
+                </div>
+                <span class="row-arw">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 6 6 6-6 6"/>
+                    </svg>
+                </span>
+            </div>
+            <div class="row">
+                <span class="row-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M4 14a1 1 0 0 1 1 1v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2a1 1 0 1 1 2 0v2a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-2a1 1 0 0 1 1-1Z"/>
+                        <path d="M11.3 3.3a1 1 0 0 1 1.4 0l4 4a1 1 0 1 1-1.4 1.4L13 6.4V15a1 1 0 1 1-2 0V6.4L8.7 8.7a1 1 0 0 1-1.4-1.4l4-4Z"/>
+                    </svg>
+                </span>
+                <div class="row-body">
+                    <div class="row-name">Fast Withdrawals</div>
+                    <div class="row-desc">Quick aur smooth payout process, taaki tera paisa time par tere paas ho.</div>
+                </div>
+                <span class="row-arw">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 6 6 6-6 6"/>
+                    </svg>
+                </span>
+            </div>
+            <div class="row">
+                <span class="row-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M2 19a5 5 0 0 1 10 0v.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V19Z"/>
+                        <circle cx="7" cy="8" r="3.2"/>
+                        <path d="M15.5 6a2.8 2.8 0 0 1 0 5.5.9.9 0 0 1-.6-1.6 1.1 1.1 0 0 0 0-2.3.9.9 0 0 1 .6-1.6ZM22 19.2a.9.9 0 0 1-1.8.1 4 4 0 0 0-2.6-3.6.9.9 0 0 1 .6-1.7 5.6 5.6 0 0 1 3.8 5.2Z"/>
+                    </svg>
+                </span>
+                <div class="row-body">
+                    <div class="row-name">Strong Community</div>
+                    <div class="row-desc">Ek badhti hui community jahan har member ki growth ko support milta hai.</div>
+                </div>
+                <span class="row-arw">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m9 6 6 6-6 6"/>
+                    </svg>
+                </span>
+            </div>
+        </div>
+
+        <!-- WHY CHOOSE US -->
+        <div class="sec-title">Why Choose Us</div>
+        <div class="trust">
+            <div class="trust-row">
+                <span class="tr-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M11.3 2.3a2 2 0 0 1 1.4 0l6 2.4A2 2 0 0 1 20 6.5v4.8c0 4.6-3 8-7.6 9.6a1.2 1.2 0 0 1-.8 0C7 19.3 4 15.9 4 11.3V6.5a2 2 0 0 1 1.3-1.8l6-2.4Z"/>
+                        <path d="M15.7 9.3a1 1 0 0 1 0 1.4l-4 4a1 1 0 0 1-1.4 0l-2-2a1 1 0 1 1 1.4-1.4l1.3 1.3 3.3-3.3a1 1 0 0 1 1.4 0Z"/>
+                    </svg>
+                </span>
+                <div class="tr-body">
+                    <div class="tr-name">Secure by Design</div>
+                    <div class="tr-desc">Aapka data aur transactions strong security layers se protected rehte hain.</div>
+                </div>
+            </div>
+            <div class="trust-row">
+                <span class="tr-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M12 5c5.5 0 9.3 5 9.9 5.9.3.4.3 1 0 1.4C21.3 13 17.5 18 12 18S2.7 13 2.1 12.1c-.3-.4-.3-1 0-1.4C2.7 10 6.5 5 12 5Z"/>
+                        <circle cx="12" cy="11.5" r="3.2"/>
+                    </svg>
+                </span>
+                <div class="tr-body">
+                    <div class="tr-name">Full Transparency</div>
+                    <div class="tr-desc">Har plan, har reward saaf-saaf — koi chhupi hui shart nahi.</div>
+                </div>
+            </div>
+            <div class="trust-row">
+                <span class="tr-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M4 13a8 8 0 0 1 16 0v4a3 3 0 0 1-3 3h-1a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1h2a6 6 0 0 0-12 0h2a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H7a3 3 0 0 1-3-3v-4Z"/>
+                        <path d="M3 14a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Zm18 0a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z"/>
+                    </svg>
+                </span>
+                <div class="tr-body">
+                    <div class="tr-name">24/7 Support</div>
+                    <div class="tr-desc">Kabhi bhi help chahiye ho, hamari team hamesha ready hai.</div>
+                </div>
+            </div>
+            <div class="trust-row">
+                <span class="tr-ic">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path opacity=".4" d="M12 21c-.3 0-.6-.1-.8-.3C6.5 16.9 4 13.9 4 10.4 4 7.6 6.1 5.5 8.8 5.5c1.3 0 2.5.5 3.2 1.4.7-.9 1.9-1.4 3.2-1.4 2.7 0 4.8 2.1 4.8 4.9 0 3.5-2.5 6.5-7.2 10.3-.2.2-.5.3-.8.3Z"/>
+                        <path d="M12 8.4a.8.8 0 0 1-.7-.4C10.8 7.1 9.9 6.5 8.8 6.5a.8.8 0 0 1 0-1.6c1.6 0 3 .8 3.8 2.1a.8.8 0 0 1-.6 1.4Z"/>
+                    </svg>
+                </span>
+                <div class="tr-body">
+                    <div class="tr-name">Member First</div>
+                    <div class="tr-desc">Har decision members ke bharose aur behtari ko dhyan me rakh kar liya jaata hai.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="card cta">
+            <div class="cta-ic">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path opacity=".4" d="M14 2.8c3.6 1 6.2 3.6 7.2 7.2-1 1-3 2-5.1 2-1.5-2-3.6-4.1-6.1-5.1 0-2.1 1-4.1 4-4.1Z"/>
+                    <path d="M13.6 8.4c1.7 1.2 3.4 2.9 4.6 4.6-.7 2.5-2.5 4.3-5.1 5.6l-1.4-2.7c-.3-.6-.8-1.1-1.4-1.4L7.6 13c1.3-2.6 3.1-4.4 6-4.6Z"/>
+                    <path d="M7.9 16.1c-1.5.3-2.6 1.5-3.1 4.1 2.6-.5 3.8-1.6 4.1-3.1l-1-1Z"/>
+                </svg>
+            </div>
+            <div class="cta-title">Finora ke saath shuru karo</div>
+            <div class="cta-sub">Aaj hi apna pehla plan choose karo aur apni growth journey shuru karo.</div>
+            <a class="cta-btn" href="/home.html">
+                Explore Plans
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M13 6l6 6-6 6"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="foot">&copy; 2026 Finora. All rights reserved.</div>
+
+    </div>
+</div>
+
+<!-- ═══ FOOTER NAV ═══ -->
+<nav class="footer">
+    <a href="/home.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none">
+            <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M21.53 11.59 20.75 10.96V21.25H22a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1 0-1.5h1.25V10.96l-.78.63a.75.75 0 1 1-.94-1.17l8.13-6.5a3.75 3.75 0 0 1 4.68 0l8.13 6.5a.75.75 0 1 1-.94 1.17ZM12 6.75a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5Zm1.75 6.56c-.46-.06-1.03-.06-1.7-.06h-.1c-.66 0-1.24 0-1.7.06-.49.07-.96.22-1.34.6-.39.39-.54.86-.6 1.35-.07.46-.07 1.03-.07 1.7v4.29h7.5v-4.42c0-.62 0-1.15-.06-1.58-.07-.49-.22-.96-.6-1.34-.39-.38-.86-.53-1.35-.6Z"/>
+        </svg>
+        Home
+    </a>
+    <a href="/invite.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none">
+            <path opacity=".5" d="M2 12c0-3.77 0-5.66 1.17-6.83C4.34 4 6.23 4 10 4h4c3.77 0 5.66 0 6.83 1.17C22 6.34 22 8.23 22 12s0 5.66-1.17 6.83C19.66 20 17.77 20 14 20h-4c-3.77 0-5.66 0-6.83-1.17C2 17.66 2 15.77 2 12Z" fill="currentColor"/>
+            <path d="M6.35 7.2a.75.75 0 1 0-.96 1.15l2.6 2.17c1.06.88 1.72 1.44 2.48 1.66.76.23 1.58.23 2.34 0 .76-.22 1.42-.78 2.48-1.66l2.6-2.17a.75.75 0 1 0-.96-1.15l-2.56 2.13c-1.17.98-1.62 1.34-2.08 1.48-.47.14-.96.14-1.42 0-.46-.14-.91-.5-2.08-1.48L6.35 7.2Z" fill="currentColor"/>
+        </svg>
+        Share
+    </a>
+    <a href="/spin.html" class="nav-fab" aria-label="Spin">
+        <span class="fab-circle">
+            <img src="/assets/images/Speener.svg" alt="" width="72" height="72" loading="lazy" decoding="async">
+        </span>
+    </a>
+    <a href="/team.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none">
+            <path d="M15.5 7.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" fill="currentColor"/>
+            <path opacity=".4" d="M19.5 7.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-15 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0Z" fill="currentColor"/>
+            <path d="M18 16.5c0 1.93-2.69 3.5-6 3.5s-6-1.57-6-3.5S8.69 13 12 13s6 1.57 6 3.5Z" fill="currentColor"/>
+            <path opacity=".4" d="M22 16.5c0 1.38-1.79 2.5-4 2.5s-4-1.12-4-2.5 1.79-2.5 4-2.5 4 1.12 4 2.5Zm-20 0C2 17.88 3.79 19 6 19s4-1.12 4-2.5S8.21 14 6 14s-4 1.12-4 2.5Z" fill="currentColor"/>
+        </svg>
+        Team
+    </a>
+    <a href="/mine.html" class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="6" r="4" fill="currentColor"/>
+            <path fill="currentColor" opacity=".5" d="M20 17.5C20 19.99 20 22 12 22s-8-2.01-8-4.5C4 15.01 7.58 13 12 13s8 2.01 8 4.5Z"/>
+        </svg>
+        Profile
+    </a>
+</nav>
+
+</body>
+</html>

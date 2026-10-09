@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex,nofollow">
+    <title>My Products · Finora</title>
+    <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            font-family: Poppins, ui-sans-serif, system-ui, sans-serif;
+            color: #3a2e10;
+            background: #fffdf4;
+            --brand: #f5b400;
+            --brand-dark: #d68f00;
+            --line: #f2e8c8;
+            --muted: #9a8748;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0 auto; max-width: 480px; min-height: 100vh; padding-bottom: 32px; }
+        .topbar { position: relative; display: flex; align-items: center; min-height: 64px; padding: 12px 16px; }
+        .back {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--line);
+            border-radius: 15px;
+            background: #fff;
+            color: var(--brand-dark);
+            text-decoration: none;
+            box-shadow: 0 8px 20px -10px rgba(214,143,0,.35);
+        }
+        .back svg { width: 18px; height: 18px; }
+        h1 { position: absolute; left: 50%; margin: 0; transform: translateX(-50%); font-size: 21px; font-weight: 700; white-space: nowrap; }
+        main { padding: 0 14px; }
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 20px 19px;
+            border-radius: 23px;
+            background: radial-gradient(130% 100% at 88% -12%, #fff06a 0%, transparent 55%),
+                linear-gradient(160deg, #ffd23f 0%, var(--brand) 48%, var(--brand-dark) 100%);
+            color: #fff;
+            box-shadow: 0 18px 38px -22px rgba(214,143,0,.6);
+        }
+        .hero::after { content: ""; position: absolute; width: 150px; height: 150px; top: -76px; right: -35px; border-radius: 50%; background: rgba(255,255,255,.12); }
+        .hero-label, .hero-count { position: relative; z-index: 1; }
+        .hero-label { font-size: 12px; font-weight: 500; opacity: .92; }
+        .hero-count { margin-top: 3px; font-size: 25px; font-weight: 800; line-height: 1.25; }
+        .hero-caption { position: relative; z-index: 1; margin-top: 4px; font-size: 11px; opacity: .9; }
+        .filters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin: 16px 0 12px; padding: 5px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+        .filter {
+            min-height: 36px;
+            padding: 7px 4px;
+            border: 0;
+            border-radius: 11px;
+            background: transparent;
+            color: var(--muted);
+            font: inherit;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .filter[aria-pressed="true"] { background: linear-gradient(180deg, #ffd23f, var(--brand-dark)); color: #fff; box-shadow: 0 5px 12px -8px rgba(150,95,0,.7); }
+        .list { display: grid; gap: 11px; }
+        .product {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 19px;
+            background: #fff;
+            box-shadow: 0 10px 24px -20px rgba(110,80,0,.45);
+        }
+        .product-head { display: flex; align-items: center; gap: 11px; padding: 14px 14px 12px; }
+        .product-icon { display: grid; place-items: center; width: 42px; height: 42px; flex: 0 0 auto; border-radius: 15px; background: #fff8df; color: var(--brand-dark); }
+        .product-icon svg { width: 23px; height: 23px; }
+        .product-icon img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
+        .product-heading { min-width: 0; flex: 1; }
+        .product-name { overflow: hidden; color: #3a2e10; font-size: 14px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+        .product-purchased { margin-top: 3px; color: var(--muted); font-size: 10px; }
+        .status { padding: 5px 9px; border-radius: 20px; background: #fff4d5; color: #936400; font-size: 10px; font-weight: 600; text-transform: capitalize; white-space: nowrap; }
+        .status.expired { background: #f3f0e9; color: #756b53; }
+        .product-data { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid #f7f0de; background: #fffdf7; }
+        .data-item { min-width: 0; padding: 11px 9px; }
+        .data-item + .data-item { border-left: 1px solid #f2e8c8; }
+        .data-label { display: block; color: var(--muted); font-size: 9px; }
+        .data-value { display: block; overflow: hidden; margin-top: 3px; color: #3a2e10; font-size: 11px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+        .empty, .error { padding: 30px 18px; border: 1px solid var(--line); border-radius: 18px; background: #fff; color: var(--muted); font-size: 13px; line-height: 1.6; text-align: center; }
+        .error { color: #9a3600; }
+        .browse { display: block; margin-top: 14px; padding: 12px; border-radius: 24px; background: linear-gradient(180deg, #ffd23f, var(--brand-dark)); color: #fff; font-size: 13px; font-weight: 700; text-align: center; text-decoration: none; }
+        .disclaimer { margin: 13px 4px 0; color: var(--muted); font-size: 10px; line-height: 1.55; text-align: center; }
+        @media (max-width: 360px) {
+            .product-head { gap: 8px; padding-right: 10px; padding-left: 10px; }
+            .data-item { padding-right: 6px; padding-left: 6px; }
+            .data-value { font-size: 10px; }
+        }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; } }
+    </style>
+    <link rel="stylesheet" href="/assets/css/customer-ui.css">
+</head>
+<body>
+    <header class="topbar">
+        <a class="back" href="/mine.html" aria-label="Back to profile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>
+        </a>
+        <h1>My Products</h1>
+    </header>
+    <main>
+        <section class="hero" aria-label="Product summary">
+            <div class="hero-label">Your purchased products</div>
+            <div class="hero-count" id="productCount">—</div>
+            <div class="hero-caption">Products linked to your account</div>
+        </section>
+        <nav class="filters" aria-label="Filter products">
+            <button class="filter" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="filter" type="button" data-filter="active" aria-pressed="false">Active</button>
+            <button class="filter" type="button" data-filter="expired" aria-pressed="false">Expired</button>
+        </nav>
+        <section class="list" id="products" aria-live="polite" aria-label="Purchased products">
+            <p class="empty">Loading your products…</p>
+        </section>
+        <a class="browse" href="/home.html">Browse products</a>
+        <p class="disclaimer">Product listings do not promise returns, daily income, or rewards.</p>
+    </main>
+    <script>
+        (function() {
+            var productsElement = document.getElementById("products");
+            var products = [];
+            var currentFilter = "all";
+
+            function formatMoney(amountPaise) {
+                return "₹" + (amountPaise / 100).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+
+            function formatDate(value) {
+                var date = new Date(String(value).replace(" ", "T") + "Z");
+                if (Number.isNaN(date.getTime())) return value;
+                return new Intl.DateTimeFormat("en-IN", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric"
+                }).format(date);
+            }
+
+            function makeDataItem(label, value) {
+                var item = document.createElement("div");
+                item.className = "data-item";
+                var labelElement = document.createElement("span");
+                labelElement.className = "data-label";
+                labelElement.textContent = label;
+                var valueElement = document.createElement("span");
+                valueElement.className = "data-value";
+                valueElement.textContent = value;
+                item.append(labelElement, valueElement);
+                return item;
+            }
+
+            function makeProduct(product) {
+                var card = document.createElement("article");
+                card.className = "product";
+
+                var head = document.createElement("div");
+                head.className = "product-head";
+                var icon = document.createElement("span");
+                icon.className = "product-icon";
+                icon.setAttribute("aria-hidden", "true");
+                if (product.imageUrl) {
+                    var image = document.createElement("img");
+                    image.src = product.imageUrl;
+                    image.alt = "";
+                    icon.appendChild(image);
+                } else {
+                    icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="m3 8 9-5 9 5v2H3V8Zm2 3h2v7H5v-7Zm6 0h2v7h-2v-7Zm6 0h2v7h-2v-7ZM3 19h18v2H3v-2Z" fill="currentColor"/></svg>';
+                }
+                var heading = document.createElement("div");
+                heading.className = "product-heading";
+                var name = document.createElement("div");
+                name.className = "product-name";
+                name.textContent = product.productName;
+                var purchased = document.createElement("div");
+                purchased.className = "product-purchased";
+                purchased.textContent = "Purchased " + formatDate(product.purchasedAt);
+                heading.append(name, purchased);
+                var status = document.createElement("span");
+                status.className = "status " + product.status;
+                status.textContent = product.status;
+                head.append(icon, heading, status);
+
+                var data = document.createElement("div");
+                data.className = "product-data";
+                data.append(
+                    makeDataItem("PRICE", formatMoney(product.pricePaise)),
+                    makeDataItem("DURATION", product.durationDays + (product.durationDays === 1 ? " day" : " days")),
+                    makeDataItem(product.status === "expired" ? "EXPIRED ON" : "EXPIRES", formatDate(product.expiresAt))
+                );
+                card.append(head, data);
+                return card;
+            }
+
+            function renderProducts() {
+                productsElement.replaceChildren();
+                var filtered = products.filter(function(product) {
+                    return currentFilter === "all" || product.status === currentFilter;
+                });
+                if (!filtered.length) {
+                    var empty = document.createElement("p");
+                    empty.className = "empty";
+                    empty.textContent = currentFilter === "all" ? "You have not purchased any products yet."
+                        : "No " + currentFilter + " products found.";
+                    productsElement.appendChild(empty);
+                    return;
+                }
+                filtered.forEach(function(product) {
+                    productsElement.appendChild(makeProduct(product));
+                });
+            }
+
+            document.querySelectorAll(".filter").forEach(function(button) {
+                button.addEventListener("click", function() {
+                    currentFilter = button.dataset.filter;
+                    document.querySelectorAll(".filter").forEach(function(filterButton) {
+                        filterButton.setAttribute("aria-pressed", String(filterButton === button));
+                    });
+                    renderProducts();
+                });
+            });
+
+            fetch("/api/my-products", {credentials: "include", cache: "no-store"})
+                .then(function(response) {
+                    if (!response.ok) throw new Error("Could not load your products. Please refresh and try again.");
+                    return response.json();
+                })
+                .then(function(result) {
+                    if (result.success !== true || !Array.isArray(result.products)) {
+                        throw new Error("Could not load your products. Please refresh and try again.");
+                    }
+                    products = result.products;
+                    document.getElementById("productCount").textContent = String(products.length);
+                    renderProducts();
+                })
+                .catch(function(error) {
+                    productsElement.replaceChildren();
+                    var message = document.createElement("p");
+                    message.className = "error";
+                    message.textContent = error.message || "Could not load your products.";
+                    productsElement.appendChild(message);
+                });
+        })();
+    </script>
+    <nav class="footer" aria-label="Main navigation">
+        <a href="/pages/home" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.5 11.6 12.9 4.7a1.5 1.5 0 0 0-1.8 0L2.5 11.6a.75.75 0 0 0 .94 1.17l.81-.65V21H3a.75.75 0 0 0 0 1.5h18a.75.75 0 0 0 0-1.5h-1.25v-8.88l.81.65a.75.75 0 0 0 .94-1.17Z"/></svg>Home</a>
+        <a href="/pages/invite" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-8 8a8 8 0 0 1 16 0v1H4v-1Zm15-9a3 3 0 1 0-2.4-4.8 5.5 5.5 0 0 1 1.1 4.8h1.3ZM19 14a6 6 0 0 1 3 5.2V21h-2v-1a9.8 9.8 0 0 0-1-4.2V14Z"/></svg>Share</a>
+        <a href="/pages/spin" class="nav-fab" aria-label="Spin"><span class="fab-circle"><img src="/assets/images/Speener.svg" alt="" width="60" height="60"></span></a>
+        <a href="/pages/team" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 0a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM1 20a7 7 0 0 1 14 0v1H1v-1Zm15.5-6a6.5 6.5 0 0 1 6.5 6v1h-6v-1a8.9 8.9 0 0 0-2.1-5.8 6.4 6.4 0 0 1 1.6-.2Z"/></svg>Team</a>
+        <a href="/pages/mine" class="nav-item active" aria-current="page"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5 0-9 2.6-9 5.8V22h18v-2.2c0-3.2-4-5.8-9-5.8Z"/></svg>Profile</a>
+    </nav>
+</body>
+</html>

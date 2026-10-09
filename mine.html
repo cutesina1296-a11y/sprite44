@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Profile · Finora</title>
+        <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+        <meta name="robots" content="noindex,nofollow">
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <style>
+            body {
+                --g-primary: #f5b400;
+                --g-deep: #d68f00;
+                --g-light: #ffd23f;
+                --g-glow: #fff06a;
+                --g-soft: #fffbe6;
+                --g-tint: rgba(245,180,0,.10);
+                --ink: #3a2e10;
+                --muted: #9a8748;
+                --field: #fdf8e8;
+                --line: #f2e8c8;
+                --bg-page: #fffdf4;
+                --on-brand: #ffffff
+            }
+
+            .hu-avatar svg { width: 30px; height: 30px; color: var(--g-primary) }
+            .hu-bank svg { width: 17px; height: 17px }
+            .bal-eye { width: 15px; height: 15px; cursor: pointer; vertical-align: -2px; color: var(--muted); transition: color .15s }
+            .bal-eye:active { color: var(--g-primary) }
+            .bal-btn svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 3px }
+            .mi-ic svg { width: 17px; height: 17px }
+            .mi-arrow { width: 13px; height: 13px; flex-shrink: 0; color: #d3b8b5 }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                -webkit-tap-highlight-color: transparent
+            }
+
+            body,p,span,div,input,button,a,label,h1,h2,h3 { font-weight: 400 }
+
+            html,body {
+                font-family: "Poppins",ui-sans-serif,system-ui,sans-serif;
+                background: var(--bg-page);
+                color: var(--ink);
+                font-size: 14px;
+                line-height: 1.5;
+                -webkit-font-smoothing: antialiased
+            }
+
+            body {
+                max-width: 480px;
+                margin: 0 auto;
+                min-height: 100vh;
+                position: relative;
+                padding-bottom: calc(96px + env(safe-area-inset-bottom))
+            }
+
+            /* ─── HERO ─── */
+            .hero {
+                position: relative;
+                background: radial-gradient(130% 100% at 88% -12%,#58c987 0%,transparent 55%),linear-gradient(160deg,#16894f 0%,#087443 48%,#045b35 100%);
+                color: var(--on-brand);
+                padding: calc(35px + env(safe-area-inset-top)) 18px 65px;
+                border-radius: 0 0 30px 30px;
+                overflow: hidden;
+                box-shadow: 0 22px 44px -22px rgba(4,91,53,.55)
+            }
+
+            .hero::before {
+                content: "";
+                position: absolute;
+                width: 240px;
+                height: 240px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.10);
+                right: -80px;
+                top: -90px
+            }
+
+            .hero::after {
+                content: "";
+                position: absolute;
+                width: 150px;
+                height: 150px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.07);
+                left: -50px;
+                bottom: -40px
+            }
+
+            .hero-user {
+                position: relative;
+                z-index: 2;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                text-decoration: none;
+                color: var(--on-brand)
+            }
+
+            .hu-avatar {
+                width: 76px;
+                height: 76px;
+                border-radius: 50%;
+                border: 0;
+                background: linear-gradient(145deg,#58c987,#087443,#045b35);
+                overflow: hidden;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 10px 24px rgba(0,0,0,.22);
+                font-size: 32px;
+                font-weight: 800;
+                color: #fff
+            }
+
+            .hu-avatar img {
+                width: 112%;
+                height: 112%;
+                flex: none;
+                padding: 0;
+                object-fit: contain;
+                display: block;
+                background: transparent;
+                border-radius: 50%
+            }
+
+            .hu-info {
+                flex: 1;
+                min-width: 0
+            }
+
+            .hu-id {
+                font-size: 21px;
+                font-weight: 800;
+                letter-spacing: -.3px;
+                text-shadow: 0 1px 2px rgba(255,255,255,.25);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis
+            }
+
+            .hu-sub {
+                font-size: 13px;
+                opacity: .92;
+                font-weight: 600;
+                margin-top: 2px
+            }
+
+            .hu-bank {
+                width: 37px;
+                height: 37px;
+                border-radius: 50%;
+                background: #ffffffcc;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--g-deep);
+                font-size: 16px;
+                flex-shrink: 0;
+                text-decoration: none;
+                box-shadow: 0 6px 14px -6px rgba(0,0,0,.35);
+                transition: transform .12s
+            }
+
+            .hu-bank:active { transform: scale(.9) }
+
+            .body-wrap {
+                padding: 0 14px;
+                position: relative;
+                z-index: 3
+            }
+
+            /* ─── BALANCE CARD ─── */
+            .bal-card {
+                background: #fff;
+                border-radius: 24px;
+                margin-top: -48px;
+                padding: 16px 16px 13px;
+                border: 1px solid #f2e8c882;
+                box-shadow: 0 18px 40px -22px rgba(214,143,0,.35)
+            }
+
+            .bal-top {
+                display: flex;
+                align-items: center;
+                gap: 12px
+            }
+
+            .bal-left {
+                flex: 1;
+                min-width: 0
+            }
+
+            .bal-label {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--ink);
+                display: flex;
+                align-items: center;
+                gap: 9px
+            }
+
+            .bal-amt {
+                font-size: 34px;
+                font-weight: 800;
+                color: #087443;
+                letter-spacing: -1.5px;
+                line-height: 1.15;
+                margin-top: 3px;
+                display: flex;
+                align-items: baseline;
+                gap: 2px;
+                word-break: break-all
+            }
+
+            .bal-amt .cur {
+                font-size: 24px;
+                font-weight: 700
+            }
+
+            span#balVal { font-weight: 800 }
+
+            .bal-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 9px;
+                flex-shrink: 0
+            }
+
+            .bal-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 5px;
+                background: linear-gradient(180deg,#34d399 0%,#16a34a 55%,#15803d 100%);
+                color: var(--on-brand);
+                border: 0;
+                border-radius: 24px;
+                padding: 10px 14px;
+                font-size: 10px;
+                font-weight: 600;
+                font-family: inherit;
+                text-decoration: none;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,.25),0 8px 16px -6px rgba(21,128,61,.45);
+                transition: transform .12s;
+                white-space: nowrap
+            }
+
+            .bal-btn::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);
+                animation: bShine 2.6s infinite
+            }
+
+            @keyframes bShine {
+                0% { left: -100% }
+                100% { left: 100% }
+            }
+
+            .bal-btn:active { transform: translateY(1px) }
+
+            /* ─── MINI STATS ─── */
+            .mini-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                background: var(--g-tint);
+                border: 1px solid #f2e8c845;
+                border-radius: 16px;
+                margin-top: 14px;
+                padding: 13px 6px
+            }
+
+            .ms {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 3px;
+                text-align: center;
+                border-right: 1px dashed var(--line);
+                padding: 0 4px;
+                min-width: 0
+            }
+
+            .ms:last-child { border-right: none }
+
+            .ms .ms-lbl {
+                font-size: 10.5px;
+                color: var(--muted);
+                font-weight: 500;
+                white-space: nowrap
+            }
+
+            .ms .ms-val {
+                font-size: 19px;
+                font-weight: 800;
+                color: var(--ink);
+                letter-spacing: -.3px
+            }
+
+            /* ─── MENU CARD ─── */
+            .menu-card {
+                background: #fff;
+                border: 1px solid #f2e8c882;
+                border-radius: 22px;
+                margin-top: 10px;
+                padding: 4px 15px;
+                box-shadow: 0 10px 24px -16px rgba(214,143,0,.3)
+            }
+
+            .menu-item {
+                display: flex;
+                align-items: center;
+                gap: 13px;
+                padding: 12px 2px;
+                border-bottom: 1px solid var(--field);
+                text-decoration: none;
+                color: var(--ink);
+                transition: transform .12s;
+                cursor: pointer;
+                background: none;
+                border-left: 0;
+                border-right: 0;
+                border-top: 0;
+                width: 100%;
+                font-family: inherit;
+                text-align: left
+            }
+
+            .menu-item:last-child { border-bottom: none }
+            .menu-item:active { transform: scale(.99) }
+
+            .mi-ic {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                flex-shrink: 0
+            }
+
+            .mi-ic.c-green { background: var(--g-soft); color: var(--g-primary) }
+            .mi-ic.c-blue { background: #e8f1ff; color: #2f6fed }
+            .mi-ic.c-red { background: #ffeaea; color: #e54848 }
+            .mi-ic.c-teal { background: var(--g-tint); color: var(--g-deep) }
+            .mi-ic.c-gray { background: #f3eeed; color: #8a7573 }
+
+            .mi-label {
+                flex: 1;
+                font-size: 13.5px;
+                font-weight: 600;
+                color: var(--ink)
+            }
+
+            /* ─── LOGOUT MODAL ─── */
+            .modal-wrap {
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,.55);
+                -webkit-backdrop-filter: blur(4px);
+                backdrop-filter: blur(4px);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 99998;
+                padding: 20px
+            }
+
+            .modal-wrap.show { display: flex }
+
+            .modal {
+                background: #fff;
+                width: 100%;
+                max-width: 320px;
+                border-radius: 20px;
+                overflow: hidden;
+                animation: popIn .25s ease-out
+            }
+
+            @keyframes popIn {
+                from { opacity: 0; transform: scale(.9) }
+                to { opacity: 1; transform: scale(1) }
+            }
+
+            .modal-body {
+                padding: 26px 20px 22px;
+                text-align: center;
+                font-size: 14px;
+                color: var(--ink);
+                line-height: 1.5
+            }
+
+            .modal-body b { color: var(--g-deep); font-weight: 700 }
+
+            .modal-foot {
+                display: flex;
+                border-top: 1px solid var(--line)
+            }
+
+            .modal-btn {
+                flex: 1;
+                padding: 14px;
+                text-align: center;
+                font-size: 14px;
+                cursor: pointer;
+                font-weight: 600;
+                font-family: inherit;
+                background: none;
+                border: 0
+            }
+
+            .modal-btn.cancel {
+                color: var(--muted);
+                border-right: 1px solid var(--line)
+            }
+
+            .modal-btn.confirm { color: var(--g-deep) }
+
+            /* ─── FOOTER ─── */
+            .footer {
+                position: fixed;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                max-width: 480px;
+                background: #fff;
+                border-top: 1px solid var(--line);
+                padding: 8px 10px calc(6px + env(safe-area-inset-bottom));
+                display: flex;
+                justify-content: space-around;
+                align-items: flex-end;
+                z-index: 100;
+                box-shadow: 0 -8px 30px rgba(214,143,0,.08);
+                overflow: visible
+            }
+
+            .nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-decoration: none;
+                padding: 6px 0;
+                color: var(--muted);
+                position: relative;
+                font-size: 11px;
+                transition: color .15s
+            }
+
+            .nav-item svg {
+                width: 24px;
+                height: 24px
+            }
+
+            .nav-item.active {
+                color: var(--g-deep);
+                font-weight: 600
+            }
+
+            .nav-item.active::before {
+                content: "";
+                position: absolute;
+                top: -8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 28px;
+                height: 3px;
+                background: linear-gradient(90deg,var(--g-light),var(--g-primary));
+                border-radius: 0 0 3px 3px
+            }
+
+            .nav-fab {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-decoration: none;
+                color: var(--g-deep);
+                font-size: 11px;
+                font-weight: 600
+            }
+
+            .nav-fab .fab-circle {
+                width: 72px;
+                height: 72px;
+                margin-top: -34px;
+                padding: 7px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: linear-gradient(145deg,#ffffff,#f0e6e4);
+                border: 0;
+                overflow: hidden;
+                box-shadow: 8px 8px 18px rgba(214,143,0,.20),-6px -6px 14px rgba(255,255,255,.95),inset 3px 3px 6px rgba(255,255,255,.90),inset -4px -4px 9px rgba(214,143,0,.14);
+                transition: transform .18s ease,box-shadow .18s ease
+            }
+
+            .nav-fab .fab-circle img {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                display: block;
+                border-radius: 50%;
+                animation: fabWheel 9s linear infinite
+            }
+
+            @keyframes fabWheel {
+                to { transform: rotate(360deg) }
+            }
+
+            .nav-fab:active .fab-circle {
+                transform: scale(.94);
+                box-shadow: 4px 4px 10px rgba(214,143,0,.18),-3px -3px 8px rgba(255,255,255,.85),inset 4px 4px 9px rgba(214,143,0,.18),inset -3px -3px 7px rgba(255,255,255,.85)
+            }
+
+            .nav-fab:active .fab-circle img {
+                animation-play-state: paused
+            }
+
+            @media (prefers-reduced-motion:reduce) {
+                .nav-fab .fab-circle img { animation: none }
+            }
+
+            /* ─── TOAST ─── */
+            #gToast {
+                position: fixed;
+                z-index: 100000;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%) scale(.9);
+                min-width: 160px;
+                max-width: 92%;
+                padding: 14px 24px;
+                border-radius: 16px;
+                background: rgba(20,18,24,.88);
+                color: #fff;
+                font-size: 14px;
+                font-weight: 600;
+                text-align: center;
+                box-shadow: 0 22px 54px -14px rgba(0,0,0,.55);
+                opacity: 0;
+                pointer-events: none;
+                transition: transform .3s cubic-bezier(.2,1,.3,1),opacity .28s ease;
+                white-space: nowrap
+            }
+
+            #gToast.show {
+                transform: translate(-50%,-50%) scale(1);
+                opacity: 1;
+                pointer-events: auto
+            }
+        </style>
+        <meta name="csrf-token" content="">
+        <link rel="stylesheet" href="/assets/css/customer-ui.css">
+    </head>
+    <body>
+
+        <!-- ═══ HERO ═══ -->
+        <div class="hero">
+            <div class="hero-user">
+                <div class="hu-avatar" id="userAvatar"><img src="/assets/images/kingfisher-logo.svg" alt="Finora logo"></div>
+                <div class="hu-info">
+                    <div class="hu-id" id="userId">+91 ----------</div>
+                    <div class="hu-sub" id="userPlan">Member</div>
+                </div>
+                <a class="hu-bank" href="/bank-setup.html" title="Bank setup">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2 2 7v2h20V7L12 2Z" fill="currentColor"/>
+                        <path opacity=".55" d="M4 10h2.5v8H4v-8Zm6.75 0h2.5v8h-2.5v-8ZM17.5 10H20v8h-2.5v-8ZM2 19.5h20V22H2v-2.5Z" fill="currentColor"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <!-- ═══ BODY ═══ -->
+        <div class="body-wrap">
+            <div class="bal-card">
+                <div class="bal-top">
+                    <div class="bal-left">
+                        <div class="bal-label">
+                            Balance
+                            <span class="bal-eye" id="balEye" onclick="toggleBal()">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.7"/>
+                                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="bal-amt">
+                            <span class="cur">₹</span>
+                            <span id="balVal" data-val="0">0</span>
+                        </div>
+                    </div>
+                    <div class="bal-actions">
+                        <a class="bal-btn" href="/recharge.html">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M20.9 10c.94 0 1.41 0 1.7.29.29.29.29.76.29 1.71v.5c0 .94 0 1.42-.29 1.71-.29.29-.76.29-1.7.29V10Z" fill="currentColor"/>
+                                <path opacity=".55" d="M21.14 10c0-1.18.04-2.45-.71-3.35-.75-.75-1.7-1.08-2.87-1.24C16.16 5.25 14.7 5.25 12.87 5.25h-2.12c-1.84 0-3.29 0-4.43.16-1.17.16-2.12.49-2.87 1.24-.75.75-1.08 1.7-1.24 2.87-.16 1.14-.16 2.6-.16 4.43v.11c0 1.84 0 3.29.16 4.43.16 1.17.49 2.12 1.24 2.87.75.75 1.7 1.08 2.87 1.24 1.14.16 2.59.16 4.43.16h2.12c1.84 0 3.29 0 4.43-.16 1.17-.16 2.12-.49 2.87-1.24.75-.9.71-2.17.71-3.35H18.2c-2.27 0-4.21-1.74-4.21-4s1.94-4 4.21-4h2.94Z" fill="currentColor"/>
+                            </svg>
+                            Recharge
+                        </a>
+                        <a class="bal-btn" href="/withdrawal.html">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/>
+                                <path d="M12 6.75a.75.75 0 0 1 .75.75v6.19l2.22-2.22a.75.75 0 1 1 1.06 1.06l-3.5 3.5a.75.75 0 0 1-1.06 0l-3.5-3.5a.75.75 0 1 1 1.06-1.06l2.22 2.22V7.5c0-.41.34-.75.75-.75Z" fill="currentColor"/>
+                            </svg>
+                            Withdraw
+                        </a>
+                    </div>
+                </div>
+                <div class="mini-stats">
+                    <div class="ms">
+                        <span class="ms-lbl">My Balance</span>
+                        <span class="ms-val" id="statBalance">₹0</span>
+                    </div>
+                    <div class="ms">
+                        <span class="ms-lbl">Recharge</span>
+                        <span class="ms-val" id="statRecharge">₹0</span>
+                    </div>
+                    <div class="ms">
+                        <span class="ms-lbl">Approved Rewards</span>
+                        <span class="ms-val" id="statRevenue">₹0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MENU -->
+            <div class="menu-card">
+                <a class="menu-item" href="/about.html">
+                    <span class="mi-ic c-teal">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/>
+                            <path d="M12 2c-2.2 0-4 4.48-4 10s1.8 10 4 10 4-4.48 4-10-1.8-10-4-10Zm-9.4 6h18.8v1.5H2.6V8Zm0 6.5h18.8V16H2.6v-1.5Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <span class="mi-label">Company</span>
+                    <svg class="mi-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+
+                <a class="menu-item" href="/bank-setup.html">
+                    <span class="mi-ic c-teal">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2 2 7v2h20V7L12 2Z" fill="currentColor"/>
+                            <path opacity=".55" d="M4 10h2.5v8H4v-8Zm6.75 0h2.5v8h-2.5v-8ZM17.5 10H20v8h-2.5v-8ZM2 19.5h20V22H2v-2.5Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <span class="mi-label">Bank setup</span>
+                    <svg class="mi-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+
+                <a class="menu-item" href="/my-products.html">
+                    <span class="mi-ic c-green">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M1.5 2.75A.75.75 0 0 1 2.25 2h1.11c.9 0 1.68.62 1.88 1.5l.3 1.3h14.2c1.3 0 2.24 1.25 1.87 2.5l-1.6 5.4a2.5 2.5 0 0 1-2.4 1.8H8.6a2.5 2.5 0 0 1-2.44-1.94L4.2 3.83a.44.44 0 0 0-.43-.33H2.25a.75.75 0 0 1-.75-.75Z" fill="currentColor"/>
+                            <path opacity=".6" d="M8.5 21.5a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Zm9 0a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <span class="mi-label">My Products</span>
+                    <svg class="mi-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+
+                <a class="menu-item" href="/transactions.html">
+                    <span class="mi-ic c-teal">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M5 3h14v18l-3-2-3 2-3-2-3 2-2-2V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                            <path d="M8 8h8M8 12h8M8 16h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <span class="mi-label">Transactions</span>
+                    <svg class="mi-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+
+                <a class="menu-item" href="/withdrawal.html">
+                    <span class="mi-ic c-red">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/>
+                            <path d="M12 6.25a.75.75 0 0 1 .75.75v4.7l3.02 1.8a.75.75 0 1 1-.77 1.29l-3.38-2a.75.75 0 0 1-.37-.65V7c0-.41.34-.75.75-.75Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <span class="mi-label">Withdraw</span>
+                    <svg class="mi-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </a>
+
+                <button type="button" class="menu-item" id="logoutBtn">
+                    <span class="mi-ic c-gray">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path opacity=".55" d="M4 12c0-3.77 0-5.66 1.17-6.83C6.34 4 8.23 4 12 4v16c-3.77 0-5.66 0-6.83-1.17C4 17.66 4 15.77 4 12Z" fill="currentColor"/>
+                            <path d="M16.6 8.47a.75.75 0 0 0-1.06 1.06l1.72 1.72H10a.75.75 0 0 0 0 1.5h7.26l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3a.75.75 0 0 0 0-1.06l-3-3Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <span class="mi-label">Logout</span>
+                    <svg class="mi-arrow" viewBox="0 0 24 24" fill="none"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══ FOOTER NAV ═══ -->
+        <nav class="footer">
+            <a href="/home.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M21.53 11.59 20.75 10.96V21.25H22a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1 0-1.5h1.25V10.96l-.78.63a.75.75 0 1 1-.94-1.17l8.13-6.5a3.75 3.75 0 0 1 4.68 0l8.13 6.5a.75.75 0 1 1-.94 1.17ZM12 6.75a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5Zm1.75 6.56c-.46-.06-1.03-.06-1.7-.06h-.1c-.66 0-1.24 0-1.7.06-.49.07-.96.22-1.34.6-.39.39-.54.86-.6 1.35-.07.46-.07 1.03-.07 1.7v4.29h7.5v-4.42c0-.62 0-1.15-.06-1.58-.07-.49-.22-.96-.6-1.34-.39-.38-.86-.53-1.35-.6Z"/>
+                </svg>
+                Home
+            </a>
+            <a href="/invite.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path opacity=".5" d="M2 12c0-3.77 0-5.66 1.17-6.83C4.34 4 6.23 4 10 4h4c3.77 0 5.66 0 6.83 1.17C22 6.34 22 8.23 22 12s0 5.66-1.17 6.83C19.66 20 17.77 20 14 20h-4c-3.77 0-5.66 0-6.83-1.17C2 17.66 2 15.77 2 12Z" fill="currentColor"/>
+                    <path d="M6.35 7.2a.75.75 0 1 0-.96 1.15l2.6 2.17c1.06.88 1.72 1.44 2.48 1.66.76.23 1.58.23 2.34 0 .76-.22 1.42-.78 2.48-1.66l2.6-2.17a.75.75 0 1 0-.96-1.15l-2.56 2.13c-1.17.98-1.62 1.34-2.08 1.48-.47.14-.96.14-1.42 0-.46-.14-.91-.5-2.08-1.48L6.35 7.2Z" fill="currentColor"/>
+                </svg>
+                Share
+            </a>
+            <a href="/spin.html" class="nav-fab" aria-label="Spin">
+                <span class="fab-circle">
+                    <img src="/assets/images/Speener.svg" alt="" width="72" height="72" loading="lazy" decoding="async">
+                </span>
+            </a>
+            <a href="/team.html" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M15.5 7.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" fill="currentColor"/>
+                    <path opacity=".4" d="M19.5 7.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-15 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0Z" fill="currentColor"/>
+                    <path d="M18 16.5c0 1.93-2.69 3.5-6 3.5s-6-1.57-6-3.5S8.69 13 12 13s6 1.57 6 3.5Z" fill="currentColor"/>
+                    <path opacity=".4" d="M22 16.5c0 1.38-1.79 2.5-4 2.5s-4-1.12-4-2.5 1.79-2.5 4-2.5 4 1.12 4 2.5Zm-20 0C2 17.88 3.79 19 6 19s4-1.12 4-2.5S8.21 14 6 14s-4 1.12-4 2.5Z" fill="currentColor"/>
+                </svg>
+                Team
+            </a>
+            <a href="/mine.html" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="6" r="4" fill="currentColor"/>
+                    <path fill="currentColor" opacity=".5" d="M20 17.5C20 19.99 20 22 12 22s-8-2.01-8-4.5C4 15.01 7.58 13 12 13s8 2.01 8 4.5Z"/>
+                </svg>
+                Profile
+            </a>
+        </nav>
+
+        <!-- ═══ LOGOUT MODAL ═══ -->
+        <div class="modal-wrap" id="logoutModal">
+            <div class="modal">
+                <div class="modal-body">
+                    Are you sure you want to <b>logout</b>?
+                </div>
+                <div class="modal-foot">
+                    <button type="button" class="modal-btn cancel" id="logoutCancel">Cancel</button>
+                    <button type="button" class="modal-btn confirm" id="logoutConfirm">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ TOAST ═══ -->
+        <div id="gToast" role="alert" aria-live="polite"></div>
+
+        <script>
+            /* ─── TOAST ─── */
+            (function() {
+                if (window.showToast) return;
+                var hideTimer = null;
+                window.showToast = function(message, type, time) {
+                    var toast = document.getElementById('gToast');
+                    if (!toast) return;
+                    type = type || 'success';
+                    time = (typeof time === 'number' && time > 0) ? time : 3;
+                    clearTimeout(hideTimer);
+                    toast.textContent = message;
+                    toast.classList.add('show');
+                    hideTimer = setTimeout(function() {
+                        toast.classList.remove('show');
+                    }, time * 1000);
+                };
+            })();
+        </script>
+
+        <script>
+            /* ─── BALANCE EYE TOGGLE ─── */
+            var balHidden = false;
+            window.toggleBal = function() {
+                var v = document.getElementById('balVal');
+                balHidden = !balHidden;
+                if (balHidden) {
+                    v.textContent = '••••';
+                } else {
+                    v.textContent = v.dataset.val;
+                }
+            };
+        </script>
+
+        <script>
+            /* ═════════════════════════════════════════
+               PROFILE LOGIC
+               ═════════════════════════════════════════ */
+            document.addEventListener("DOMContentLoaded", function() {
+
+                /* ─── LOAD USER INFO ─── */
+                var userName = "User";
+                var userPhone = "";
+                var userPlan = "Member";
+                var userBalance = 0;
+                var userRecharge = 0;
+                var userRevenue = 0;
+
+                /* ─── UPDATE HERO ─── */
+                var idEl = document.getElementById("userId");
+                var planEl = document.getElementById("userPlan");
+
+                if (userPhone) {
+                    idEl.textContent = "+91 " + userPhone;
+                } else {
+                    idEl.textContent = "+91 ----------";
+                }
+                planEl.textContent = userPlan;
+                fetch("/api/session", { credentials: "include" })
+                    .then(function(response) {
+                        if (response.status === 401) {
+                            window.location.replace("/index.html");
+                            throw new Error("Please sign in again.");
+                        }
+                        if (!response.ok) throw new Error("Could not load signed-in profile.");
+                        return response.json();
+                    })
+                    .then(function(result) {
+                        userName = result.user.name || "User";
+                        userPhone = result.user.phone || "";
+                        idEl.textContent = userPhone ? "+91 " + userPhone : "+91 ----------";
+                        return fetch("/api/wallet", {credentials:"include", cache:"no-store"});
+                    })
+                    .then(function(response) {
+                        if (!response.ok) throw new Error("Could not load wallet summary.");
+                        return response.json();
+                    })
+                    .then(function(wallet) {
+                        userBalance = wallet.balancePaise / 100;
+                        userRecharge = wallet.approvedRechargesPaise / 100;
+                        userRevenue = wallet.approvedRewardsPaise / 100;
+                        var formattedBalance = userBalance.toLocaleString("en-IN", {
+                            minimumFractionDigits:0, maximumFractionDigits:2
+                        });
+                        balVal.dataset.val = formattedBalance;
+                        balVal.textContent = formattedBalance;
+                        document.getElementById("statBalance").textContent =
+                            "₹" + userBalance.toLocaleString("en-IN", {maximumFractionDigits:2});
+                        document.getElementById("statRecharge").textContent =
+                            "₹" + userRecharge.toLocaleString("en-IN", {maximumFractionDigits:2});
+                        document.getElementById("statRevenue").textContent =
+                            "₹" + userRevenue.toLocaleString("en-IN", {maximumFractionDigits:2});
+                    })
+                    .catch(function(error) { console.error(error); });
+
+                /* ─── UPDATE BALANCE ─── */
+                var balVal = document.getElementById("balVal");
+                var formatted = userBalance.toLocaleString("en-IN", {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                });
+                balVal.dataset.val = formatted;
+                balVal.textContent = formatted;
+
+                /* ─── UPDATE MINI STATS ─── */
+                document.getElementById("statBalance").textContent =
+                    "₹" + userBalance.toLocaleString("en-IN", { maximumFractionDigits: 0 });
+                document.getElementById("statRecharge").textContent =
+                    "₹" + userRecharge.toLocaleString("en-IN", { maximumFractionDigits: 0 });
+                document.getElementById("statRevenue").textContent =
+                    "₹" + userRevenue.toLocaleString("en-IN", { maximumFractionDigits: 0 });
+
+                /* ─── LOGOUT MODAL ─── */
+                var logoutModal = document.getElementById("logoutModal");
+
+                document.getElementById("logoutBtn").addEventListener("click", function() {
+                    logoutModal.classList.add("show");
+                });
+
+                document.getElementById("logoutCancel").addEventListener("click", function() {
+                    logoutModal.classList.remove("show");
+                });
+
+                document.getElementById("logoutConfirm").addEventListener("click", async function() {
+                    var button = this;
+                    button.disabled = true;
+                    try {
+                        var csrfResponse = await fetch("/api/csrf", { credentials: "include" });
+                        var csrfData = await csrfResponse.json();
+                        if (!csrfResponse.ok || !csrfData.csrfToken) {
+                            throw new Error(csrfData.message || "Could not start a secure session.");
+                        }
+                        var response = await fetch("/api/logout", {
+                            method: "POST",
+                            credentials: "include",
+                            headers: { "X-CSRF-Token": csrfData.csrfToken }
+                        });
+                        var result = await response.json();
+                        if (!response.ok || result.success !== true) {
+                            throw new Error(result.message || "Logout failed.");
+                        }
+                        try {
+                            localStorage.removeItem("user_logged_in");
+                            localStorage.removeItem("user_name");
+                            localStorage.removeItem("user_phone");
+                            localStorage.removeItem("user_plan");
+                        } catch (storageError) {
+                            console.error("Could not clear cached profile:", storageError);
+                        }
+                        window.location.replace("/index.html");
+                    } catch (error) {
+                        console.error(error);
+                        button.disabled = false;
+                        showToast(error.message || "Logout failed", "error");
+                    }
+                });
+
+                /* Close modal on outside click */
+                logoutModal.addEventListener("click", function(e) {
+                    if (e.target === logoutModal) {
+                        logoutModal.classList.remove("show");
+                    }
+                });
+
+                /* ESC closes modal */
+                document.addEventListener("keydown", function(e) {
+                    if (e.key === "Escape") {
+                        logoutModal.classList.remove("show");
+                    }
+                });
+            });
+        </script>
+
+    </body>
+</html>

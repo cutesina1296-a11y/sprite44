@@ -1,0 +1,978 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Admin Console · Finora</title>
+    <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+    <style>
+        :root{font-family:Inter,Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;color:#1d2939;background:#f4f6fa;font-synthesis:none}
+        *{box-sizing:border-box}
+        body{margin:0;min-height:100vh}
+        button,input,select,textarea{font:inherit}
+        button{cursor:pointer}
+        .shell{min-height:100vh}
+        .sidebar{position:fixed;inset:0 auto 0 0;width:248px;background:#141c2e;color:#e9eef9;padding:22px 15px;display:flex;flex-direction:column;z-index:4}
+        .brand{display:flex;align-items:center;gap:11px;padding:2px 9px 24px;font-weight:750;font-size:16px}
+        .brand img{width:38px;height:38px}
+        .brand small{display:block;color:#96a2bb;font-size:11px;font-weight:500;margin-top:2px}
+        .nav-label{color:#8692aa;font-size:10px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;padding:12px 10px 8px}
+        .nav button{border:0;background:transparent;color:#bac4d6;width:100%;text-align:left;padding:11px 12px;border-radius:9px;margin:2px 0;font-size:13px}
+        .nav button:hover,.nav button.active{background:#263450;color:#fff}
+        .side-bottom{margin-top:auto;padding:12px 10px;color:#8f9bb1;font-size:11px;line-height:1.6}
+        .main{margin-left:248px;min-height:100vh}
+        .topbar{height:72px;background:#fff;border-bottom:1px solid #e7eaf0;padding:0 30px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:3}
+        .topbar h1{font-size:18px;margin:0;font-weight:700}
+        .admin-meta{font-size:12px;color:#697586;display:flex;align-items:center;gap:12px}
+        .content{padding:26px 30px 60px;max-width:1440px;margin:auto}
+        .view{display:none}.view.active{display:block}
+        .lead{margin:0 0 20px;color:#667085;font-size:13px;line-height:1.6}
+        .cards{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:14px;margin-bottom:23px}
+        .stat,.panel{background:#fff;border:1px solid #e7eaf0;border-radius:14px;box-shadow:0 2px 8px #1018280a}
+        .stat{padding:17px}.stat span{display:block;color:#697586;font-size:12px}.stat strong{display:block;font-size:24px;margin-top:9px}
+        .panel{padding:18px;margin-bottom:18px}
+        .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+        h2{font-size:15px;margin:0;font-weight:700}.muted{color:#667085;font-size:12px}
+        .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+        .table-wrap{width:100%;overflow:auto}
+        table{border-collapse:collapse;width:100%;font-size:12px;min-width:680px}
+        th,td{text-align:left;padding:11px 10px;border-bottom:1px solid #edf0f5;vertical-align:middle}
+        th{font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:#697586;background:#fafbfc}
+        td{color:#344054}
+        .actions{display:flex;gap:6px;flex-wrap:wrap}
+        .btn{border:1px solid #d0d5dd;background:#fff;color:#344054;padding:8px 11px;border-radius:8px;font-size:12px;font-weight:600}
+        .btn:hover{background:#f7f8fa}.btn.primary{background:#3458d4;color:#fff;border-color:#3458d4}.btn.danger{color:#b42318;border-color:#f3c5c1}.btn.success{color:#067647;border-color:#abefc6}
+        .btn:disabled{opacity:.55;cursor:not-allowed}
+        input,select,textarea{border:1px solid #d0d5dd;border-radius:8px;background:#fff;padding:9px 10px;color:#1d2939;min-width:0}
+        input:focus,select:focus,textarea:focus{outline:2px solid #c7d2fe;border-color:#5269db}
+        .search{min-width:min(260px,60vw)}
+        .form-grid{display:grid;grid-template-columns:repeat(4,minmax(130px,1fr));gap:10px;align-items:end}
+        .form-grid label{display:grid;gap:5px;color:#667085;font-size:11px;font-weight:600}
+        .form-grid .wide{grid-column:span 2}
+        .pill{display:inline-block;border-radius:20px;padding:4px 8px;font-size:10px;font-weight:700;background:#eef2f6;color:#475467;text-transform:capitalize}
+        .pill.active,.pill.approved,.pill.processing{background:#dcfae6;color:#067647}.pill.pending{background:#fff4cc;color:#93370d}.pill.suspended,.pill.rejected,.pill.inactive{background:#fee4e2;color:#b42318}
+        .notice{background:#fff7e6;border:1px solid #fedf89;padding:12px 14px;border-radius:10px;color:#7a4b00;font-size:12px;line-height:1.6;margin-bottom:15px}
+        .empty{color:#667085;text-align:center;padding:24px;font-size:13px}
+        .media-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+        .media-card{border:1px solid #e7eaf0;border-radius:12px;padding:14px;display:grid;gap:10px}
+        .media-card h3{margin:0;font-size:13px}
+        .media-card img{width:100%;height:130px;object-fit:contain;background:#f8f9fb;border:1px solid #e7eaf0;border-radius:9px}
+        .invite-banner-preview{height:130px;position:relative;overflow:hidden;border:1px solid #e7eaf0;border-radius:9px;background:radial-gradient(95% 115% at 95% 5%,rgba(255,244,155,.92),rgba(255,210,63,.35) 36%,transparent 70%),linear-gradient(145deg,#f5bd12 0%,#eda800 48%,#cb7900 100%)}
+        .invite-banner-preview svg{position:absolute;right:10px;bottom:5px;width:95px;height:95px;filter:drop-shadow(0 5px 6px #60340038)}
+        .invite-banner-preview img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:transparent;border:0;border-radius:0}
+        .media-card input{width:100%}
+        .product-preview{width:72px;height:52px;object-fit:cover;border:1px solid #e7eaf0;border-radius:8px;background:#f8f9fb}
+        .product-image-preview{width:150px;height:100px;object-fit:cover;border:1px solid #e7eaf0;border-radius:10px;background:#f8f9fb}
+        .overlay{position:fixed;inset:0;background:#101828aa;z-index:10;display:grid;place-items:center;padding:18px}
+        .dialog{width:min(100%,420px);background:#fff;border-radius:16px;padding:26px;box-shadow:0 20px 70px #10182844}
+        .dialog h2{font-size:20px;margin-bottom:7px}.dialog p{color:#667085;font-size:13px;line-height:1.6;margin:0 0 18px}
+        .dialog form{display:grid;gap:12px}.dialog label{display:grid;gap:6px;color:#475467;font-size:12px;font-weight:600}.dialog button{padding:11px}
+        .hidden{display:none!important}
+        #toast{position:fixed;right:20px;bottom:20px;z-index:20;background:#182230;color:#fff;padding:12px 17px;border-radius:10px;font-size:13px;max-width:min(450px,calc(100vw - 40px));box-shadow:0 8px 28px #10182830}
+        .mobile-toggle{display:none}
+        @media(max-width:900px){.sidebar{width:205px}.main{margin-left:205px}.content{padding:20px}.cards{grid-template-columns:repeat(2,1fr)}.form-grid{grid-template-columns:repeat(2,minmax(120px,1fr))}}
+        @media(max-width:620px){.sidebar{width:72px;padding:14px 9px}.brand{justify-content:center;padding:6px 0 18px}.brand div,.nav-label,.nav button span,.side-bottom{display:none}.nav button{font-size:0;text-align:center;padding:13px 5px}.nav button::first-letter{font-size:16px}.main{margin-left:72px}.topbar{height:62px;padding:0 14px}.topbar h1{font-size:16px}.admin-meta{font-size:10px;gap:6px}.content{padding:15px 11px 38px}.cards{gap:8px}.stat{padding:12px}.stat strong{font-size:19px}.panel{padding:13px}.panel-head{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr 1fr}.form-grid .wide{grid-column:span 2}}
+    </style>
+</head>
+<body>
+    <div class="shell hidden" id="app">
+        <aside class="sidebar">
+            <div class="brand"><img src="/assets/images/kingfisher-logo.svg" alt=""><div>Finora<small>ADMIN CONSOLE</small></div></div>
+            <div class="nav-label">Management</div>
+            <nav class="nav" id="navigation">
+                <button class="active" data-view="overview">▦ <span>Overview</span></button>
+                <button data-view="users">♙ <span>Users</span></button>
+                <button data-view="demo-accounts">◉ <span>Demo accounts</span></button>
+                <button data-view="products">◇ <span>Products</span></button>
+                <button data-view="product-requests">↗ <span>Product requests</span></button>
+                <button data-view="transactions">₹ <span>Payment requests</span></button>
+                <button data-view="missions">☆ <span>Missions</span></button>
+                <button data-view="mission-claims">✓ <span>Mission claims</span></button>
+                <button data-view="settings">⚙ <span>Site settings</span></button>
+                <button data-view="audit">≡ <span>Audit log</span></button>
+            </nav>
+            <div class="side-bottom">All sensitive actions are recorded. User passwords are never viewable.</div>
+        </aside>
+        <main class="main">
+            <header class="topbar">
+                <h1 id="pageTitle">Overview</h1>
+                <div class="admin-meta"><span id="adminName"></span><button class="btn" id="logout">Sign out</button></div>
+            </header>
+            <div class="content">
+                <section class="view active" id="view-overview">
+                    <p class="lead">Live account, wallet and operations overview.</p>
+                    <div class="cards" id="overviewCards"></div>
+                    <div class="panel">
+                        <div class="panel-head"><h2>Operational safety</h2></div>
+                        <div class="notice">Payment requests stay pending until an administrator verifies the payment or payout. Approving a recharge credits the internal wallet; approving a withdrawal deducts it. This panel does not send money or integrate with a payment provider.</div>
+                        <p class="muted">Wallet balances are stored server-side in paise. Every admin balance change, request decision and configuration update is recorded in the audit log.</p>
+                    </div>
+                </section>
+                <section class="view" id="view-users">
+                    <div class="panel">
+                        <div class="panel-head"><h2>Users</h2><div class="toolbar"><input class="search" id="userSearch" placeholder="Search name or mobile"><button class="btn" id="searchUsers">Search</button><button class="btn" id="exportUsers">Export CSV</button></div></div>
+                        <p class="muted">Suspending an account blocks access but preserves its wallet and history; suspended accounts can be reactivated. Wallet credits/debits update the user’s available balance for active product purchases and eligible withdrawal requests. Withdrawals require saved bank details and admin review; adjustments do not send payouts.</p>
+                        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Wallet</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead><tbody id="usersBody"></tbody></table></div>
+                        <div class="toolbar" style="justify-content:space-between;margin-top:12px"><span class="muted" id="usersCount"></span><div><button class="btn" id="usersPrev">Previous</button> <button class="btn" id="usersNext">Next</button></div></div>
+                    </div>
+                </section>
+                <section class="view" id="view-demo-accounts">
+                    <div class="panel">
+                        <div class="panel-head"><h2>Create demo ID</h2><span class="muted">Admin-only simulation records</span></div>
+                        <div class="notice"><strong>DEMO ONLY:</strong> Demo IDs are not login accounts. Simulated deposits and withdrawals use a separate ledger, never change a real user wallet, and do not send or receive money.</div>
+                        <form class="form-grid" id="demoAccountForm">
+                            <label class="wide">Demo account name<input id="demoAccountName" maxlength="80" placeholder="e.g. Product walkthrough" required></label>
+                            <div><button class="btn primary" type="submit">Create demo ID</button></div>
+                        </form>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-head"><h2>Simulate demo deposit / withdrawal</h2></div>
+                        <form class="form-grid" id="demoTransactionForm">
+                            <label>Demo ID<select id="demoTransactionAccount" required></select></label>
+                            <label>Simulation type<select id="demoTransactionType"><option value="deposit">Demo deposit (+)</option><option value="withdrawal">Demo withdrawal (−)</option></select></label>
+                            <label>Amount (₹)<input id="demoTransactionAmount" type="number" min="0.01" step="0.01" required></label>
+                            <label class="wide">Demo note<input id="demoTransactionNote" maxlength="250" placeholder="For UI testing only" required></label>
+                            <div><button class="btn primary" id="demoTransactionSubmit" type="submit">Record demo transaction</button></div>
+                        </form>
+                    </div>
+                    <div class="panel"><div class="panel-head"><h2>Demo IDs <button class="btn" id="refreshDemoAccounts" type="button">Refresh</button></h2></div><div class="table-wrap"><table><thead><tr><th>Demo ID</th><th>Name</th><th>Demo balance</th><th>Created</th><th>Label</th></tr></thead><tbody id="demoAccountsBody"></tbody></table></div></div>
+                    <div class="panel"><div class="panel-head"><h2>Simulated demo ledger</h2></div><div class="table-wrap"><table><thead><tr><th>Entry</th><th>Demo ID</th><th>Type</th><th>Amount</th><th>Note</th><th>Recorded</th></tr></thead><tbody id="demoTransactionsBody"></tbody></table></div></div>
+                </section>
+                <section class="view" id="view-products">
+                    <div class="panel">
+                        <div class="panel-head"><h2 id="productFormTitle">Add product</h2><span class="muted">Changes update the customer catalog immediately.</span></div>
+                        <div class="notice">Edit each product’s customer-visible Return Time, Deposit, Est. Daily, and Est. Total below. Products debit the customer’s internal wallet and activate immediately on purchase. Estimated rewards and returns are disabled; configured estimates are not paid or promised.</div>
+                        <form class="form-grid" id="productForm">
+                            <input type="hidden" id="productId">
+                            <label>Product name<input id="productName" maxlength="80" required></label>
+                            <label>Category<select id="productCategory"><option value="daily">Daily</option><option value="vip">VIP</option></select></label>
+                            <label>Deposit (₹)<input id="productPrice" type="number" min="0" step="0.01" required></label>
+                            <label>Return Time (days)<input id="productDuration" type="number" min="1" max="3650" step="1" required></label>
+                            <label>Est. Daily (₹)<input id="productDaily" type="number" min="0" step="0.01" value="0"></label>
+                            <label>Est. Total (₹)<input id="productTotal" type="number" min="0" step="0.01" value="0"></label>
+                            <label>Per-user limit<input id="productLimit" type="number" min="1" max="10000" step="1" value="1"></label>
+                            <input type="hidden" id="productImageUrl">
+                            <label class="wide">Product image (PNG, JPEG, or WebP; max 3 MB)<input id="productImageFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
+                            <div class="wide"><img id="productImagePreview" class="product-image-preview hidden" alt="Product image preview"><label id="removeProductImageWrap" class="hidden"><input id="removeProductImage" type="checkbox"> Remove current product image</label></div>
+                            <div class="toolbar"><button class="btn primary" type="submit">Save product</button><button class="btn hidden" type="button" id="cancelProductEdit">Cancel edit</button></div>
+                        </form>
+                    </div>
+                    <div class="panel"><div class="panel-head"><h2>Product catalog</h2></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Deposit</th><th>Return Time</th><th>Estimates</th><th>Status</th><th>Actions</th></tr></thead><tbody id="productsBody"></tbody></table></div></div>
+                </section>
+                <section class="view" id="view-product-requests">
+                    <div class="panel">
+                        <div class="panel-head"><h2>Product requests</h2><select id="productRequestFilter"><option value="">All statuses</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div>
+                        <div class="notice">Reviewing a request does not debit the user’s wallet or activate any reward. Confirm terms and fulfilment with the user outside this demo before any real transaction.</div>
+                        <div class="table-wrap"><table><thead><tr><th>ID</th><th>User</th><th>Product</th><th>Listed price</th><th>Status / note</th><th>Created</th><th>Review</th></tr></thead><tbody id="productRequestsBody"></tbody></table></div>
+                    </div>
+                </section>
+                <section class="view" id="view-transactions">
+                    <div class="panel">
+                        <div class="panel-head"><h2>Create manual review request</h2><span class="muted">Use only for an actual customer request.</span></div>
+                        <form class="form-grid" id="transactionForm">
+                            <label>User ID<input id="transactionUser" type="number" min="1" step="1" required></label>
+                            <label>Type<select id="transactionType"><option value="recharge">Recharge</option><option value="withdrawal">Withdrawal</option></select></label>
+                            <label>Amount (₹)<input id="transactionAmount" type="number" min="0.01" step="0.01" required></label>
+                            <label>Payment / payout reference<input id="transactionReference" maxlength="120"></label>
+                            <label class="wide">Reason / notes<input id="transactionNote" maxlength="250" required></label>
+                            <div><button class="btn primary" type="submit">Create pending request</button></div>
+                        </form>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-head"><h2>Recharge &amp; withdrawal requests</h2><select id="transactionFilter"><option value="">All statuses</option><option value="pending">Pending</option><option value="processing">Processing</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div>
+                        <div class="notice">Only approve a recharge after independently confirming receipt. For withdrawals, mark the request Processing while arranging the payout, reveal bank details only when needed, and approve with the payout reference after sending it manually. Processing withdrawals continue to reserve wallet funds. Reveals are audited; this panel does not send money.</div>
+                        <div class="table-wrap"><table><thead><tr><th>ID</th><th>User</th><th>Type</th><th>Amount</th><th>Status</th><th>Reference / note</th><th>Payout destination</th><th>Created</th><th>Actions</th></tr></thead><tbody id="transactionsBody"></tbody></table></div>
+                    </div>
+                </section>
+                <section class="view" id="view-missions">
+                    <div class="panel">
+                        <div class="panel-head"><h2 id="missionFormTitle">Add mission</h2><span class="muted">Mission rewards are configuration only until server-side eligibility/reward processing is enabled.</span></div>
+                        <form class="form-grid" id="missionForm">
+                            <input type="hidden" id="missionId">
+                            <label>Name<input id="missionName" maxlength="100" required></label>
+                            <label>Target members<input id="missionTarget" type="number" min="0" step="1" required></label>
+                            <label>Reward (₹)<input id="missionReward" type="number" min="0" step="0.01" required></label>
+                            <label class="wide">Description<input id="missionDescription" maxlength="500"></label>
+                            <label>Status<select id="missionActive"><option value="true">Active</option><option value="false">Inactive</option></select></label>
+                            <div class="toolbar"><button class="btn primary" type="submit">Save mission</button><button class="btn hidden" type="button" id="cancelMissionEdit">Cancel edit</button></div>
+                        </form>
+                    </div>
+                    <div class="panel"><div class="panel-head"><h2>Mission configuration</h2></div><div class="table-wrap"><table><thead><tr><th>ID</th><th>Name</th><th>Description</th><th>Target</th><th>Reward</th><th>Status</th><th>Actions</th></tr></thead><tbody id="missionsBody"></tbody></table></div></div>
+                </section>
+                <section class="view" id="view-mission-claims">
+                    <div class="panel">
+                        <div class="panel-head"><h2>Mission claims</h2><select id="missionClaimFilter"><option value="">All statuses</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select></div>
+                        <div class="notice">Claims are checked against the user’s current registered team. Approving credits only the internal wallet; this does not send an external payment.</div>
+                        <div class="table-wrap"><table><thead><tr><th>ID</th><th>User</th><th>Mission</th><th>Required team</th><th>Reward</th><th>Status</th><th>Review</th></tr></thead><tbody id="missionClaimsBody"></tbody></table></div>
+                    </div>
+                </section>
+                <section class="view" id="view-settings">
+                    <div class="panel">
+                        <div class="panel-head"><h2>App branding images</h2></div>
+                        <div class="notice">Upload PNG, JPEG, or WebP images up to 3 MB. Logo, banner, and spinner updates appear across the site after upload. The invite banner appears on the Invite friends page.</div>
+                        <div class="media-grid">
+                            <div class="media-card">
+                                <h3>App logo</h3>
+                                <img id="siteLogoPreview" src="/assets/images/kingfisher-logo.svg" alt="Current app logo">
+                                <input id="siteLogoFile" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose app logo">
+                                <button class="btn primary" id="uploadSiteLogo" type="button">Upload logo</button>
+                            </div>
+                            <div class="media-card">
+                                <h3>App banner</h3>
+                                <img id="siteBannerPreview" src="/assets/images/hero.svg" alt="Current app banner">
+                                <input id="siteBannerFile" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose app banner">
+                                <button class="btn primary" id="uploadSiteBanner" type="button">Upload banner</button>
+                            </div>
+                            <div class="media-card">
+                                <h3>Invite friends banner</h3>
+                                <div class="invite-banner-preview" id="inviteBannerDefaultPreview" role="img" aria-label="Default invite banner preview">
+                                    <svg viewBox="0 0 160 130" aria-hidden="true">
+                                        <circle cx="80" cy="34" r="22" fill="#ffe0ae"/><path d="M57 35c1-24 43-33 49 2-11-7-21-17-25-23-4 11-13 18-24 21" fill="#563b2a"/>
+                                        <path d="M42 111c2-35 15-53 38-53s38 18 39 53" fill="#fff3d6"/><circle cx="37" cy="58" r="16" fill="#ffce9c"/>
+                                        <path d="M14 116c1-24 8-39 24-39 11 0 20 10 22 27l-12 12" fill="#f8ddaa"/><circle cx="123" cy="60" r="16" fill="#e8b486"/>
+                                        <path d="M103 116c2-24 9-39 21-39 16 0 23 15 24 39" fill="#f4d59b"/>
+                                    </svg>
+                                </div>
+                                <img id="inviteBannerPreviewImage" class="hidden" alt="Uploaded invite banner preview">
+                                <input id="inviteBannerFile" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose invite banner">
+                                <button class="btn primary" id="uploadInviteBanner" type="button">Upload invite banner</button>
+                            </div>
+                            <div class="media-card">
+                                <h3>App spinner</h3>
+                                <img id="siteSpinnerPreview" src="/assets/images/Speener.svg" alt="Current app spinner">
+                                <input id="siteSpinnerFile" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose app spinner">
+                                <button class="btn primary" id="uploadSiteSpinner" type="button">Upload spinner</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel"><div class="panel-head"><h2>Site settings</h2></div><div class="notice">Settings are saved in the database. Payment and payout credentials must be configured with the provider separately; never enter secret keys here.</div><div class="table-wrap"><table><thead><tr><th>Key</th><th>Value</th><th>Last updated</th><th>Action</th></tr></thead><tbody id="settingsBody"></tbody></table></div></div>
+                </section>
+                <section class="view" id="view-audit">
+                    <div class="panel"><div class="panel-head"><h2>Admin audit log</h2><button class="btn" id="refreshAudit">Refresh</button></div><div class="table-wrap"><table><thead><tr><th>When</th><th>Admin</th><th>Action</th><th>Entity</th><th>ID</th><th>Details</th></tr></thead><tbody id="auditBody"></tbody></table></div></div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div class="overlay" id="authOverlay">
+        <section class="dialog">
+            <div class="brand" style="padding:0 0 14px;color:#172033"><img src="/assets/images/kingfisher-logo.svg" alt=""><div>Finora<small>SECURE ADMIN ACCESS</small></div></div>
+            <div id="loginPane">
+                <h2>Admin sign in</h2>
+                <p>Use the bootstrap username and password configured on the server.</p>
+                <div class="notice hidden" id="bootstrapNotice">No admin account exists yet. Set <code>ADMIN_USERNAME</code> and a unique <code>ADMIN_PASSWORD</code> (12+ characters) in your local <code>.env</code>, then restart the server.</div>
+                <form id="loginForm">
+                    <label>Admin username<input id="loginUsername" autocomplete="username" required></label>
+                    <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required></label>
+                    <button class="btn primary" type="submit">Sign in</button>
+                </form>
+            </div>
+            <div class="hidden" id="passwordPane">
+                <h2>Change bootstrap password</h2>
+                <p>Before continuing, set a new unique admin password. Use at least 12 characters.</p>
+                <form id="passwordForm">
+                    <label>Current password<input id="currentPassword" type="password" autocomplete="current-password" required></label>
+                    <label>New password<input id="newPassword" type="password" autocomplete="new-password" minlength="12" required></label>
+                    <button class="btn primary" type="submit">Update password</button>
+                </form>
+            </div>
+            <p id="authMessage" role="status" style="margin:13px 0 0;color:#b42318"></p>
+        </section>
+    </div>
+    <div class="overlay hidden" id="walletAdjustmentOverlay">
+        <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="walletAdjustmentTitle">
+            <h2 id="walletAdjustmentTitle">Credit or debit user wallet</h2>
+            <p id="walletAdjustmentUser" class="muted"></p>
+            <form id="walletAdjustmentForm">
+                <label>Adjustment amount (₹)
+                    <input id="walletAdjustmentAmount" type="number" step="0.01" placeholder="Example: 250 or -100" required>
+                </label>
+                <p class="muted">Positive credits the wallet; negative debits it. Updated available balance can be used for active product purchases or eligible withdrawal requests. Withdrawals require saved bank details and admin review; a debit cannot make the wallet negative.</p>
+                <label>Reason (required)
+                    <input id="walletAdjustmentNote" maxlength="250" required>
+                </label>
+                <div class="toolbar">
+                    <button class="btn primary" type="submit" id="walletAdjustmentSubmit">Apply credit / debit</button>
+                    <button class="btn" type="button" id="walletAdjustmentCancel">Cancel</button>
+                </div>
+            </form>
+            <p id="walletAdjustmentMessage" role="status"></p>
+        </section>
+    </div>
+    <div id="toast" class="hidden" role="status" aria-live="polite"></div>
+
+    <script>
+    (function(){
+        "use strict";
+        const $ = selector => document.querySelector(selector);
+        const state = { csrf: "", admin: null, usersPage: 1, usersSearch: "", products: [], missions: [], demoAccounts: [] };
+        const titles = { overview:"Overview", users:"Users", "demo-accounts":"Demo accounts", products:"Products", transactions:"Payment requests", missions:"Missions", settings:"Site settings", audit:"Audit log" };
+        let toastTimer;
+
+        function showToast(message, isError) {
+            const el = $("#toast");
+            el.textContent = message;
+            el.style.background = isError ? "#b42318" : "#182230";
+            el.classList.remove("hidden");
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => el.classList.add("hidden"), 4000);
+        }
+        function escapeHtml(value) {
+            return String(value == null ? "" : value).replace(/[&<>"']/g, ch => ({
+                "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+            })[ch]);
+        }
+        function money(paise) {
+            return "₹" + (Number(paise || 0) / 100).toLocaleString("en-IN", { minimumFractionDigits:2, maximumFractionDigits:2 });
+        }
+        async function getCsrf() {
+            const response = await fetch("/api/csrf", { credentials:"include", cache:"no-store" });
+            const result = await response.json();
+            if (!response.ok || !result.csrfToken) throw new Error(result.message || "Could not start secure admin session.");
+            state.csrf = result.csrfToken;
+        }
+        async function api(url, options) {
+            options = options || {};
+            const method = options.method || "GET";
+            const headers = Object.assign({}, options.headers || {});
+            if (method !== "GET") {
+                if (!state.csrf) await getCsrf();
+                headers["X-CSRF-Token"] = state.csrf;
+                if (options.body !== undefined) headers["Content-Type"] = "application/json";
+            }
+            const response = await fetch(url, {
+                method, credentials:"include", cache:"no-store", headers,
+                body:options.body === undefined ? undefined : JSON.stringify(options.body)
+            });
+            let result;
+            try { result = await response.json(); }
+            catch { throw new Error("Server returned an invalid response."); }
+            if (!response.ok || result.success === false) {
+                if (response.status === 401) showAuth();
+                throw new Error(result.message || "Request failed.");
+            }
+            if (result.csrfToken) state.csrf = result.csrfToken;
+            return result;
+        }
+        async function uploadImage(kind, file) {
+            if (!file || !["image/png", "image/jpeg", "image/webp"].includes(file.type) || file.size > 3 * 1024 * 1024) {
+                throw new Error("Choose a PNG, JPEG, or WebP image no larger than 3 MB.");
+            }
+            if (!state.csrf) await getCsrf();
+            const response = await fetch(`/api/admin/media/${kind}`, {
+                method:"POST", credentials:"include", cache:"no-store",
+                headers:{"Content-Type":file.type,"X-CSRF-Token":state.csrf}, body:file
+            });
+            let result;
+            try { result = await response.json(); }
+            catch { throw new Error("Server returned an invalid response."); }
+            if (!response.ok || result.success !== true || !result.imageUrl) {
+                if (response.status === 401) showAuth();
+                throw new Error(result.message || "Image upload failed.");
+            }
+            return result.imageUrl;
+        }
+        function showAuth() {
+            $("#app").classList.add("hidden");
+            $("#authOverlay").classList.remove("hidden");
+            $("#loginPane").classList.remove("hidden");
+            $("#passwordPane").classList.add("hidden");
+            state.admin = null;
+        }
+        function showApp(admin) {
+            state.admin = admin;
+            $("#adminName").textContent = admin.username;
+            $("#authOverlay").classList.add("hidden");
+            $("#app").classList.remove("hidden");
+            if (admin.passwordChangeRequired) {
+                $("#loginPane").classList.add("hidden");
+                $("#passwordPane").classList.remove("hidden");
+                $("#authOverlay").classList.remove("hidden");
+            } else {
+                loadOverview().catch(error => showToast(error.message, true));
+            }
+        }
+        async function boot() {
+            try {
+                const response = await fetch("/api/admin/session", { credentials:"include", cache:"no-store" });
+                const result = await response.json();
+                if (result.success) {
+                    state.csrf = result.csrfToken || "";
+                    showApp(result.admin);
+                } else {
+                    showAuth();
+                    const configured = result.configured === true;
+                    $("#bootstrapNotice").classList.toggle("hidden", configured);
+                    $("#loginUsername").disabled = !configured;
+                    $("#loginPassword").disabled = !configured;
+                    $("#loginForm button[type='submit']").disabled = !configured;
+                }
+            } catch (error) {
+                showAuth();
+                $("#authMessage").textContent = error.message;
+            }
+        }
+        async function loadOverview() {
+            const {summary} = await api("/api/admin/overview");
+            const cards = [
+                ["Total users", summary.users], ["Active users", summary.activeUsers],
+                ["Suspended users", summary.suspendedUsers], ["Wallet liability", money(summary.walletPaise)],
+                ["Pending requests", summary.pendingTransactions], ["Active products", summary.activeProducts],
+                ["Active missions", summary.activeMissions], ["Pending product requests", summary.pendingProductRequests],
+                ["Pending mission claims", summary.pendingMissionClaims]
+            ];
+            $("#overviewCards").innerHTML = cards.map(([label,value]) =>
+                `<article class="stat"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></article>`
+            ).join("");
+        }
+        async function loadUsers() {
+            const query = new URLSearchParams({ page:String(state.usersPage), search:state.usersSearch });
+            const result = await api("/api/admin/users?" + query.toString());
+            $("#usersBody").innerHTML = result.users.map(user => `<tr>
+                <td>${user.id}</td><td>${escapeHtml(user.name)}</td><td>${escapeHtml(user.phone)}</td>
+                <td>${money(user.balancePaise)}</td><td><span class="pill ${escapeHtml(user.status)}">${escapeHtml(user.status)}</span></td>
+                <td>${escapeHtml(user.createdAt)}</td><td><div class="actions">
+                <button class="btn ${user.status === "active" ? "danger" : "success"}" data-action="status" data-id="${user.id}" data-status="${user.status === "active" ? "suspended" : "active"}">${user.status === "active" ? "Suspend account" : "Reactivate"}</button>
+                <button class="btn" data-action="balance" data-id="${user.id}" data-name="${escapeHtml(user.name)}" data-phone="${escapeHtml(user.phone)}" data-balance="${user.balancePaise}">Adjust wallet</button>
+                <button class="btn" data-action="reset" data-id="${user.id}">Reset password</button>
+                ${user.bankConfigured ? `<button class="btn danger" data-action="remove-bank" data-id="${user.id}">Remove bank</button>` : ""}
+                ${user.status === "active" ? `<button class="btn primary" data-action="impersonate" data-id="${user.id}" data-name="${escapeHtml(user.name)}">Login as user</button>` : ""}
+                </div></td></tr>`).join("") || `<tr><td colspan="7" class="empty">No users found.</td></tr>`;
+            $("#usersCount").textContent = `${result.total} users · page ${result.page}`;
+            $("#usersPrev").disabled = state.usersPage <= 1;
+            $("#usersNext").disabled = state.usersPage * result.pageSize >= result.total;
+        }
+        async function loadDemoAccounts() {
+            const result = await api("/api/admin/demo-accounts");
+            state.demoAccounts = result.accounts;
+            const selectedId = $("#demoTransactionAccount").value;
+            $("#demoTransactionAccount").innerHTML = state.demoAccounts.map(account =>
+                `<option value="${account.id}">${escapeHtml(account.demoCode)} · ${escapeHtml(account.name)}</option>`
+            ).join("") || `<option value="">Create a demo ID first</option>`;
+            if (state.demoAccounts.some(account => String(account.id) === selectedId)) {
+                $("#demoTransactionAccount").value = selectedId;
+            }
+            $("#demoTransactionAccount").disabled = state.demoAccounts.length === 0;
+            $("#demoTransactionSubmit").disabled = state.demoAccounts.length === 0;
+            $("#demoAccountsBody").innerHTML = state.demoAccounts.map(account => `<tr>
+                <td><code>${escapeHtml(account.demoCode)}</code></td><td>${escapeHtml(account.name)}</td>
+                <td>${money(account.balancePaise)}</td><td>${escapeHtml(account.createdAt)}</td>
+                <td><span class="pill pending">DEMO ONLY</span></td></tr>`
+            ).join("") || `<tr><td colspan="5" class="empty">No demo IDs created.</td></tr>`;
+            $("#demoTransactionsBody").innerHTML = result.transactions.map(transaction => `<tr>
+                <td>${transaction.id}</td><td><code>${escapeHtml(transaction.demoCode)}</code><br><span class="muted">${escapeHtml(transaction.accountName)}</span></td>
+                <td>${transaction.type === "demo_deposit" ? "Demo deposit" : "Demo withdrawal"}</td>
+                <td>${transaction.type === "demo_deposit" ? "+" : "−"}${money(transaction.amountPaise)}</td>
+                <td>${escapeHtml(transaction.note)}</td><td>${escapeHtml(transaction.createdAt)}</td></tr>`
+            ).join("") || `<tr><td colspan="6" class="empty">No simulated transactions recorded.</td></tr>`;
+        }
+        function fillProduct(product) {
+            $("#productForm").dataset.active = product ? String(Boolean(product.active)) : "true";
+            $("#productId").value = product ? product.id : "";
+            $("#productName").value = product ? product.name : "";
+            $("#productCategory").value = product ? product.category : "daily";
+            $("#productPrice").value = product ? product.pricePaise / 100 : "";
+            $("#productDuration").value = product ? product.durationDays : "";
+            $("#productDaily").value = product ? product.dailyRewardPaise / 100 : "0";
+            $("#productTotal").value = product ? product.totalRewardPaise / 100 : "0";
+            $("#productLimit").value = product ? product.purchaseLimit : "1";
+            $("#productImageUrl").value = product ? product.imageUrl || "" : "";
+            $("#productImageFile").value = "";
+            $("#removeProductImage").checked = false;
+            clearImagePreviewObjectUrl($("#productImagePreview"));
+            $("#productImagePreview").classList.toggle("hidden", !(product && product.imageUrl));
+            $("#productImagePreview").src = product && product.imageUrl ? product.imageUrl : "";
+            $("#removeProductImageWrap").classList.toggle("hidden", !(product && product.imageUrl));
+            $("#productFormTitle").textContent = product ? "Edit product #" + product.id : "Add product";
+            $("#cancelProductEdit").classList.toggle("hidden", !product);
+            $("#productForm").scrollIntoView({behavior:"smooth", block:"center"});
+        }
+        async function loadProducts() {
+            const result = await api("/api/admin/products");
+            state.products = result.products;
+            $("#productsBody").innerHTML = state.products.map(p => `<tr>
+                <td>${p.id}</td><td>${p.imageUrl ? `<img class="product-preview" src="${escapeHtml(p.imageUrl)}" alt="">` : "—"}</td>
+                <td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.category)}</td>
+                <td>${money(p.pricePaise)}</td><td>${p.durationDays} days</td>
+                <td>${money(p.dailyRewardPaise)} / day<br>${money(p.totalRewardPaise)} total</td>
+                <td><span class="pill ${p.active ? "active" : "inactive"}">${p.active ? "active" : "inactive"}</span></td>
+                <td><div class="actions"><button class="btn" data-action="edit-product" data-id="${p.id}">Edit</button>
+                ${p.active ? `<button class="btn danger" data-action="deactivate-product" data-id="${p.id}">Deactivate</button>` : ""}</div></td>
+                </tr>`).join("") || `<tr><td colspan="9" class="empty">No products configured.</td></tr>`;
+        }
+        async function loadProductRequests() {
+            const filter = encodeURIComponent($("#productRequestFilter").value);
+            const result = await api("/api/admin/product-requests?status=" + filter);
+            $("#productRequestsBody").innerHTML = result.requests.map(request => `<tr>
+                <td>${request.id}</td>
+                <td>${escapeHtml(request.userName)}<br><span class="muted">#${request.userId} · ${escapeHtml(request.phone)}</span></td>
+                <td>${escapeHtml(request.productName)} (#${request.productId})</td>
+                <td>${money(request.pricePaise)}</td>
+                <td><span class="pill ${escapeHtml(request.status)}">${escapeHtml(request.status)}</span><br><span class="muted">${escapeHtml(request.note)}</span></td>
+                <td>${escapeHtml(request.createdAt)}</td>
+                <td>${request.status === "pending" ? `<div class="actions"><button class="btn success" data-action="approve-product-request" data-id="${request.id}">Approve request</button><button class="btn danger" data-action="reject-product-request" data-id="${request.id}">Reject</button></div>` : escapeHtml(request.reviewedAt || "")}</td>
+                </tr>`).join("") || `<tr><td colspan="7" class="empty">No product requests found.</td></tr>`;
+        }
+        async function loadTransactions() {
+            const filter = encodeURIComponent($("#transactionFilter").value);
+            const result = await api("/api/admin/transactions?status=" + filter);
+            $("#transactionsBody").innerHTML = result.transactions.map(t => `<tr>
+                <td>${t.id}</td><td>${escapeHtml(t.userName)}<br><span class="muted">#${t.userId} · ${escapeHtml(t.phone)}</span></td>
+                <td>${escapeHtml(t.type)}</td><td>${money(t.amountPaise)}</td>
+                <td><span class="pill ${escapeHtml(t.status)}">${escapeHtml(t.status)}</span></td>
+                <td>${escapeHtml(t.reference)} ${t.note ? "<br>" + escapeHtml(t.note) : ""}</td>
+                <td>${t.type === "withdrawal" ? `${t.bankName ? `<span class="muted">${escapeHtml(t.bankName)} · •••• ${escapeHtml(t.bankAccountLast4)} · ${escapeHtml(t.bankIfsc)}</span>` : `<span class="muted">No bank account saved</span>`}${["pending", "processing"].includes(t.status) ? `<div><button class="btn" data-action="reveal-payout" data-id="${t.id}">Reveal payout details</button></div>` : ""}<div class="muted" data-payout-output="${t.id}"></div>` : "—"}</td>
+                <td>${escapeHtml(t.createdAt)}</td>
+                <td>${t.status === "pending" || t.status === "processing" ? `<div class="actions">${t.type === "withdrawal" && t.status === "pending" ? `<button class="btn primary" data-action="processing" data-id="${t.id}">Mark processing</button>` : ""}<button class="btn success" data-action="approve" data-type="${escapeHtml(t.type)}" data-id="${t.id}">${t.type === "withdrawal" ? "Approve / paid" : "Approve"}</button><button class="btn danger" data-action="reject" data-id="${t.id}">Reject</button></div>` : escapeHtml(t.reviewedAt || "")}</td>
+                </tr>`).join("") || `<tr><td colspan="9" class="empty">No requests found.</td></tr>`;
+        }
+        function fillMission(mission) {
+            $("#missionId").value = mission ? mission.id : "";
+            $("#missionName").value = mission ? mission.name : "";
+            $("#missionDescription").value = mission ? mission.description : "";
+            $("#missionTarget").value = mission ? mission.targetMembers : "";
+            $("#missionReward").value = mission ? mission.rewardPaise / 100 : "";
+            $("#missionActive").value = mission ? String(Boolean(mission.active)) : "true";
+            $("#missionFormTitle").textContent = mission ? "Edit mission #" + mission.id : "Add mission";
+            $("#cancelMissionEdit").classList.toggle("hidden", !mission);
+        }
+        async function loadMissions() {
+            const result = await api("/api/admin/missions");
+            state.missions = result.missions;
+            $("#missionsBody").innerHTML = state.missions.map(m => `<tr>
+                <td>${m.id}</td><td>${escapeHtml(m.name)}</td><td>${escapeHtml(m.description)}</td>
+                <td>${m.targetMembers}</td><td>${money(m.rewardPaise)}</td>
+                <td><span class="pill ${m.active ? "active" : "inactive"}">${m.active ? "active" : "inactive"}</span></td>
+                <td><div class="actions"><button class="btn" data-action="edit-mission" data-id="${m.id}">Edit</button><button class="btn" data-action="toggle-mission" data-id="${m.id}">${m.active ? "Deactivate" : "Activate"}</button></div></td>
+                </tr>`).join("") || `<tr><td colspan="7" class="empty">No missions configured.</td></tr>`;
+        }
+        async function loadMissionClaims() {
+            const filter = encodeURIComponent($("#missionClaimFilter").value);
+            const result = await api("/api/admin/mission-claims?status=" + filter);
+            $("#missionClaimsBody").innerHTML = result.claims.map(claim => `<tr>
+                <td>${claim.id}</td>
+                <td>${escapeHtml(claim.userName)}<br><span class="muted">#${claim.userId} · ${escapeHtml(claim.phone)}</span></td>
+                <td>${escapeHtml(claim.missionName)}</td><td>${claim.targetMembers}</td>
+                <td>${money(claim.rewardPaise)}</td>
+                <td><span class="pill ${escapeHtml(claim.status)}">${escapeHtml(claim.status)}</span>${claim.note ? `<br><span class="muted">${escapeHtml(claim.note)}</span>` : ""}</td>
+                <td>${claim.status === "pending" ? `<div class="actions"><button class="btn success" data-action="approve-claim" data-id="${claim.id}">Approve</button><button class="btn danger" data-action="reject-claim" data-id="${claim.id}">Reject</button></div>` : escapeHtml(claim.reviewedAt || "")}</td>
+                </tr>`).join("") || `<tr><td colspan="7" class="empty">No mission claims found.</td></tr>`;
+        }
+        async function loadSettings() {
+            const result = await api("/api/admin/settings");
+            const values = Object.fromEntries(result.settings.map(setting => [setting.key, setting.value]));
+            $("#siteLogoPreview").src = values.site_logo_url || "/assets/images/kingfisher-logo.svg";
+            $("#siteBannerPreview").src = values.site_banner_url || "/assets/images/hero.svg";
+            $("#siteSpinnerPreview").src = values.site_spinner_url || "/assets/images/Speener.svg";
+            const inviteBannerPreview = $("#inviteBannerPreviewImage");
+            clearImagePreviewObjectUrl(inviteBannerPreview);
+            if (values.invite_banner_url) {
+                inviteBannerPreview.src = values.invite_banner_url;
+                inviteBannerPreview.classList.remove("hidden");
+                $("#inviteBannerDefaultPreview").classList.add("hidden");
+            } else {
+                inviteBannerPreview.removeAttribute("src");
+                inviteBannerPreview.classList.add("hidden");
+                $("#inviteBannerDefaultPreview").classList.remove("hidden");
+            }
+            $("#settingsBody").innerHTML = result.settings.map(s => `<tr>
+                <td><code>${escapeHtml(s.key)}</code></td>
+                <td><input data-setting="${escapeHtml(s.key)}" value="${escapeHtml(s.value)}" maxlength="500"></td>
+                <td>${escapeHtml(s.updatedAt || "—")}</td>
+                <td><button class="btn primary" data-action="save-setting" data-key="${escapeHtml(s.key)}">Save</button></td>
+                </tr>`).join("") || `<tr><td colspan="4" class="empty">No settings.</td></tr>`;
+        }
+        function previewSelectedImage(input, preview, clearRemoval) {
+            const file = input.files && input.files[0];
+            if (!file) return;
+            if (!["image/png", "image/jpeg", "image/webp"].includes(file.type) || file.size > 3 * 1024 * 1024) {
+                input.value = "";
+                showToast("Choose a PNG, JPEG, or WebP image no larger than 3 MB.", true);
+                return;
+            }
+            if (preview.dataset.objectUrl) URL.revokeObjectURL(preview.dataset.objectUrl);
+            preview.dataset.objectUrl = URL.createObjectURL(file);
+            preview.src = preview.dataset.objectUrl;
+            preview.classList.remove("hidden");
+            if (clearRemoval) $("#removeProductImage").checked = false;
+        }
+        function clearImagePreviewObjectUrl(preview) {
+            if (!preview.dataset.objectUrl) return;
+            URL.revokeObjectURL(preview.dataset.objectUrl);
+            delete preview.dataset.objectUrl;
+        }
+        async function uploadBrandImage(kind, input, preview, button) {
+            const file = input.files && input.files[0];
+            if (!file) return showToast(`Choose an image to upload as the app ${kind}.`, true);
+            button.disabled = true;
+            try {
+                const imageUrl = await uploadImage(kind, file);
+                clearImagePreviewObjectUrl(preview);
+                preview.src = imageUrl;
+                input.value = "";
+                showToast(`App ${kind} updated.`);
+                await loadSettings();
+            } catch (error) {
+                showToast(error.message, true);
+            } finally {
+                button.disabled = false;
+            }
+        }
+        async function loadAudit() {
+            const result = await api("/api/admin/audit");
+            $("#auditBody").innerHTML = result.events.map(event => `<tr>
+                <td>${escapeHtml(event.createdAt)}</td><td>${escapeHtml(event.username)}</td>
+                <td>${escapeHtml(event.action)}</td><td>${escapeHtml(event.entityType)}</td>
+                <td>${escapeHtml(event.entityId)}</td>                <td>${escapeHtml(typeof event.details === "string" ? event.details : JSON.stringify(event.details))}</td>
+                </tr>`).join("") || `<tr><td colspan="6" class="empty">No audit events.</td></tr>`;
+        }
+        const loaders = { overview:loadOverview, users:loadUsers, "demo-accounts":loadDemoAccounts, products:loadProducts,
+            "product-requests":loadProductRequests,
+            transactions:loadTransactions, missions:loadMissions, "mission-claims":loadMissionClaims,
+            settings:loadSettings, audit:loadAudit };
+        $("#navigation").addEventListener("click", event => {
+            const button = event.target.closest("button[data-view]");
+            if (!button) return;
+            document.querySelectorAll(".nav button").forEach(item => item.classList.toggle("active", item === button));
+            document.querySelectorAll(".view").forEach(item => item.classList.toggle("active", item.id === "view-" + button.dataset.view));
+            $("#pageTitle").textContent = titles[button.dataset.view];
+            loaders[button.dataset.view]().catch(error => showToast(error.message, true));
+        });
+
+        $("#loginForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            $("#authMessage").textContent = "";
+            try {
+                await getCsrf();
+                const result = await api("/api/admin/login", { method:"POST", body:{
+                    username:$("#loginUsername").value, password:$("#loginPassword").value
+                }});
+                $("#loginPassword").value = "";
+                showApp(result.admin);
+            } catch (error) { $("#authMessage").textContent = error.message; }
+        });
+        $("#passwordForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            try {
+                await api("/api/admin/change-password", { method:"POST", body:{
+                    currentPassword:$("#currentPassword").value, newPassword:$("#newPassword").value
+                }});
+                $("#currentPassword").value = "";
+                $("#newPassword").value = "";
+                showToast("Password changed.");
+                showApp({username:state.admin.username, passwordChangeRequired:false});
+            } catch (error) { $("#authMessage").textContent = error.message; }
+        });
+        $("#logout").addEventListener("click", async () => {
+            try { await api("/api/admin/logout", {method:"POST"}); showAuth(); }
+            catch (error) { showToast(error.message, true); }
+        });
+        $("#searchUsers").addEventListener("click", () => {
+            state.usersSearch = $("#userSearch").value.trim(); state.usersPage = 1;
+            loadUsers().catch(error => showToast(error.message, true));
+        });
+        $("#userSearch").addEventListener("keydown", event => { if (event.key === "Enter") $("#searchUsers").click(); });
+        $("#usersPrev").addEventListener("click", () => { state.usersPage--; loadUsers().catch(error => showToast(error.message, true)); });
+        $("#usersNext").addEventListener("click", () => { state.usersPage++; loadUsers().catch(error => showToast(error.message, true)); });
+        $("#exportUsers").addEventListener("click", async () => {
+            try {
+                const first = await api("/api/admin/users?page=1&search=" + encodeURIComponent(state.usersSearch));
+                let users = first.users;
+                for (let page = 2; page <= Math.ceil(first.total / first.pageSize); page++) {
+                    const next = await api("/api/admin/users?page=" + page + "&search=" + encodeURIComponent(state.usersSearch));
+                    users = users.concat(next.users);
+                }
+                const rows = [["ID","Name","Phone","Balance (paise)","Status","Joined"],
+                    ...users.map(u=>[u.id,u.name,u.phone,u.balancePaise,u.status,u.createdAt])];
+                const csv = rows.map(row=>row.map(value=>{
+                    const text = String(value);
+                    const safe = /^[\s]*[=+\-@]/.test(text) ? "'" + text : text;
+                    return `"${safe.replace(/"/g,'""')}"`;
+                }).join(",")).join("\r\n");
+                const url = URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+                const link = document.createElement("a");link.href=url;link.download="kingfisher-users.csv";link.click();
+                setTimeout(()=>URL.revokeObjectURL(url),0);
+            } catch (error) { showToast(error.message, true); }
+        });
+        $("#usersBody").addEventListener("click", async event => {
+            const button = event.target.closest("button[data-action]"); if (!button) return;
+            const id = button.dataset.id;
+            try {
+                if (button.dataset.action === "status") {
+                    if (button.dataset.status === "suspended"
+                        && !confirm("Suspend this account? The user will be signed out and can no longer log in. Wallet and account history will be preserved; you can reactivate the account later.")) return;
+                    await api(`/api/admin/users/${id}/status`,{method:"PATCH",body:{status:button.dataset.status}});
+                    showToast(button.dataset.status === "suspended"
+                        ? "Account suspended. User history has been preserved."
+                        : "Account reactivated.");
+                } else if (button.dataset.action === "balance") {
+                    $("#walletAdjustmentForm").dataset.userId = id;
+                    $("#walletAdjustmentUser").textContent = `${button.dataset.name} · +91 ${button.dataset.phone} · Current balance: ${money(Number(button.dataset.balance))}`;
+                    $("#walletAdjustmentAmount").value = "";
+                    $("#walletAdjustmentNote").value = "";
+                    $("#walletAdjustmentMessage").textContent = "";
+                    $("#walletAdjustmentOverlay").classList.remove("hidden");
+                    $("#walletAdjustmentAmount").focus();
+                    return;
+                } else if (button.dataset.action === "reset") {
+                    const password = prompt("Set a temporary user password (8+ characters). It will not be shown again by the server:");
+                    if (password === null) return;
+                    await api(`/api/admin/users/${id}/reset-password`,{method:"POST",body:{password}});
+                    showToast("User password reset.");
+                } else if (button.dataset.action === "remove-bank") {
+                    if (!confirm("Remove this user's saved bank details? This cannot be undone. Removal is blocked while a withdrawal is pending or processing.")) return;
+                    await api(`/api/admin/users/${id}/bank-account`,{method:"DELETE"});
+                    showToast("Saved bank details removed.");
+                } else if (button.dataset.action === "impersonate") {
+                    if (!confirm(`Open ${button.dataset.name}'s account as an admin support session? Admin controls will be locked until you use the visible Return to admin banner. This action is audited.`)) return;
+                    const result = await api(`/api/admin/users/${id}/impersonate`,{method:"POST"});
+                    window.location.replace(result.destination);
+                    return;
+                }
+                await loadUsers();await loadOverview();
+            } catch (error) { showToast(error.message, true); }
+        });
+        $("#walletAdjustmentCancel").addEventListener("click", () => {
+            $("#walletAdjustmentOverlay").classList.add("hidden");
+        });
+        $("#walletAdjustmentOverlay").addEventListener("click", event => {
+            if (event.target === $("#walletAdjustmentOverlay")) {
+                $("#walletAdjustmentOverlay").classList.add("hidden");
+            }
+        });
+        $("#walletAdjustmentForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const userId = form.dataset.userId;
+            const submit = $("#walletAdjustmentSubmit");
+            submit.disabled = true;
+            $("#walletAdjustmentMessage").textContent = "";
+            try {
+                const result = await api(`/api/admin/users/${userId}/adjust-balance`, {
+                    method:"POST",
+                    body:{
+                        amount:$("#walletAdjustmentAmount").value,
+                        note:$("#walletAdjustmentNote").value.trim()
+                    }
+                });
+                $("#walletAdjustmentOverlay").classList.add("hidden");
+                showToast("Wallet updated. New balance: " + money(result.balancePaise));
+                await loadUsers();
+                await loadOverview();
+            } catch (error) {
+                $("#walletAdjustmentMessage").textContent = error.message;
+            } finally {
+                submit.disabled = false;
+            }
+        });
+        $("#demoAccountForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            try {
+                const result = await api("/api/admin/demo-accounts", {
+                    method:"POST", body:{name:$("#demoAccountName").value}
+                });
+                event.target.reset();
+                showToast("Created DEMO ID " + result.account.demoCode + ". No login or real wallet was created.");
+                await loadDemoAccounts();
+            } catch (error) { showToast(error.message, true); }
+        });
+        $("#demoTransactionForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            const accountId = $("#demoTransactionAccount").value;
+            const type = $("#demoTransactionType").value;
+            const account = state.demoAccounts.find(item => String(item.id) === accountId);
+            if (!account) return showToast("Create or select a demo ID first.", true);
+            if (type === "withdrawal" && !confirm(`Record a SIMULATED withdrawal from ${account.demoCode}? No real payment will be made.`)) return;
+            try {
+                const result = await api(`/api/admin/demo-accounts/${accountId}/transactions`, {
+                    method:"POST",
+                    body:{
+                        type,
+                        amount:$("#demoTransactionAmount").value,
+                        note:$("#demoTransactionNote").value
+                    }
+                });
+                $("#demoTransactionAmount").value = "";
+                $("#demoTransactionNote").value = "";
+                showToast(result.message);
+                await loadDemoAccounts();
+            } catch (error) { showToast(error.message, true); }
+        });
+        $("#refreshDemoAccounts").addEventListener("click", () =>
+            loadDemoAccounts().catch(error => showToast(error.message, true)));
+        $("#siteLogoFile").addEventListener("change", event =>
+            previewSelectedImage(event.currentTarget, $("#siteLogoPreview"), false));
+        $("#siteBannerFile").addEventListener("change", event =>
+            previewSelectedImage(event.currentTarget, $("#siteBannerPreview"), false));
+        $("#inviteBannerFile").addEventListener("change", event => {
+            previewSelectedImage(event.currentTarget, $("#inviteBannerPreviewImage"), false);
+            if (!event.currentTarget.files || event.currentTarget.files.length) {
+                $("#inviteBannerDefaultPreview").classList.add("hidden");
+            }
+        });
+        $("#siteSpinnerFile").addEventListener("change", event =>
+            previewSelectedImage(event.currentTarget, $("#siteSpinnerPreview"), false));
+        $("#uploadSiteLogo").addEventListener("click", () =>
+            uploadBrandImage("logo", $("#siteLogoFile"), $("#siteLogoPreview"), $("#uploadSiteLogo")));
+        $("#uploadSiteBanner").addEventListener("click", () =>
+            uploadBrandImage("banner", $("#siteBannerFile"), $("#siteBannerPreview"), $("#uploadSiteBanner")));
+        $("#uploadInviteBanner").addEventListener("click", () =>
+            uploadBrandImage("invite-banner", $("#inviteBannerFile"), $("#inviteBannerPreviewImage"), $("#uploadInviteBanner")));
+        $("#uploadSiteSpinner").addEventListener("click", () =>
+            uploadBrandImage("spinner", $("#siteSpinnerFile"), $("#siteSpinnerPreview"), $("#uploadSiteSpinner")));
+        $("#productImageFile").addEventListener("change", event =>
+            previewSelectedImage(event.currentTarget, $("#productImagePreview"), true));
+        $("#removeProductImage").addEventListener("change", event => {
+            if (event.currentTarget.checked) {
+                clearImagePreviewObjectUrl($("#productImagePreview"));
+                $("#productImagePreview").classList.add("hidden");
+                $("#productImageFile").value = "";
+            } else if ($("#productImageUrl").value) {
+                $("#productImagePreview").src = $("#productImageUrl").value;
+                $("#productImagePreview").classList.remove("hidden");
+            } else if ($("#productImageFile").files && $("#productImageFile").files[0]) {
+                previewSelectedImage($("#productImageFile"), $("#productImagePreview"), false);
+            }
+        });
+        $("#productForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            const id=$("#productId").value;
+            const submitButton = event.currentTarget.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            const body={name:$("#productName").value,category:$("#productCategory").value,
+                price:$("#productPrice").value,durationDays:$("#productDuration").value,
+                dailyReward:$("#productDaily").value,totalReward:$("#productTotal").value,
+                purchaseLimit:$("#productLimit").value,active:$("#productForm").dataset.active !== "false",
+                imageUrl:$("#removeProductImage").checked ? "" : $("#productImageUrl").value};
+            try {
+                const imageFile = $("#productImageFile").files && $("#productImageFile").files[0];
+                if (imageFile) body.imageUrl = await uploadImage("product", imageFile);
+                await api(id?`/api/admin/products/${id}`:"/api/admin/products",{method:id?"PUT":"POST",body});
+                fillProduct(null);event.target.reset();$("#productDaily").value="0";$("#productTotal").value="0";$("#productLimit").value="1";
+                showToast("Product saved.");await loadProducts();await loadOverview();
+            } catch(error){showToast(error.message,true);}
+            finally { submitButton.disabled = false; }
+        });
+        $("#cancelProductEdit").addEventListener("click",()=>{fillProduct(null);$("#productForm").reset();$("#productDaily").value="0";$("#productTotal").value="0";$("#productLimit").value="1";});
+        $("#productsBody").addEventListener("click",async event=>{
+            const button=event.target.closest("button[data-action]");if(!button)return;
+            const product=state.products.find(p=>p.id===Number(button.dataset.id));if(!product)return;
+            try{
+                if(button.dataset.action==="edit-product"){fillProduct(product);return;}
+                if(!confirm(`Deactivate ${product.name}? It will disappear from the customer catalog.`))return;
+                await api(`/api/admin/products/${product.id}`,{method:"DELETE"});
+                showToast("Product deactivated.");await loadProducts();await loadOverview();
+            }catch(error){showToast(error.message,true);}
+        });
+        $("#transactionForm").addEventListener("submit",async event=>{
+            event.preventDefault();
+            try{
+                await api("/api/admin/transactions",{method:"POST",body:{
+                    userId:$("#transactionUser").value,type:$("#transactionType").value,
+                    amount:$("#transactionAmount").value,reference:$("#transactionReference").value,
+                    note:$("#transactionNote").value
+                }});
+                event.target.reset();showToast("Pending request created.");await loadTransactions();await loadOverview();
+            }catch(error){showToast(error.message,true);}
+        });
+        $("#transactionFilter").addEventListener("change",()=>loadTransactions().catch(error=>showToast(error.message,true)));
+        $("#productRequestFilter").addEventListener("change",()=>loadProductRequests().catch(error=>showToast(error.message,true)));
+        $("#productRequestsBody").addEventListener("click", async event => {
+            const button = event.target.closest("button[data-action]");
+            if (!button) return;
+            const decision = button.dataset.action === "approve-product-request" ? "approved" : "rejected";
+            const note = prompt(decision === "approved" ? "Enter a note confirming the customer was contacted; no balance will be charged." : "Enter the reason for rejecting this request:");
+            if (note === null) return;
+            try {
+                const result = await api(`/api/admin/product-requests/${button.dataset.id}/review`, {
+                    method:"POST", body:{decision,note}
+                });
+                showToast(result.message);
+                await loadProductRequests();
+            } catch (error) { showToast(error.message, true); }
+        });
+        $("#missionClaimFilter").addEventListener("change",()=>loadMissionClaims().catch(error=>showToast(error.message,true)));
+        $("#missionClaimsBody").addEventListener("click", async event => {
+            const button = event.target.closest("button[data-action]");
+            if (!button) return;
+            const decision = button.dataset.action === "approve-claim" ? "approved" : "rejected";
+            const note = prompt(decision === "approved" ? "Confirm the verified team count and enter a review note:" : "Enter the reason for rejecting this claim:");
+            if (note === null) return;
+            try {
+                await api(`/api/admin/mission-claims/${button.dataset.id}/review`, {method:"POST", body:{decision,note}});
+                showToast("Mission claim " + decision + ".");
+                await loadMissionClaims(); await loadOverview();
+            } catch (error) { showToast(error.message, true); }
+        });
+        $("#transactionsBody").addEventListener("click",async event=>{
+            const button=event.target.closest("button[data-action]");if(!button)return;
+            if(button.dataset.action==="reveal-payout"){
+                const output=document.querySelector(`[data-payout-output="${button.dataset.id}"]`);
+                if(button.dataset.revealed==="true"){
+                    output.textContent="";
+                    button.dataset.revealed="false";
+                    button.textContent="Reveal payout details";
+                    return;
+                }
+                button.disabled=true;
+                try{
+                    const result=await api(`/api/admin/transactions/${button.dataset.id}/payout-details`,{method:"POST"});
+                    output.textContent=`${result.payoutDetails.holderName} · ${result.payoutDetails.bankName} · Account ${result.payoutDetails.accountNumber} · IFSC ${result.payoutDetails.ifsc}`;
+                    button.dataset.revealed="true";
+                    button.textContent="Hide payout details";
+                    button.disabled=false;
+                    showToast("Payout details revealed and recorded in the audit log.");
+                }catch(error){showToast(error.message,true);button.disabled=false;}
+                return;
+            }
+            const decision=button.dataset.action==="processing"?"processing":button.dataset.action==="approve"?"approved":"rejected";
+            const promptMessage=decision==="processing"
+                ?"Confirm payout processing has started; enter a note:"
+                :decision==="approved"
+                    ?(button.dataset.type==="withdrawal"?"Confirm payout was sent and enter its reference:":"Enter verified payment receipt/reference:")
+                    :"Enter reason for rejection:";
+            const note=prompt(promptMessage);
+            if(note===null)return;
+            try{
+                await api(`/api/admin/transactions/${button.dataset.id}/review`,{method:"POST",body:{decision,note}});
+                showToast(decision==="processing"?"Withdrawal marked as processing.":"Request "+decision+".");await loadTransactions();await loadOverview();
+            }catch(error){showToast(error.message,true);}
+        });
+        $("#missionForm").addEventListener("submit",async event=>{
+            event.preventDefault();const id=$("#missionId").value;
+            const body={name:$("#missionName").value,description:$("#missionDescription").value,
+                targetMembers:$("#missionTarget").value,reward:$("#missionReward").value,
+                active:$("#missionActive").value === "true"};
+            try{
+                await api(id?`/api/admin/missions/${id}`:"/api/admin/missions",{method:id?"PUT":"POST",body});
+                fillMission(null);event.target.reset();showToast("Mission saved.");await loadMissions();await loadOverview();
+            }catch(error){showToast(error.message,true);}
+        });
+        $("#cancelMissionEdit").addEventListener("click",()=>{fillMission(null);$("#missionForm").reset();});
+        $("#missionsBody").addEventListener("click",async event=>{
+            const button=event.target.closest("button[data-action]");if(!button)return;
+            const mission=state.missions.find(m=>m.id===Number(button.dataset.id));if(!mission)return;
+            if(button.dataset.action==="edit-mission"){fillMission(mission);return;}
+            if(button.dataset.action==="toggle-mission"){
+                try{
+                    await api(`/api/admin/missions/${mission.id}`,{method:"PUT",body:{
+                        name:mission.name,description:mission.description,targetMembers:mission.targetMembers,
+                        reward:(mission.rewardPaise/100).toFixed(2),active:!mission.active
+                    }});
+                    showToast("Mission status updated.");await loadMissions();await loadOverview();
+                }catch(error){showToast(error.message,true);}
+            }
+        });
+        $("#settingsBody").addEventListener("click",async event=>{
+            const button=event.target.closest("button[data-action='save-setting']");if(!button)return;
+            const input=$(`[data-setting="${CSS.escape(button.dataset.key)}"]`);
+            try{await api(`/api/admin/settings/${encodeURIComponent(button.dataset.key)}`,{method:"PUT",body:{value:input.value}});showToast("Setting saved.");await loadSettings();}
+            catch(error){showToast(error.message,true);}
+        });
+        $("#refreshAudit").addEventListener("click",()=>loadAudit().catch(error=>showToast(error.message,true)));
+        boot();
+    })();
+    </script>
+</body>
+</html>

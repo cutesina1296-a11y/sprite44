@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" fill="none">
+  <defs>
+    <linearGradient id="medallion" x1="34" y1="20" x2="126" y2="143" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A91008"/>
+      <stop offset="1" stop-color="#5E0808"/>
+    </linearGradient>
+    <linearGradient id="feather" x1="59" y1="42" x2="106" y2="129" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF0A3"/>
+      <stop offset=".52" stop-color="#F5B400"/>
+      <stop offset="1" stop-color="#D68F00"/>
+    </linearGradient>
+  </defs>
+  <circle cx="80" cy="80" r="77" fill="#FFFDF4"/>
+  <circle cx="80" cy="80" r="70" fill="url(#medallion)"/>
+  <circle cx="80" cy="80" r="65.5" stroke="#F5B400" stroke-opacity=".72"/>
+  <path d="M29 119c8-19 18-37 32-52 14-15 29-25 43-25 13 0 23 8 24 20l22-10 2 7-23 12c-2 20-14 37-32 47-20 12-45 15-68 1Z" fill="url(#feather)"/>
+  <path d="M49 113c15-19 31-32 55-42-11 17-25 31-45 42-4 2-7 2-10 0Z" fill="#8D180B"/>
+  <path d="M68 119c14-4 27-12 37-22" stroke="#FFF3C5" stroke-opacity=".82" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="112" cy="53" r="4.2" fill="#FFFDF4"/>
+  <circle cx="113" cy="53" r="1.8" fill="#64100B"/>
+</svg>

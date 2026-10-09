@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+        <meta name="robots" content="noindex,nofollow">
+        <title>Withdraw · Finora</title>
+        <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+        <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <link rel="preload" as="image" href="/assets/images/money-hero.svg">
+        <style>
+            body {
+                --g-primary: #f5b400;
+                --g-deep: #d68f00;
+                --g-light: #ffd23f;
+                --g-glow: #fff06a;
+                --g-soft: #fffbe6;
+                --g-tint: rgba(245,180,0,.10);
+                --ink: #3a2e10;
+                --muted: #9a8748;
+                --field: #fdf8e8;
+                --line: #f2e8c8;
+                --bg-page: #fffdf4;
+                --on-brand: #ffffff
+            }
+
+            .rc-back svg { width: 18px; height: 18px }
+            .rc-bal-chip svg { width: 12px; height: 12px; vertical-align: -2px; margin-right: 4px }
+            .rc-edit svg { width: 16px; height: 16px }
+            .dot-i svg { width: 11px; height: 11px }
+            .rc-pill .badge svg { width: 11px; height: 11px }
+            .rc-field svg { width: 15px; height: 15px; color: var(--g-deep); flex-shrink: 0 }
+            .rc-sec svg { width: 16px; height: 16px; color: var(--g-primary); vertical-align: -3px; margin-right: 5px }
+            .rc-note svg { width: 13px; height: 13px; color: var(--g-primary); margin-top: 3px; flex-shrink: 0 }
+            .rc-pay svg { width: 16px; height: 16px }
+            .wd-closed svg { width: 19px; height: 19px; color: #d38b00; flex: 0 0 auto }
+            .vip-pop-ic svg { width: 32px; height: 32px }
+            .vip-pop-btn svg { width: 15px; height: 15px; vertical-align: -2px }
+            .rc-spark svg { width: 100%; height: 100%; display: block }
+
+            * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0 }
+            body,p,span,div,input,button,a,label { font-weight: 400 }
+
+            html,body {
+                font-family: "Poppins",ui-sans-serif,system-ui,sans-serif;
+                background: var(--bg-page);
+                color: var(--ink);
+                font-size: 14px;
+                line-height: 1.5
+            }
+
+            body {
+                max-width: 480px;
+                margin: 0 auto;
+                min-height: 100vh;
+                position: relative;
+                padding-bottom: calc(104px + env(safe-area-inset-bottom))
+            }
+
+            .rc-topbar {
+                position: absolute;
+                top: 0; left: 0; right: 0;
+                z-index: 5;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: calc(14px + env(safe-area-inset-top)) 16px 12px
+            }
+
+            .rc-back {
+                width: 40px; height: 40px;
+                border-radius: 15px;
+                background: rgba(255,255,255,.18);
+                border: 1px solid rgba(255,255,255,.32);
+                -webkit-backdrop-filter: blur(4px);
+                backdrop-filter: blur(4px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--on-brand);
+                cursor: pointer;
+                text-decoration: none
+            }
+
+            .rc-back:active { transform: scale(.92) }
+
+            .rc-topbar .rc-title {
+                position: absolute;
+                left: 50%;
+                top: calc(28px + env(safe-area-inset-top));
+                transform: translateX(-50%);
+                font-size: 21px;
+                font-weight: 700;
+                color: var(--on-brand);
+                text-shadow: 0 2px 6px rgba(0,0,0,.18);
+                letter-spacing: -.3px;
+                white-space: nowrap
+            }
+
+            .rc-hero-wrap { padding: 0 }
+
+            .rc-hero {
+                position: relative;
+                background: radial-gradient(130% 100% at 88% -12%,var(--g-glow) 0%,transparent 55%),linear-gradient(160deg,var(--g-light) 0%,var(--g-primary) 48%,var(--g-deep) 100%);
+                color: var(--on-brand);
+                padding: calc(74px + env(safe-area-inset-top)) 20px 56px;
+                min-height: 155px;
+                border-radius: 0 0 30px 30px;
+                overflow: hidden;
+                box-shadow: 0 22px 44px -22px rgba(214,143,0,.55)
+            }
+
+            .rc-hero::before {
+                content: "";
+                position: absolute;
+                width: 220px; height: 220px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.10);
+                right: -70px; top: -90px
+            }
+
+            .rc-hero::after {
+                content: "";
+                position: absolute;
+                width: 150px; height: 150px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.07);
+                left: -50px; bottom: -60px
+            }
+
+            .rc-hero-img {
+                position: absolute;
+                right: -6px; bottom: -14px;
+                width: 178px; height: auto;
+                z-index: 1;
+                filter: drop-shadow(0 14px 22px rgba(0,0,0,.28));
+                pointer-events: none;
+                animation: heroFloat 3.6s ease-in-out infinite
+            }
+
+            @keyframes heroFloat {
+                0%,100% { transform: translateY(0) }
+                50% { transform: translateY(-7px) }
+            }
+
+            .rc-spark {
+                position: absolute;
+                z-index: 1;
+                color: rgba(255,255,255,.95);
+                width: 11px; height: 11px;
+                animation: sparkTwinkle 2.2s ease-in-out infinite;
+                pointer-events: none
+            }
+
+            .rc-spark.s1 { right: 168px; top: 34px; width: 13px; height: 13px; animation-delay: 0s }
+            .rc-spark.s2 { right: 36px; top: 24px; width: 9px; height: 9px; animation-delay: .7s }
+            .rc-spark.s3 { right: 188px; top: 120px; width: 10px; height: 10px; animation-delay: 1.3s }
+
+            @keyframes sparkTwinkle {
+                0%,100% { opacity: .25; transform: scale(.7) rotate(0deg) }
+                50% { opacity: 1; transform: scale(1.15) rotate(20deg) }
+            }
+
+            .rc-bal {
+                position: relative;
+                z-index: 2;
+                display: flex;
+                gap: 14px;
+                align-items: flex-start
+            }
+
+            .rc-bal-ic {
+                width: 54px; height: 54px;
+                border-radius: 17px;
+                background: rgba(255,255,255,.28);
+                border: 1px solid rgba(255,255,255,.35);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                color: var(--on-brand);
+                flex-shrink: 0;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,.3)
+            }
+
+            .rc-bal-label { font-size: 13.5px; font-weight: 600; opacity: .95 }
+
+            .rc-bal-amt {
+                font-size: 38px;
+                font-weight: 800;
+                letter-spacing: -1.5px;
+                line-height: 1.1;
+                margin-top: 5px;
+                display: flex;
+                align-items: baseline;
+                gap: 3px;
+                text-shadow: 0 1px 2px rgba(255,255,255,.25)
+            }
+
+            .rc-bal-amt .cur { font-size: 26px; font-weight: 700 }
+
+            .rc-bal-chip {
+                position: relative;
+                z-index: 2;
+                display: inline-flex;
+                align-items: center;
+                gap: 7px;
+                font-size: 9px;
+                font-weight: 600;
+                background: rgba(255,255,255,.28);
+                border: 1px solid rgba(255,255,255,.32);
+                padding: 8px 9px;
+                border-radius: 30px;
+                margin-top: 11px
+            }
+
+            .rc-body {
+                padding: 0 14px;
+                position: relative;
+                z-index: 3
+            }
+
+            .rc-amount-card {
+                background: #fff;
+                border-radius: 24px;
+                padding: 22px 18px 18px;
+                margin-top: -40px;
+                box-shadow: 0 18px 40px -22px rgba(214,143,0,.35);
+                border: 1px solid var(--line);
+                position: relative
+            }
+
+            .rc-amount-card .lbl {
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--ink);
+                letter-spacing: -.2px
+            }
+
+            .rc-amount-row {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-top: 10px
+            }
+
+            .rc-amount-display {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                min-width: 0
+            }
+
+            .rc-amount-display .sym {
+                font-size: 34px;
+                font-weight: 700;
+                color: var(--g-primary);
+                margin-right: 6px
+            }
+
+            .rc-amount-display input {
+                flex: 1;
+                border: 0;
+                outline: 0;
+                background: transparent;
+                font-family: inherit;
+                font-size: 38px;
+                font-weight: 800;
+                color: var(--ink);
+                letter-spacing: -1.5px;
+                min-width: 0;
+                width: 100%;
+                caret-color: var(--g-primary)
+            }
+
+            .rc-amount-display input::placeholder {
+                color: #e0cda0;
+                font-weight: 700;
+                font-size: 26px;
+                letter-spacing: 0
+            }
+
+            .rc-amount-display input::-webkit-outer-spin-button,
+            .rc-amount-display input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0
+            }
+            .rc-amount-display input[type=number] { -moz-appearance: textfield }
+
+            .rc-edit {
+                width: 46px; height: 46px;
+                border-radius: 50%;
+                background: var(--g-soft);
+                border: 1px solid var(--line);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--g-deep);
+                font-size: 15px;
+                flex-shrink: 0;
+                cursor: pointer;
+                transition: transform .15s
+            }
+
+            .rc-edit:active { transform: scale(.9) }
+
+            .rc-divider {
+                height: 1px;
+                background: var(--line);
+                margin: 14px 0 12px
+            }
+
+            .rc-minhint {
+                font-size: 13px;
+                color: var(--muted);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-weight: 500
+            }
+
+            .rc-minhint .dot-i {
+                width: 19px; height: 19px;
+                border-radius: 50%;
+                background: var(--g-primary);
+                color: #fff;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10px;
+                flex-shrink: 0
+            }
+
+            .rc-presets {
+                display: grid;
+                grid-template-columns: repeat(4,1fr);
+                gap: 10px;
+                margin-top: 16px
+            }
+
+            .rc-pill {
+                border: 1.5px solid var(--line);
+                border-radius: 15px;
+                background: var(--g-soft);
+                padding: 13px 4px;
+                text-align: center;
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--ink);
+                cursor: pointer;
+                position: relative;
+                transition: all .18s;
+                min-width: 0;
+                font-family: inherit;
+                box-shadow: 0 3px 10px -6px rgba(214,143,0,.12)
+            }
+
+            .rc-pill:active { transform: scale(.94) }
+
+            .rc-pill.active {
+                border-color: var(--g-primary);
+                background: #fff;
+                color: var(--g-deep);
+                box-shadow: 0 8px 18px -8px rgba(214,143,0,.5)
+            }
+
+            .rc-pill .badge {
+                position: absolute;
+                top: -8px; right: -7px;
+                width: 22px; height: 22px;
+                border-radius: 50%;
+                background: var(--g-primary);
+                border: 2px solid #fff;
+                color: var(--on-brand);
+                font-size: 9px;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 10px -3px rgba(214,143,0,.6)
+            }
+
+            .rc-pill.active .badge { display: flex; animation: badgePop .25s ease }
+
+            @keyframes badgePop {
+                0% { transform: scale(0) }
+                70% { transform: scale(1.25) }
+                100% { transform: scale(1) }
+            }
+
+            .rc-field {
+                display: flex;
+                align-items: center;
+                gap: 11px;
+                background: var(--field);
+                border: 1.5px solid var(--field);
+                border-radius: 16px;
+                padding: 13px 16px;
+                margin-top: 14px;
+                transition: border-color .15s,background .15s
+            }
+
+            .rc-field:focus-within {
+                background: #fff;
+                border-color: var(--g-primary)
+            }
+
+            .rc-field input {
+                flex: 1;
+                border: 0;
+                outline: 0;
+                background: transparent;
+                font-family: inherit;
+                font-size: 14px;
+                font-weight: 500;
+                color: var(--ink);
+                min-width: 0;
+                width: 100%
+            }
+
+            .rc-field input::placeholder {
+                color: #c9b88e;
+                font-weight: 400
+            }
+
+            .rc-taxline {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 13px;
+                font-size: 12.5px;
+                color: var(--muted);
+                font-weight: 500
+            }
+
+            .rc-taxline b {
+                font-weight: 700;
+                color: var(--ink);
+                margin-left: 3px
+            }
+
+            .rc-taxline b.net { color: var(--g-deep) }
+
+            .rc-sec {
+                font-size: 16px;
+                font-weight: 700;
+                margin: 24px 4px 12px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: var(--ink)
+            }
+
+            .rc-notes {
+                background: #fff;
+                border: 1px solid var(--line);
+                border-radius: 18px;
+                padding: 6px 16px;
+                margin-top: 4px
+            }
+
+            .rc-note {
+                display: flex;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 11px 0;
+                font-size: 12.5px;
+                color: var(--muted);
+                line-height: 1.5;
+                border-bottom: 1px dashed var(--line)
+            }
+
+            .rc-note:last-child { border-bottom: none }
+
+            .rc-note b { color: var(--ink); font-weight: 600 }
+
+            .rc-bar {
+                position: fixed;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                max-width: 480px;
+                background: #fff;
+                border-top: 1px solid var(--line);
+                border-radius: 22px 22px 0 0;
+                padding: 13px 16px calc(13px + env(safe-area-inset-bottom));
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 999;
+                box-shadow: 0 -12px 34px rgba(214,143,0,.1)
+            }
+
+            .rc-pay {
+                width: 80%;
+                border: 0;
+                border-radius: 18px;
+                padding: 15px 12px;
+                background: linear-gradient(180deg,var(--g-light) 0%,var(--g-primary) 55%,var(--g-deep) 100%);
+                color: var(--on-brand);
+                font-family: inherit;
+                font-size: 16px;
+                font-weight: 700;
+                letter-spacing: .3px;
+                cursor: pointer;
+                position: relative;
+                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 9px;
+                box-shadow: inset 0 1px 0 rgba(255,255,255,.4),0 10px 22px -7px rgba(214,143,0,.55);
+                transition: transform .12s
+            }
+
+            .rc-pay::before {
+                content: "";
+                position: absolute;
+                top: 0; left: -100%;
+                width: 100%; height: 100%;
+                background: linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);
+                animation: rcShine 2.6s infinite
+            }
+
+            @keyframes rcShine {
+                0% { left: -100% }
+                100% { left: 100% }
+            }
+
+            .rc-pay:active { transform: translateY(1px) }
+
+            .rc-pay:disabled {
+                opacity: .6;
+                cursor: not-allowed;
+                filter: grayscale(.35)
+            }
+            .rc-pay:disabled::before { display: none }
+
+            .rc-pay .coin {
+                width: 26px; height: 26px;
+                object-fit: contain;
+                filter: drop-shadow(0 3px 5px rgba(0,0,0,.3));
+                animation: coinBounce 1.8s ease-in-out infinite
+            }
+
+            @keyframes coinBounce {
+                0%,100% { transform: translateY(0) rotate(0deg) }
+                50% { transform: translateY(-3px) rotate(-10deg) }
+            }
+
+            #loader {
+                position: fixed;
+                inset: 0;
+                background: rgba(0,0,0,.45);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 100001
+            }
+
+            #loader.show { display: flex }
+
+            .loader-box {
+                width: 108px; height: 98px;
+                background: rgba(43,20,18,.92);
+                border-radius: 14px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 11px;
+                color: #fff;
+                font-size: 12px
+            }
+
+            .loader-box .spinner {
+                width: 34px; height: 34px;
+                border: 4px solid rgba(255,255,255,.15);
+                border-top-color: var(--g-light);
+                border-right-color: var(--g-light);
+                border-radius: 50%;
+                animation: rcSpin .9s linear infinite
+            }
+
+            @keyframes rcSpin { to { transform: rotate(360deg) } }
+
+            .wd-closed {
+                display: flex;
+                align-items: center;
+                gap: 11px;
+                margin: 12px 16px 0;
+                padding: 13px 15px;
+                background: linear-gradient(180deg,#fff4e2,#ffe9c9);
+                border: 1px solid #f0c98a;
+                border-radius: 16px;
+                box-shadow: 0 10px 20px -14px rgba(150,100,10,.5)
+            }
+
+            .wd-closed div { min-width: 0 }
+
+            .wd-closed b {
+                display: block;
+                font-size: 13.5px;
+                font-weight: 700;
+                color: #7a4d00
+            }
+
+            .wd-closed span {
+                display: block;
+                font-size: 12px;
+                color: #9a6a1c;
+                margin-top: 1px
+            }
+
+            /* VIP popup */
+            .vip-pop-ov {
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                background: rgba(45,6,4,.55);
+                backdrop-filter: blur(6px);
+                -webkit-backdrop-filter: blur(6px);
+                opacity: 0;
+                transition: opacity .22s ease
+            }
+
+            .vip-pop-ov.show { display: flex; opacity: 1 }
+
+            .vip-pop {
+                width: 100%;
+                max-width: 340px;
+                background: #fff;
+                border-radius: 26px;
+                border: 1px solid rgba(245,180,0,.28);
+                box-shadow: 0 30px 70px -20px rgba(214,143,0,.5);
+                overflow: hidden;
+                transform: translateY(16px) scale(.96);
+                transition: transform .28s cubic-bezier(.2,.9,.3,1.3)
+            }
+
+            .vip-pop-ov.show .vip-pop { transform: translateY(0) scale(1) }
+
+            .vip-pop-top {
+                position: relative;
+                padding: 30px 22px 22px;
+                text-align: center;
+                background: linear-gradient(160deg,var(--g-light) 0%,var(--g-deep) 100%);
+                overflow: hidden
+            }
+
+            .vip-pop-top::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(120px 120px at 50% -10%,rgba(255,255,255,.55),transparent 70%);
+                pointer-events: none
+            }
+
+            .vip-pop-ic {
+                position: relative;
+                width: 74px; height: 74px;
+                margin: 0 auto 12px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--g-deep);
+                background: #fff;
+                box-shadow: 0 12px 26px -8px rgba(214,143,0,.55),inset 0 0 0 4px rgba(255,210,63,.45);
+                animation: vipCrown 2s ease-in-out infinite
+            }
+
+            @keyframes vipCrown {
+                0%,100% { transform: translateY(0) rotate(-4deg) }
+                50% { transform: translateY(-4px) rotate(4deg) }
+            }
+
+            .vip-pop-top h3 {
+                position: relative;
+                margin: 0;
+                font-size: 19px;
+                font-weight: 800;
+                color: #ffffff;
+                letter-spacing: .2px
+            }
+
+            .vip-pop-body {
+                padding: 22px 22px 24px;
+                text-align: center
+            }
+
+            .vip-pop-body p {
+                margin: 0 0 4px;
+                font-size: 14px;
+                font-weight: 500;
+                color: #4a4a4a;
+                line-height: 1.55
+            }
+
+            .vip-pop-body p b { color: var(--g-deep); font-weight: 700 }
+
+            .vip-count {
+                margin: 14px 0 18px;
+                font-size: 12.5px;
+                color: #8a8a8a;
+                font-weight: 500
+            }
+
+            .vip-count b { color: var(--g-deep); font-weight: 800 }
+
+            .vip-pop-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                padding: 15px;
+                border-radius: 16px;
+                font-size: 15px;
+                font-weight: 700;
+                color: #fff;
+                text-decoration: none;
+                background: linear-gradient(135deg,var(--g-light),var(--g-deep));
+                box-shadow: 0 14px 28px -10px rgba(214,143,0,.55);
+                transition: transform .12s ease,box-shadow .12s ease
+            }
+
+            .vip-pop-btn:active {
+                transform: translateY(2px);
+                box-shadow: 0 8px 18px -10px rgba(214,143,0,.55)
+            }
+
+            #gToast {
+                position: fixed;
+                z-index: 100000;
+                top: 50%; left: 50%;
+                transform: translate(-50%,-50%) scale(.9);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 9px;
+                min-width: 160px;
+                max-width: 92%;
+                padding: 14px 24px;
+                border-radius: 16px;
+                white-space: nowrap;
+                background: rgba(20,18,24,.72);
+                -webkit-backdrop-filter: blur(18px) saturate(1.4);
+                backdrop-filter: blur(18px) saturate(1.4);
+                border: 1px solid rgba(255,255,255,.14);
+                color: #fff;
+                font-size: 14px;
+                font-weight: 600;
+                line-height: 1.45;
+                text-align: center;
+                box-shadow: 0 22px 54px -14px rgba(0,0,0,.55);
+                opacity: 0;
+                pointer-events: none;
+                transition: transform .3s cubic-bezier(.2,1,.3,1),opacity .28s ease
+            }
+
+            #gToast.show {
+                transform: translate(-50%,-50%) scale(1);
+                opacity: 1;
+                pointer-events: auto
+            }
+        </style>
+        <meta name="csrf-token" content="">
+        <link rel="stylesheet" href="/assets/css/customer-ui.css">
+    </head>
+    <body>
+
+        <!-- ═══ TOP BAR ═══ -->
+        <div class="rc-topbar">
+            <a class="rc-back" href="/home.html" aria-label="Back">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M15 5 8 12l7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+            <div class="rc-title">Withdraw</div>
+        </div>
+
+        <!-- ═══ HERO ═══ -->
+        <div class="rc-hero-wrap">
+            <div class="rc-hero">
+                <img class="rc-hero-img" src="/assets/images/money-hero.svg" alt="" loading="eager">
+                <span class="rc-spark s1">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
+                </span>
+                <span class="rc-spark s2">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
+                </span>
+                <span class="rc-spark s3">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
+                </span>
+                <div class="rc-bal">
+                    <div class="rc-bal-ic">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                            <path d="M4.8916 9.61431C4.8916 9.21193 5.21525 8.88574 5.61449 8.88574H9.46991C9.86916 8.88574 10.1928 9.21193 10.1928 9.61431C10.1928 10.0167 9.86916 10.3429 9.46991 10.3429H5.61449C5.21525 10.3429 4.8916 10.0167 4.8916 9.61431Z" fill="currentColor"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M21.1884 10.0038C21.1262 9.99995 21.0584 9.99998 20.9881 10L20.9706 10H18.2149C15.9435 10 14 11.7361 14 14C14 16.2639 15.9435 18 18.2149 18H20.9706L20.9881 18C21.0584 18 21.1262 18 21.1884 17.9962C22.111 17.9397 22.927 17.2386 22.9956 16.2594C23.0001 16.1952 23 16.126 23 16.0619L23 16.0444V11.9556L23 11.9381C23 11.874 23.0001 11.8048 22.9956 11.7406C22.927 10.7614 22.111 10.0603 21.1884 10.0038ZM17.9706 15.0667C18.5554 15.0667 19.0294 14.5891 19.0294 14C19.0294 13.4109 18.5554 12.9333 17.9706 12.9333C17.3858 12.9333 16.9118 13.4109 16.9118 14C16.9118 14.5891 17.3858 15.0667 17.9706 15.0667Z" fill="currentColor"/>
+                            <path opacity="0.5" d="M21.1394 10.0015C21.1394 8.82091 21.0965 7.55447 20.3418 6.64658C20.2689 6.55894 20.1914 6.47384 20.1088 6.39124C19.3604 5.64288 18.4114 5.31076 17.239 5.15314C16.0998 4.99997 14.6442 4.99999 12.8064 5H10.6936C8.85583 4.99999 7.40019 4.99997 6.26098 5.15314C5.08856 5.31076 4.13961 5.64288 3.39124 6.39124C2.64288 7.13961 2.31076 8.08856 2.15314 9.26098C1.99997 10.4002 1.99999 11.8558 2 13.6936V13.8064C1.99999 15.6442 1.99997 17.0998 2.15314 18.239C2.31076 19.4114 2.64288 20.3604 3.39124 21.1088C4.13961 21.8571 5.08856 22.1892 6.26098 22.3469C7.40018 22.5 8.8558 22.5 10.6935 22.5H12.8064C14.6442 22.5 16.0998 22.5 17.239 22.3469C18.4114 22.1892 19.3604 21.8571 20.1088 21.1088C20.3133 20.9042 20.487 20.6844 20.6346 20.4486C21.0851 19.7291 21.1394 18.8473 21.1394 17.9985C21.0912 18 21.0404 18 20.9882 18L18.2149 18C15.9435 18 14 16.2639 14 14C14 11.7361 15.9435 10 18.2149 10L20.9881 10C21.0403 9.99999 21.0912 9.99997 21.1394 10.0015Z" fill="currentColor"/>
+                            <path d="M10.1013 2.57211L7.99988 3.99253L6.2666 5.15237C7.40496 4.99997 8.8588 4.99999 10.6935 5H12.8063C14.6441 4.99998 16.0997 4.99997 17.2389 5.15314C17.4681 5.18394 17.6887 5.22142 17.9009 5.26737L15.9999 4L13.8874 2.57211C12.7588 1.8093 11.2299 1.8093 10.1013 2.57211Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="rc-bal-label">Available Balance</div>
+                        <div class="rc-bal-amt">
+                            <span class="cur">₹</span>
+                            <span id="balanceDisplay">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ═══ BODY ═══ -->
+        <div class="rc-body">
+            <div class="rc-amount-card">
+                <div class="lbl">Withdrawal Amount</div>
+                <div class="rc-amount-row">
+                    <div class="rc-amount-display" id="amountDisplay">
+                        <span class="sym">₹</span>
+                        <input type="number" name="amount" id="withdrawAmount" inputmode="numeric" autocomplete="off" placeholder="Enter amount">
+                    </div>
+                    <div class="rc-edit" id="editBtn" title="Bank details">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2 2 7v2h20V7L12 2Z" fill="currentColor"/>
+                            <path opacity=".55" d="M4 10h2.5v8H4v-8Zm6.75 0h2.5v8h-2.5v-8ZM17.5 10H20v8h-2.5v-8ZM2 19.5h20V22H2v-2.5Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="rc-divider"></div>
+                <div class="rc-minhint">
+                    <span class="dot-i">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M12 7.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6Zm-1.1 4.6h2.2v6.4h-2.2v-6.4Z" fill="currentColor"/></svg>
+                    </span>
+                    Minimum withdrawal: <span id="minimumWithdrawalDisplay">₹170</span>
+                </div>
+                <div class="rc-presets">
+                    <button type="button" class="rc-pill percent-btn" data-percent="25">
+                        25%
+                        <span class="badge"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    </button>
+                    <button type="button" class="rc-pill percent-btn" data-percent="50">
+                        50%
+                        <span class="badge"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    </button>
+                    <button type="button" class="rc-pill percent-btn active" data-percent="75">
+                        75%
+                        <span class="badge"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    </button>
+                    <button type="button" class="rc-pill percent-btn" data-percent="100">
+                        Max
+                        <span class="badge"><svg viewBox="0 0 24 24" fill="none"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                    </button>
+                </div>
+                <div class="rc-taxline">
+                    <span>Tax (0.00%): <b id="taxAmount">₹0.00</b></span>
+                    <span>You Receive: <b id="netAmount" class="net">₹0.00</b></span>
+                </div>
+            </div>
+
+            <div class="rc-sec">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/>
+                    <path d="m10.5 8.5 3.5 3.5-3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Instructions
+            </div>
+            <div class="rc-notes">
+                <div class="rc-note">
+                    <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/></svg>
+                    <span>Minimum withdrawal amount is ₹170.</span>
+                </div>
+                <div class="rc-note">
+                    <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/></svg>
+                    <span>No service charge is deducted when you submit a request.</span>
+                </div>
+                <div class="rc-note">
+                    <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/></svg>
+                    <span>Requests are reviewed manually by an administrator.</span>
+                </div>
+                <div class="rc-note">
+                    <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/></svg>
+                    <span>Requests are manually reviewed. No payout is sent automatically.</span>
+                </div>
+                <div class="rc-note">
+                    <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/></svg>
+                    <span>Save a bank account in Bank Setup before requesting a withdrawal.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="rc-notes" id="payoutBankNotice" style="margin-top:14px">
+            <div class="rc-note"><span>Loading saved payout bank details…</span></div>
+        </div>
+
+        <!-- ═══ PAY BAR ═══ -->
+        <div class="rc-bar">
+            <button type="button" class="rc-pay" id="submitBtn">
+                <img class="coin" src="/assets/images/coin.svg" alt="" loading="lazy" decoding="async">Withdraw Now
+            </button>
+        </div>
+        <nav class="footer" aria-label="Main navigation">
+            <a href="/pages/home" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.5 11.6 12.9 4.7a1.5 1.5 0 0 0-1.8 0L2.5 11.6a.75.75 0 0 0 .94 1.17l.81-.65V21H3a.75.75 0 0 0 0 1.5h18a.75.75 0 0 0 0-1.5h-1.25v-8.88l.81.65a.75.75 0 0 0 .94-1.17Z"/></svg>Home</a>
+            <a href="/pages/invite" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-8 8a8 8 0 0 1 16 0v1H4v-1Zm15-9a3 3 0 1 0-2.4-4.8 5.5 5.5 0 0 1 1.1 4.8h1.3ZM19 14a6 6 0 0 1 3 5.2V21h-2v-1a9.8 9.8 0 0 0-1-4.2V14Z"/></svg>Share</a>
+            <a href="/pages/spin" class="nav-fab" aria-label="Spin"><span class="fab-circle"><img src="/assets/images/Speener.svg" alt="" width="60" height="60"></span></a>
+            <a href="/pages/team" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm8 0a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM1 20a7 7 0 0 1 14 0v1H1v-1Zm15.5-6a6.5 6.5 0 0 1 6.5 6v1h-6v-1a8.9 8.9 0 0 0-2.1-5.8 6.4 6.4 0 0 1 1.6-.2Z"/></svg>Team</a>
+            <a href="/pages/mine" class="nav-item"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-5 0-9 2.6-9 5.8V22h18v-2.2c0-3.2-4-5.8-9-5.8Z"/></svg>Profile</a>
+        </nav>
+
+        <!-- ═══ LOADER ═══ -->
+        <div id="loader">
+            <div class="loader-box">
+                <div class="spinner"></div>
+                <div>Processing</div>
+            </div>
+        </div>
+
+        <!-- ═══ TOAST ═══ -->
+        <div id="gToast" role="alert" aria-live="polite"></div>
+
+        <script>
+            /* ─── TOAST ─── */
+            (function() {
+                if (window.showToast) return;
+                var hideTimer = null;
+                window.showToast = function(message, type, time) {
+                    var toast = document.getElementById('gToast');
+                    if (!toast) return;
+                    type = type || 'success';
+                    time = (typeof time === 'number' && time > 0) ? time : 3;
+                    clearTimeout(hideTimer);
+                    toast.textContent = message;
+                    toast.classList.add('show');
+                    hideTimer = setTimeout(function() {
+                        toast.classList.remove('show');
+                    }, time * 1000);
+                };
+                window.hideToast = function() {
+                    var toast = document.getElementById('gToast');
+                    if (!toast) return;
+                    clearTimeout(hideTimer);
+                    toast.classList.remove('show');
+                };
+            })();
+        </script>
+
+        <script>
+            /* ═════════════════════════════════════════
+               WITHDRAWAL LOGIC
+               ═════════════════════════════════════════ */
+            (function() {
+                var withdrawInput = document.getElementById('withdrawAmount');
+                var taxAmount = document.getElementById('taxAmount');
+                var netAmount = document.getElementById('netAmount');
+                var percentBtns = document.querySelectorAll('.percent-btn');
+                var submitBtn = document.getElementById('submitBtn');
+                var editBtn = document.getElementById('editBtn');
+                var balanceDisplay = document.getElementById('balanceDisplay');
+
+                var feePercent = 0;
+                var minWithdrawal = 170;
+                var CUR = "\u20b9";
+                var userBalance = 0;
+                var bankConfigured = false;
+
+                /* ─── MANUAL PAYOUT NOTICE ─── */
+                editBtn.addEventListener('click', function() {
+                    window.location.href = "/bank-setup.html";
+                });
+
+                /* ─── CALCULATE ─── */
+                function updateCalc(amount) {
+                    amount = parseFloat(amount) || 0;
+                    var fee = (amount * feePercent) / 100;
+                    var net = amount - fee;
+                    taxAmount.textContent = CUR + fee.toFixed(2);
+                    netAmount.textContent = CUR + (net > 0 ? net.toFixed(2) : '0.00');
+                }
+
+                withdrawInput.addEventListener('input', function() {
+                    percentBtns.forEach(function(b) { b.classList.remove('active'); });
+                    updateCalc(this.value);
+                });
+
+                /* ─── PERCENTAGE BUTTONS ─── */
+                percentBtns.forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        percentBtns.forEach(function(b) { b.classList.remove('active'); });
+                        this.classList.add('active');
+                        var pct = parseFloat(this.dataset.percent);
+                        var amount = Math.floor((userBalance * pct) / 100);
+                        withdrawInput.value = amount;
+                        updateCalc(amount);
+                    });
+                });
+
+                /* ─── LOADER ─── */
+                function showLoader() { document.getElementById('loader').classList.add('show'); }
+                function hideLoader() { document.getElementById('loader').classList.remove('show'); }
+
+                /* ─── LOAD SERVER WALLET ─── */
+                fetch("/api/wallet", { credentials:"include", cache:"no-store" })
+                    .then(function(response) {
+                        if (response.status === 401) {
+                            window.location.replace("/index.html");
+                            throw new Error("Please sign in again.");
+                        }
+                        if (!response.ok) throw new Error("Could not load wallet.");
+                        return response.json();
+                    })
+                    .then(function(wallet) {
+                        userBalance = Math.max(0, (wallet.balancePaise - wallet.pendingWithdrawalsPaise) / 100);
+                        minWithdrawal = wallet.minimumWithdrawal;
+                        document.getElementById("minimumWithdrawalDisplay").textContent = CUR + minWithdrawal;
+                        balanceDisplay.textContent = userBalance.toLocaleString("en-IN", {
+                            minimumFractionDigits:0, maximumFractionDigits:2
+                        });
+                        var note = document.querySelector(".rc-notes .rc-note span");
+                        if (note) note.textContent = "Minimum withdrawal amount is ₹" + minWithdrawal + ".";
+                        withdrawInput.value = userBalance >= minWithdrawal ? Math.floor(userBalance * 0.75) : "";
+                        updateCalc(withdrawInput.value);
+                    })
+                    .catch(function(error) {
+                        console.error(error);
+                        showToast(error.message, "error");
+                    });
+
+                fetch("/api/bank-account", {credentials:"include", cache:"no-store"})
+                    .then(function(response) {
+                        if (!response.ok) throw new Error("Could not load saved bank details.");
+                        return response.json();
+                    })
+                    .then(function(result) {
+                        var notice = document.getElementById("payoutBankNotice");
+                        notice.replaceChildren();
+                        if (result.account) {
+                            bankConfigured = true;
+                            var line = document.createElement("div");
+                            line.className = "rc-note";
+                            line.textContent = result.account.bankName + " · Account ending "
+                                + result.account.accountLast4 + " · IFSC " + result.account.ifsc;
+                            notice.appendChild(line);
+                        }
+                    })
+                    .catch(function(error) {
+                        console.error(error);
+                        document.getElementById("payoutBankNotice").textContent = error.message;
+                    });
+
+                /* ─── SUBMIT MANUAL WITHDRAWAL REQUEST ─── */
+                submitBtn.addEventListener('click', async function() {
+                    var amount = parseFloat(withdrawInput.value) || 0;
+
+                    if (!bankConfigured) {
+                        showToast("Save your bank account in Bank Setup before requesting a withdrawal.", "error", 5);
+                        return;
+                    }
+                    if (!withdrawInput.value.trim()) {
+                        showToast("Enter withdrawal amount", "error");
+                        return;
+                    }
+                    if (!amount || amount <= 0) {
+                        showToast("Enter a valid amount", "error");
+                        return;
+                    }
+                    if (amount < minWithdrawal) {
+                        showToast("Minimum withdrawal is " + CUR + minWithdrawal, "error");
+                        return;
+                    }
+                    if (amount > userBalance) {
+                        showToast("Amount not available", "error");
+                        return;
+                    }
+                    submitBtn.disabled = true;
+                    showLoader();
+                    try {
+                        var csrfResponse = await fetch("/api/csrf", { credentials:"include" });
+                        var csrf = await csrfResponse.json();
+                        if (!csrfResponse.ok || !csrf.csrfToken) throw new Error(csrf.message || "Secure session expired.");
+                        var response = await fetch("/api/withdrawal", {
+                            method:"POST", credentials:"include",
+                            headers:{"Content-Type":"application/json","X-CSRF-Token":csrf.csrfToken},
+                            body:JSON.stringify({amount:amount})
+                        });
+                        var result = await response.json();
+                        if (response.status === 401) {
+                            window.location.replace("/index.html");
+                            return;
+                        }
+                        if (!response.ok || result.success !== true) throw new Error(result.message || "Request could not be submitted.");
+                        showToast(result.message || "Withdrawal request sent for manual review.", "success", 5);
+                        submitBtn.textContent = "Request pending review";
+                        submitBtn.disabled = true;
+                    } catch (error) {
+                        console.error(error);
+                        showToast(error.message || "Withdrawal request failed.", "error", 5);
+                        submitBtn.disabled = false;
+                    } finally {
+                        hideLoader();
+                    }
+                });
+            })();
+        </script>
+    </body>
+</html>

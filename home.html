@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Home · Finora</title>
+<link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ─── THEME VARIABLES ─── */
+:root{
+    --g-primary:#f5b400;
+    --g-deep:#d68f00;
+    --g-light:#ffd23f;
+    --g-glow:#fff06a;
+    --g-soft:#fffbe6;
+    --g-tint:rgba(245,180,0,.10);
+    --ink:#3a2e10;
+    --muted:#9a8748;
+    --field:#fdf8e8;
+    --line:#f2e8c8;
+    --bg-page:#fffdf4;
+    --on-brand:#ffffff;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body,p,span,div,input,button,a,label,h1,h2,h3,h4,h5,h6{font-weight:400;}
+html,body{
+    margin:0;padding:0;
+    font-family:"Poppins",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg-page);
+    color:var(--ink);
+    font-size:14px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+
+.page{
+    max-width:480px;
+    margin:0 auto;
+    padding:0 0 96px;
+    position:relative;
+}
+.content{padding:0 12px;}
+
+/* ─── HERO SLIDER ─── */
+.hero{
+    position:relative;
+    width:100%;
+    height:200px;
+    overflow:hidden;
+    background:var(--g-soft);
+}
+.slide-track{
+    display:flex;
+    width:100%;
+    height:100%;
+    transition:transform .6s ease;
+}
+.slide{
+    min-width:100%;
+    height:100%;
+    background-size:cover;
+    background-position:center;
+}
+.dots{
+    position:absolute;
+    bottom:44px;left:50%;
+    transform:translateX(-50%);
+    display:flex;gap:6px;z-index:3;
+}
+.dot{
+    width:6px;height:6px;
+    border-radius:50%;
+    background:rgba(255,255,255,.65);
+    transition:width .3s,background .3s;
+}
+.dot.active{
+    width:18px;
+    background:var(--g-primary);
+    border-radius:3px;
+}
+
+/* ─── QUICK GRID ─── */
+.quick-grid{
+    position:relative;
+    z-index:5;
+    margin-top:-47px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:4px;
+    background:linear-gradient(160deg,#166534,#14532d 60%,#064e3b);
+    padding:15px 12px;
+    border-radius:22px;
+    box-shadow:0 16px 32px -14px rgba(6,78,59,.5),inset 0 1px 0 rgba(255,255,255,.18);
+    overflow:hidden;
+}
+.quick-grid::before{
+    content:"";
+    position:absolute;
+    width:150px;height:150px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    right:-50px;top:-70px;
+    pointer-events:none;
+}
+.quick-chip{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    cursor:pointer;
+    text-decoration:none;
+    color:var(--on-brand);
+    position:relative;
+    z-index:1;
+}
+.quick-icon{
+    width:46px;height:46px;
+    border-radius:16px;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 14px -5px rgba(0,0,0,.35),inset 0 -3px 6px rgba(214,143,0,.12);
+    transition:transform .15s;
+}
+.quick-chip:active .quick-icon{transform:scale(.9);}
+.quick-icon svg{
+    width:26px;height:26px;
+    color:#dc2626;
+}
+.quick-label{
+    font-size:10.5px;
+    color:var(--on-brand);
+    font-weight:600;
+    letter-spacing:.2px;
+}
+.quick-badge{
+    position:absolute;
+    top:-5px;right:2px;
+    z-index:3;
+    background:var(--ink);
+    color:var(--on-brand);
+    font-size:8px;font-weight:700;
+    letter-spacing:.3px;
+    padding:2px 6px;
+    border-radius:10px;
+}
+
+/* ─── TABS ─── */
+.tabs{
+    position:relative;
+    display:flex;
+    background:#fff;
+    padding:5px;
+    border-radius:30px;
+    border:1px solid var(--line);
+    margin:14px 0 12px;
+    box-shadow:0 8px 20px -14px rgba(214,143,0,.3);
+}
+.tab{
+    flex:1;
+    text-align:center;
+    padding:11px 6px;
+    font-size:13.5px;
+    color:var(--muted);
+    background:transparent;
+    border:0;
+    border-radius:24px;
+    cursor:pointer;
+    transition:color .2s;
+    font-family:inherit;
+    font-weight:600;
+    z-index:2;
+    position:relative;
+}
+.tab svg{
+    width:16px;height:16px;
+    vertical-align:-3px;
+    margin-right:5px;
+}
+.tab.active{color:var(--on-brand);}
+.tab-slider{
+    position:absolute;
+    top:5px;bottom:5px;left:5px;
+    width:calc(50% - 5px);
+    border-radius:24px;
+    background:linear-gradient(180deg,#f87171,#dc2626);
+    box-shadow:0 6px 14px -4px rgba(185,28,28,.4),inset 0 1px 0 rgba(255,255,255,.3);
+    transition:transform .25s ease;
+    z-index:1;
+}
+.tab-slider.right{transform:translateX(100%);}
+.product-disclosure{margin:10px 2px;color:var(--muted);font-size:10px;line-height:1.5;}
+
+/* ─── PRODUCTS ─── */
+.product-list{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+}
+.product{
+    background:#fff;
+    border-radius:18px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    box-shadow:0 10px 24px -16px rgba(214,143,0,.35);
+    display:flex;
+    flex-direction:column;
+}
+.product-img{
+    position:relative;
+    height:118px;
+    background-size:cover;
+    background-position:center;
+    background-color:var(--g-soft);
+}
+.product-quota{
+    position:absolute;
+    top:7px;right:7px;
+    background:linear-gradient(180deg,#34d399 0%,#16a34a 55%,#15803d 100%);
+    color:var(--on-brand);
+    padding:3px 9px;
+    border-radius:20px;
+    font-size:9.5px;
+    font-weight:600;
+    box-shadow:0 4px 10px -4px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3);
+}
+.product-name{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    padding:18px 10px 7px;
+    background:linear-gradient(0deg,rgba(0,0,0,.72),transparent);
+    color:#fff;
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:.2px;
+}
+.product-info{
+    padding:10px 12px 4px;
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-size:11.5px;
+}
+.info-label{color:var(--muted);}
+.info-val{color:var(--ink);font-weight:700;}
+.info-val.green{color:var(--g-deep);}
+.buy-wrap{padding:8px 10px 11px;margin-top:auto;}
+.btn-buy{
+    width:100%;
+    border:none;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    padding:11px;
+    color:var(--on-brand);
+    border-radius:26px;
+    background:linear-gradient(180deg,#34d399 0%,#16a34a 55%,#15803d 100%);
+    cursor:pointer;
+    font-family:inherit;
+    font-weight:600;
+    box-shadow:0 6px 16px -6px rgba(21,128,61,.45),inset 0 1px 0 rgba(255,255,255,.25);
+    transition:transform .12s;
+    position:relative;
+    overflow:hidden;
+    letter-spacing:.4px;
+}
+.btn-buy svg{
+    width:14px;height:14px;
+    vertical-align:-2px;
+    margin-right:4px;
+}
+.btn-buy::before{
+    content:"";
+    position:absolute;
+    top:0;left:-100%;
+    width:100%;height:100%;
+    background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);
+    animation:slideShine 2.6s infinite;
+}
+@keyframes slideShine{
+    0%{left:-100%}
+    100%{left:100%}
+}
+.btn-buy:active{transform:translateY(1px);}
+.btn-buy:disabled{
+    background:var(--line);
+    color:var(--muted);
+    box-shadow:none;
+    cursor:not-allowed;
+}
+.btn-buy:disabled::before{display:none;}
+
+/* ─── WELCOME POPUP ─── */
+.popup-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(43,20,18,.6);
+    -webkit-backdrop-filter:blur(7px);
+    backdrop-filter:blur(7px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:20px;
+}
+.welcome-card{
+    position:relative;
+    width:95%;
+    max-width:360px;
+    background:#fff;
+    border-radius:26px;
+    overflow:hidden;
+    animation:popIn .35s cubic-bezier(.2,1.2,.4,1);
+    box-shadow:0 30px 70px -20px rgba(0,0,0,.5);
+}
+@keyframes popIn{
+    from{opacity:0;transform:scale(.85) translateY(14px);}
+    to{opacity:1;transform:scale(1) translateY(0);}
+}
+.welcome-close{
+    position:absolute;
+    top:13px;right:13px;
+    width:32px;height:32px;
+    border:1px solid rgba(255,255,255,.3);
+    cursor:pointer;
+    border-radius:50%;
+    background:rgba(255,255,255,.18);
+    -webkit-backdrop-filter:blur(4px);
+    backdrop-filter:blur(4px);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:3;
+    transition:transform .15s;
+}
+.welcome-close svg{width:14px;height:14px;}
+.welcome-close:active{transform:scale(.85);}
+.welcome-head{
+    position:relative;
+    background:
+        radial-gradient(130% 110% at 85% -15%,var(--g-glow) 0%,transparent 55%),
+        linear-gradient(160deg,var(--g-light) 0%,var(--g-primary) 50%,var(--g-deep) 100%);
+    color:var(--on-brand);
+    text-align:center;
+    padding:26px 16px 22px;
+    overflow:hidden;
+}
+.welcome-head::before{
+    content:"";
+    position:absolute;
+    width:170px;height:170px;
+    border-radius:50%;
+    background:rgba(255,255,255,.10);
+    right:-60px;top:-80px;
+}
+.welcome-head::after{
+    content:"";
+    position:absolute;
+    width:110px;height:110px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    left:-45px;bottom:-55px;
+}
+.welcome-spark{
+    position:absolute;
+    color:rgba(255,255,255,.95);
+    width:11px;height:11px;
+    z-index:2;
+    animation:wSpark 2.1s ease-in-out infinite;
+    pointer-events:none;
+}
+.welcome-spark svg{width:100%;height:100%;display:block;}
+.welcome-spark.a{left:24%;top:22px;animation-delay:0s;}
+.welcome-spark.b{right:23%;top:38px;width:8px;height:8px;animation-delay:.7s;}
+.welcome-spark.c{left:30%;bottom:22px;width:9px;height:9px;animation-delay:1.3s;}
+@keyframes wSpark{
+    0%,100%{opacity:.2;transform:scale(.6) rotate(0deg);}
+    50%{opacity:1;transform:scale(1.2) rotate(25deg);}
+}
+.welcome-title{
+    position:relative;
+    z-index:2;
+    font-size:21px;
+    font-weight:700;
+    letter-spacing:.4px;
+    margin-top:8px;
+    text-shadow:0 1px 2px rgba(255,255,255,.3);
+}
+.welcome-sub{
+    position:relative;
+    z-index:2;
+    font-size:11.5px;
+    opacity:.92;
+    font-weight:500;
+    margin-top:2px;
+}
+.welcome-body{padding:16px 17px 18px;}
+.info-list{
+    font-size:13.5px;
+    color:var(--ink);
+    background:#fff;
+    border-radius:16px;
+    padding:4px 14px;
+}
+.wl-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:9px 2px;
+    border-bottom:1px dashed var(--line);
+}
+.wl-row:last-child{border-bottom:none;}
+.wl-row .lbl{
+    color:var(--muted);
+    font-size:12.5px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.wl-row .lbl svg{
+    width:15px;height:15px;
+    color:var(--g-primary);
+    flex-shrink:0;
+}
+.wl-row .val{
+    color:var(--g-deep);
+    font-weight:700;
+    font-size:13px;
+    background:#fff;
+    border:1px solid var(--line);
+    padding:2px 10px;
+    border-radius:20px;
+    box-shadow:0 2px 6px -3px rgba(214,143,0,.2);
+}
+.welcome-btn{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    width:100%;
+    margin-top:15px;
+    background:linear-gradient(180deg,var(--g-light),var(--g-primary),var(--g-deep));
+    border:none;
+    padding:14px;
+    font-size:15px;
+    border-radius:32px;
+    color:var(--on-brand);
+    cursor:pointer;
+    text-decoration:none;
+    font-family:inherit;
+    font-weight:700;
+    letter-spacing:.4px;
+    box-shadow:0 10px 22px -8px rgba(214,143,0,.55),inset 0 1px 0 rgba(255,255,255,.4);
+    overflow:hidden;
+    transition:transform .12s;
+}
+.welcome-btn svg{width:19px;height:19px;}
+.welcome-btn:active{transform:translateY(1px);}
+.welcome-btn::before{
+    content:"";
+    position:absolute;
+    top:0;left:-100%;
+    width:100%;height:100%;
+    background:linear-gradient(120deg,transparent,rgba(255,255,255,.45),transparent);
+    animation:slideShine 2.4s infinite;
+}
+
+/* ─── MODAL ─── */
+.modal-wrap{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    -webkit-backdrop-filter:blur(4px);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9998;
+    padding:20px;
+}
+.modal-wrap.show{display:flex;}
+.modal{
+    background:#fff;
+    width:100%;
+    max-width:320px;
+    border-radius:20px;
+    overflow:hidden;
+    animation:popIn .25s ease-out;
+}
+.modal-body{
+    padding:26px 20px 22px;
+    text-align:center;
+    font-size:14px;
+    color:var(--ink);
+    line-height:1.5;
+}
+.modal-foot{
+    display:flex;
+    border-top:1px solid var(--line);
+}
+.modal-btn{
+    flex:1;
+    padding:14px;
+    text-align:center;
+    font-size:14px;
+    cursor:pointer;
+    font-weight:600;
+}
+.modal-btn.cancel{
+    color:var(--muted);
+    border-right:1px solid var(--line);
+}
+.modal-btn.confirm{color:var(--g-deep);}
+
+/* ─── MISSION FAB (left side) ─── */
+.mission-fab{
+    position:fixed;
+    left:14px;
+    bottom:104px;
+    z-index:9996;
+    width:56px;
+    height:56px;
+    text-decoration:none;
+    transition:transform .15s;
+}
+.mission-fab:active{transform:scale(.92);}
+.mission-fab .m-circle{
+    width:100%;height:100%;
+    border-radius:50%;
+    background:linear-gradient(160deg,var(--g-light),var(--g-primary),var(--g-deep));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 12px 26px -10px rgba(214,143,0,.85),inset 0 1px 0 rgba(255,255,255,.3);
+}
+
+/* ─── FOOTER NAV ─── */
+.footer{
+    position:fixed;
+    bottom:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:480px;
+    background:#fff;
+    border-top:1px solid var(--line);
+    padding:8px 10px calc(6px + env(safe-area-inset-bottom));
+    display:flex;
+    justify-content:space-around;
+    align-items:flex-end;
+    z-index:100;
+    box-shadow:0 -8px 30px rgba(214,143,0,.08);
+    overflow:visible;
+}
+.nav-item{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    padding:6px 0;
+    color:var(--muted);
+    position:relative;
+    font-size:11px;
+    transition:color .15s;
+}
+.nav-item svg{width:24px;height:24px;}
+.nav-item.active{color:var(--g-deep);font-weight:600;}
+.nav-item.active::before{
+    content:"";
+    position:absolute;
+    top:-8px;left:50%;
+    transform:translateX(-50%);
+    width:28px;height:3px;
+    background:linear-gradient(90deg,var(--g-light),var(--g-primary));
+    border-radius:0 0 3px 3px;
+}
+
+/* Center Spin FAB */
+.nav-fab{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    color:var(--g-deep);
+    font-size:11px;
+    font-weight:600;
+}
+.nav-fab .fab-circle{
+    width:72px;
+    height:72px;
+    margin-top:-34px;
+    padding:7px;
+    border-radius:50%;
+    background:linear-gradient(145deg,#ffffff,#f0e6e4);
+    border:0;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:
+        8px 8px 18px rgba(214,143,0,.20),
+        -6px -6px 14px rgba(255,255,255,.95),
+        inset 3px 3px 6px rgba(255,255,255,.90),
+        inset -4px -4px 9px rgba(214,143,0,.14);
+    transition:transform .18s ease,box-shadow .18s ease;
+}
+.nav-fab:active .fab-circle{
+    transform:scale(.94);
+    box-shadow:
+        4px 4px 10px rgba(214,143,0,.18),
+        -3px -3px 8px rgba(255,255,255,.85),
+        inset 4px 4px 9px rgba(214,143,0,.18),
+        inset -3px -3px 7px rgba(255,255,255,.85);
+}
+.nav-fab .fab-circle img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+    border-radius:50%;
+    animation:navWheel 9s linear infinite;
+}
+.nav-fab:active .fab-circle img{animation-play-state:paused;}
+
+@keyframes navWheel{to{transform:rotate(360deg);}}
+
+@media (prefers-reduced-motion:reduce){
+    .nav-fab .fab-circle img{animation:none;}
+}
+
+/* ─── TOAST ─── */
+#gToast{
+    position:fixed;
+    z-index:100000;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%) scale(.9);
+    min-width:160px;
+    max-width:92%;
+    padding:14px 24px;
+    border-radius:16px;
+    background:rgba(20,18,24,.88);
+    color:#fff;
+    font-size:14px;
+    font-weight:600;
+    text-align:center;
+    box-shadow:0 22px 54px -14px rgba(0,0,0,.55);
+    opacity:0;
+    pointer-events:none;
+    transition:transform .3s cubic-bezier(.2,1,.3,1),opacity .28s ease;
+}
+#gToast.show{
+    opacity:1;
+    transform:translate(-50%,-50%) scale(1);
+    pointer-events:auto;
+}
+@media (prefers-reduced-motion:reduce){
+    #gToast{transition:opacity .28s;transform:translate(-50%,-50%);}
+    #gToast.show{transform:translate(-50%,-50%);}
+}
+</style>
+
+<meta name="csrf-token" content="5e160cc7405fdb373f3f2134a3e3abeb47c4b9743ab66237fbeff4902d9e10ce">
+
+<script>
+/* ─── CSRF TOKEN AUTO-INJECTOR (fetch + XHR + form.submit) ─── */
+(function() {
+    var m = document.querySelector('meta[name="csrf-token"]');
+    var t = m ? m.getAttribute("content") : "";
+    if (!t) return;
+
+    function sameOrigin(u) {
+        try {
+            if (!u) return true;
+            if (/^https?:\/\//i.test(u)) {
+                var a = document.createElement("a");
+                a.href = u;
+                return a.host === location.host;
+            }
+            return true;
+        } catch (e) { return true; }
+    }
+
+    if (window.fetch) {
+        var of = window.fetch;
+        window.fetch = function(input, init) {
+            try {
+                if (typeof input === "string") {
+                    init = init || {};
+                    var M = ((init.method || "GET") + "").toUpperCase();
+                    if (sameOrigin(input) && M !== "GET" && M !== "HEAD") {
+                        var h = new Headers(init.headers || {});
+                        if (!h.has("X-CSRF-Token")) h.set("X-CSRF-Token", t);
+                        init.headers = h;
+                    }
+                    return of.call(this, input, init);
+                }
+            } catch (e) {}
+            return of.call(this, input, init);
+        };
+    }
+
+    var oo = XMLHttpRequest.prototype.open, os = XMLHttpRequest.prototype.send;
+    XMLHttpRequest.prototype.open = function(method, url) {
+        try {
+            var M = (method + "").toUpperCase();
+            this._csrfOK = sameOrigin(url) && M !== "GET" && M !== "HEAD";
+        } catch (e) { this._csrfOK = false; }
+        return oo.apply(this, arguments);
+    };
+    XMLHttpRequest.prototype.send = function(b) {
+        try { if (this._csrfOK) this.setRequestHeader("X-CSRF-Token", t); } catch (e) {}
+        return os.apply(this, arguments);
+    };
+})();
+</script>
+    <link rel="stylesheet" href="/assets/css/customer-ui.css">
+</head>
+
+<body>
+
+<!-- ═══════════ WELCOME POPUP ═══════════ -->
+<div class="popup-overlay" id="welcomePopup">
+    <div class="welcome-card">
+        <button class="welcome-close" onclick="closeWelcome()" aria-label="Close">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+        </button>
+        <div class="welcome-head">
+            <span class="welcome-spark a">
+                <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
+            </span>
+            <span class="welcome-spark b">
+                <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
+            </span>
+            <span class="welcome-spark c">
+                <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
+            </span>
+            <div class="welcome-title">Finora</div>
+            <div class="welcome-sub">New app launched</div>
+        </div>
+        <div class="welcome-body">
+            <div class="info-list">
+                <div class="wl-row">
+                    <span class="lbl">
+                        <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="M12.75 6.5a.75.75 0 0 0-1.5 0v.58c-1.3.2-2.3 1.2-2.3 2.48 0 1.5 1.36 2.35 2.85 2.7 1.32.32 1.7.72 1.7 1.24 0 .55-.55 1.1-1.5 1.1-.86 0-1.44-.42-1.6-.9a.75.75 0 0 0-1.42.48c.32.95 1.14 1.6 2.27 1.8v.52a.75.75 0 0 0 1.5 0v-.53c1.36-.23 2.25-1.24 2.25-2.47 0-1.6-1.42-2.42-2.85-2.76-1.36-.33-1.7-.7-1.7-1.18 0-.5.52-1.03 1.5-1.03.8 0 1.35.36 1.55.8a.75.75 0 1 0 1.37-.6c-.35-.8-1.08-1.35-2.12-1.55V6.5Z" fill="currentColor"/></svg>
+                        Signup reward
+                    </span>
+                    <span class="val">Not enabled</span>
+                </div>
+                <div class="wl-row">
+                    <span class="lbl">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M15.5 7.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" fill="currentColor"/><path opacity=".4" d="M19.5 7.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-15 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0Z" fill="currentColor"/><path d="M18 16.5c0 1.93-2.69 3.5-6 3.5s-6-1.57-6-3.5S8.69 13 12 13s6 1.57 6 3.5Z" fill="currentColor"/></svg>
+                        Invite tracking
+                    </span>
+                    <span class="val">Active</span>
+                </div>
+                <div class="wl-row">
+                    <span class="lbl">
+                        <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M22 12c0 2.83 0 4.24-.88 5.12-.88.88-2.29.88-5.12.88H8c-2.83 0-4.24 0-5.12-.88C2 16.24 2 14.83 2 12s0-4.24.88-5.12C3.76 6 5.17 6 8 6h8c2.83 0 4.24 0 5.12.88.88.88.88 2.29.88 5.12Z" fill="currentColor"/><path d="M2 10h20v2H2v-2Zm3 4.5c0-.41.34-.75.75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z" fill="currentColor"/></svg>
+                        Min withdrawal
+                    </span>
+                    <span class="val" id="welcomeMinWithdrawal">₹170</span>
+                </div>
+                <div class="wl-row">
+                    <span class="lbl">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M20.9 10c.94 0 1.41 0 1.7.29.29.29.29.76.29 1.71v.5c0 .94 0 1.42-.29 1.71-.29.29-.76.29-1.7.29V10Z" fill="currentColor"/><path opacity=".5" d="M21.14 10c0-1.18.04-2.45-.71-3.35-.75-.75-1.7-1.08-2.87-1.24C16.16 5.25 14.7 5.25 12.87 5.25h-2.12c-1.84 0-3.29 0-4.43.16-1.17.16-2.12.49-2.87 1.24-.75.75-1.08 1.7-1.24 2.87-.16 1.14-.16 2.6-.16 4.43v.11c0 1.84 0 3.29.16 4.43.16 1.17.49 2.12 1.24 2.87.75.75 1.7 1.08 2.87 1.24 1.14.16 2.59.16 4.43.16h2.12c1.84 0 3.29 0 4.43-.16 1.17-.16 2.12-.49 2.87-1.24.75-.9.71-2.17.71-3.35H18.2c-2.27 0-4.21-1.74-4.21-4s1.94-4 4.21-4h2.94Z" fill="currentColor"/><path d="M17.97 15.07a1.07 1.07 0 1 0 0-2.14 1.07 1.07 0 0 0 0 2.14Z" fill="currentColor"/></svg>
+                        Min Recharge
+                    </span>
+                    <span class="val" id="welcomeMinRecharge">₹295</span>
+                </div>
+                <div class="wl-row">
+                    <span class="lbl">
+                        <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="M12 6.25a.75.75 0 0 1 .75.75v4.7l3.02 1.8a.75.75 0 1 1-.77 1.29l-3.38-2a.75.75 0 0 1-.37-.65V7c0-.41.34-.75.75-.75Z" fill="currentColor"/></svg>
+                        Payout processing
+                    </span>
+                    <span class="val">Manual review only</span>
+                </div>
+            </div>
+            <a href="https://t.me/+JF8Yn62LV7tmZTY1" target="_blank" rel="noopener" class="welcome-btn" onclick="closeWelcome()">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M21.8 4.4 18.6 19.5c-.24 1.06-.87 1.32-1.76.82l-4.87-3.59-2.35 2.26c-.26.26-.48.48-.98.48l.35-4.96 9.03-8.16c.4-.35-.08-.54-.6-.2L6.28 13.18l-4.8-1.5c-1.05-.33-1.07-1.05.22-1.55l18.78-7.24c.87-.32 1.63.2 1.35 1.5Z" fill="currentColor"/></svg>
+                Join Telegram
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ MAIN PAGE ═══════════ -->
+<div class="page">
+    <div class="hero">
+        <div class="slide-track" id="slideTrack" data-total="1">
+            <div class="slide" style="background-image:url('/assets/images/hero.svg');"></div>
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- ─── QUICK GRID ─── -->
+        <div class="quick-grid">
+            <a href="/pages/recharge" class="quick-chip">
+                <div class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M20.9 10c.94 0 1.41 0 1.7.29.29.29.29.76.29 1.71v.5c0 .94 0 1.42-.29 1.71-.29.29-.76.29-1.7.29V10Z" fill="currentColor"/><path opacity=".5" d="M21.14 10c0-1.18.04-2.45-.71-3.35-.75-.75-1.7-1.08-2.87-1.24C16.16 5.25 14.7 5.25 12.87 5.25h-2.12c-1.84 0-3.29 0-4.43.16-1.17.16-2.12.49-2.87 1.24-.75.75-1.08 1.7-1.24 2.87-.16 1.14-.16 2.6-.16 4.43v.11c0 1.84 0 3.29.16 4.43.16 1.17.49 2.12 1.24 2.87.75.75 1.7 1.08 2.87 1.24 1.14.16 2.59.16 4.43.16h2.12c1.84 0 3.29 0 4.43-.16 1.17-.16 2.12-.49 2.87-1.24.75-.9.71-2.17.71-3.35H18.2c-2.27 0-4.21-1.74-4.21-4s1.94-4 4.21-4h2.94Z" fill="currentColor"/></svg>
+                </div>
+                <div class="quick-label">Recharge</div>
+            </a>
+            <a href="/pages/withdrawal" class="quick-chip">
+                <div class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M9 20h6c1.89 0 2.83 0 3.41-.59.48-.47.57-1.17.59-2.41H5c.02 1.24.11 1.94.59 2.41C6.17 20 7.11 20 9 20Z" fill="currentColor"/><path d="M11.25 6H9c-1.89 0-2.83 0-3.41.59C5 7.17 5 8.11 5 10v6c0 .37 0 .7.004 1H19c.004-.3.004-.63.004-1v-6c0-1.89 0-2.83-.59-3.41C17.83 6 16.89 6 15 6h-2.25v4.97l.68-.79a.75.75 0 1 1 1.14.98l-2 2.33a.75.75 0 0 1-1.14 0l-2-2.33a.75.75 0 1 1 1.14-.98l.68.79V6Z" fill="currentColor"/><path opacity=".5" d="M18.11 3H5.89C3.74 3 2 4.8 2 7.02c0 1.9 1.28 3.5 3 3.92V10c0-1.89 0-2.83.59-3.41C6.17 6 7.11 6 9 6h6c1.89 0 2.83 0 3.41.59.59.58.59 1.52.59 3.41v.94c1.72-.42 3-2.02 3-3.92C22 4.8 20.26 3 18.11 3Z" fill="currentColor"/></svg>
+                </div>
+                <div class="quick-label">Withdraw</div>
+            </a>
+            <a href="/pages/mission" class="quick-chip">
+                <span class="quick-badge">New</span>
+                <div class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M21 16v-6c0-2.83 0-4.24-.88-5.12-.77-.77-1.94-.87-4.12-.88H8c-2.18.01-3.35.11-4.12.88C3 5.76 3 7.17 3 10v6c0 2.83 0 4.24.88 5.12C4.76 22 6.17 22 9 22h6c2.83 0 4.24 0 5.12-.88C21 20.24 21 18.83 21 16Z" fill="currentColor"/><path d="M8 3.5C8 2.67 8.67 2 9.5 2h5c.83 0 1.5.67 1.5 1.5v1c0 .83-.67 1.5-1.5 1.5h-5C8.67 6 8 5.33 8 4.5v-1Z" fill="currentColor"/></svg>
+                </div>
+                <div class="quick-label">Mission</div>
+            </a>
+            <a href="/pages/invite" class="quick-chip">
+                <div class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none"><g opacity=".5"><path d="M7.2 7.56a.75.75 0 1 0-.99-1.12A9.7 9.7 0 0 0 3.25 13a.75.75 0 0 0 1.5 0c0-2.17.95-4.11 2.45-5.44Z" fill="currentColor"/><path d="M17.79 6.44a.75.75 0 0 0-.99 1.12A7.24 7.24 0 0 1 19.25 13a.75.75 0 0 0 1.5 0c0-2.61-1.15-4.96-2.96-6.56Z" fill="currentColor"/></g><path d="M9 6a3 3 0 1 0 6 0 3 3 0 0 0-6 0ZM2.5 18a3 3 0 1 0 6 0 3 3 0 0 0-6 0Zm16 3a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" fill="currentColor"/></svg>
+                </div>
+                <div class="quick-label">Invite</div>
+            </a>
+            <a href="https://t.me/Kingfisher_supportbot" class="quick-chip">
+                <div class="quick-icon">
+                    <svg viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.4 22.48l.28-.47c.44-.74.66-1.11 1.01-1.32.35-.21.81-.22 1.73-.25.86-.03 1.43-.1 1.93-.31a4.3 4.3 0 0 0 2.3-2.3c.32-.78.32-1.77.32-3.74v-.85c0-2.78 0-4.17-.63-5.19a4.3 4.3 0 0 0-1.4-1.4c-1.02-.63-2.41-.63-5.19-.63H8.21c-2.78 0-4.16 0-5.18.63a4.3 4.3 0 0 0-1.4 1.4C1 9.08 1 10.47 1 13.24v.85c0 1.97 0 2.96.32 3.74a4.3 4.3 0 0 0 2.3 2.3c.49.2 1.07.27 1.93.3.91.03 1.37.05 1.72.26.35.21.57.58 1.01 1.32l.28.47c.4.69 1.43.69 1.84 0Z" fill="currentColor"/><path opacity=".5" d="M15.48 1c1.27 0 2.28 0 3.09.08.82.08 1.52.24 2.14.62a4.7 4.7 0 0 1 1.58 1.58c.38.62.54 1.32.62 2.15.08.8.08 1.81.08 3.08v.87c0 .9 0 1.62-.04 2.2-.04.6-.13 1.11-.32 1.59a4.7 4.7 0 0 1-2.58 2.58l-.43.15h-1.65c.02-.5.02-1.09.02-1.82v-.85c0-2.78 0-4.17-.63-5.19a4.3 4.3 0 0 0-1.4-1.4c-1.02-.63-2.41-.63-5.19-.63H8.21c-.99 0-1.8 0-2.48.03V4.41c.03-.11.08-.24.13-.4.09-.25.2-.5.34-.73a4.7 4.7 0 0 1 1.58-1.58c.62-.38 1.32-.54 2.15-.62C10.74 1 11.75 1 13.02 1h2.46Z" fill="currentColor"/></svg>
+                </div>
+                <div class="quick-label">Online</div>
+            </a>
+        </div>
+
+        <!-- ─── TABS ─── -->
+        <div class="tabs">
+            <span class="tab-slider" id="tabSlider"></span>
+            <button id="normalTab" class="tab active">
+                <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
+                Daily Products
+            </button>
+            <button id="vipTab" class="tab">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M2.5 7.5 6 12l4.4-6.2a2 2 0 0 1 3.2 0L18 12l3.5-4.5c.9-1.15 2.7-.1 2.1 1.24l-.05.1-3 8.06c-.3.8-1.06 1.35-1.92 1.35H5.37c-.86 0-1.62-.55-1.92-1.35l-3-8.06-.05-.1C-.2 7.4 1.6 6.35 2.5 7.5Z" fill="currentColor" opacity=".95"/><path d="M4 20.5c0-.55.45-1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1Z" fill="currentColor" opacity=".55"/></svg>
+                VIP Products
+            </button>
+        </div>
+        <!-- ─── NORMAL PRODUCTS ─── -->
+        <div class="product-list" id="normalBox">
+            <!-- Product A -->
+            <div class="product">
+                <div class="product-img" style="background-image:url('/assets/images/product-daily-a.svg');">
+                    <span class="product-quota">Limit 0/5</span>
+                    <div class="product-name">Product A</div>
+                </div>
+                <div class="product-info">
+                    <div class="info-row"><span class="info-label">Return Time</span><span class="info-val">2 Days</span></div>
+                    <div class="info-row"><span class="info-label">Deposit</span><span class="info-val">₹900</span></div>
+                    <div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">₹4,000</span></div>
+                    <div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">₹8,000</span></div>
+                </div>
+                <div class="buy-wrap">
+                    <button class="btn-buy buyBtn" data-product-id="372">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M1.5 2.75A.75.75 0 0 1 2.25 2h1.11c.9 0 1.68.62 1.88 1.5l.3 1.3h14.2c1.3 0 2.24 1.25 1.87 2.5l-1.6 5.4a2.5 2.5 0 0 1-2.4 1.8H8.6a2.5 2.5 0 0 1-2.44-1.94L4.2 3.83a.44.44 0 0 0-.43-.33H2.25a.75.75 0 0 1-.75-.75Z" fill="currentColor"/><path d="M8.5 21.5a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Zm9 0a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z" fill="currentColor" opacity=".6"/></svg>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product B -->
+            <div class="product">
+                <div class="product-img" style="background-image:url('/assets/images/product-daily-b.svg');">
+                    <span class="product-quota">Limit 0/10</span>
+                    <div class="product-name">Product B</div>
+                </div>
+                <div class="product-info">
+                    <div class="info-row"><span class="info-label">Return Time</span><span class="info-val">45 Days</span></div>
+                    <div class="info-row"><span class="info-label">Deposit</span><span class="info-val">₹295</span></div>
+                    <div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">₹240</span></div>
+                    <div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">₹10,800</span></div>
+                </div>
+                <div class="buy-wrap">
+                    <button class="btn-buy buyBtn" data-product-id="374">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M1.5 2.75A.75.75 0 0 1 2.25 2h1.11c.9 0 1.68.62 1.88 1.5l.3 1.3h14.2c1.3 0 2.24 1.25 1.87 2.5l-1.6 5.4a2.5 2.5 0 0 1-2.4 1.8H8.6a2.5 2.5 0 0 1-2.44-1.94L4.2 3.83a.44.44 0 0 0-.43-.33H2.25a.75.75 0 0 1-.75-.75Z" fill="currentColor"/><path d="M8.5 21.5a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Zm9 0a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z" fill="currentColor" opacity=".6"/></svg>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product C -->
+            <div class="product">
+                <div class="product-img" style="background-image:url('/assets/images/product-daily-c.svg');">
+                    <span class="product-quota">Limit 0/10</span>
+                    <div class="product-name">Product C</div>
+                </div>
+                <div class="product-info">
+                    <div class="info-row"><span class="info-label">Return Time</span><span class="info-val">10 Days</span></div>
+                    <div class="info-row"><span class="info-label">Deposit</span><span class="info-val">₹550</span></div>
+                    <div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">₹1,400</span></div>
+                    <div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">₹14,000</span></div>
+                </div>
+                <div class="buy-wrap">
+                    <button class="btn-buy buyBtn" data-product-id="376">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M1.5 2.75A.75.75 0 0 1 2.25 2h1.11c.9 0 1.68.62 1.88 1.5l.3 1.3h14.2c1.3 0 2.24 1.25 1.87 2.5l-1.6 5.4a2.5 2.5 0 0 1-2.4 1.8H8.6a2.5 2.5 0 0 1-2.44-1.94L4.2 3.83a.44.44 0 0 0-.43-.33H2.25a.75.75 0 0 1-.75-.75Z" fill="currentColor"/><path d="M8.5 21.5a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Zm9 0a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z" fill="currentColor" opacity=".6"/></svg>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product D -->
+            <div class="product">
+                <div class="product-img" style="background-image:url('/assets/images/product-daily-d.svg');">
+                    <span class="product-quota">Limit 0/10</span>
+                    <div class="product-name">Product D</div>
+                </div>
+                <div class="product-info">
+                    <div class="info-row"><span class="info-label">Return Time</span><span class="info-val">7 Days</span></div>
+                    <div class="info-row"><span class="info-label">Deposit</span><span class="info-val">₹1,100</span></div>
+                    <div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">₹4,000</span></div>
+                    <div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">₹28,000</span></div>
+                </div>
+                <div class="buy-wrap">
+                    <button class="btn-buy buyBtn" data-product-id="377">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M1.5 2.75A.75.75 0 0 1 2.25 2h1.11c.9 0 1.68.62 1.88 1.5l.3 1.3h14.2c1.3 0 2.24 1.25 1.87 2.5l-1.6 5.4a2.5 2.5 0 0 1-2.4 1.8H8.6a2.5 2.5 0 0 1-2.44-1.94L4.2 3.83a.44.44 0 0 0-.43-.33H2.25a.75.75 0 0 1-.75-.75Z" fill="currentColor"/><path d="M8.5 21.5a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Zm9 0a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z" fill="currentColor" opacity=".6"/></svg>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product F -->
+            <div class="product">
+                <div class="product-img" style="background-image:url('/assets/images/product-daily-f.svg');">
+                    <span class="product-quota">Limit 0/5</span>
+                    <div class="product-name">Product F</div>
+                </div>
+                <div class="product-info">
+                    <div class="info-row"><span class="info-label">Return Time</span><span class="info-val">5 Days</span></div>
+                    <div class="info-row"><span class="info-label">Deposit</span><span class="info-val">₹2,500</span></div>
+                    <div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">₹7,450</span></div>
+                    <div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">₹37,250</span></div>
+                </div>
+                <div class="buy-wrap">
+                    <button class="btn-buy buyBtn" data-product-id="379">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M1.5 2.75A.75.75 0 0 1 2.25 2h1.11c.9 0 1.68.62 1.88 1.5l.3 1.3h14.2c1.3 0 2.24 1.25 1.87 2.5l-1.6 5.4a2.5 2.5 0 0 1-2.4 1.8H8.6a2.5 2.5 0 0 1-2.44-1.94L4.2 3.83a.44.44 0 0 0-.43-.33H2.25a.75.75 0 0 1-.75-.75Z" fill="currentColor"/><path d="M8.5 21.5a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Zm9 0a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z" fill="currentColor" opacity=".6"/></svg>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- Product G -->
+            <div class="product">
+                <div class="product-img" style="background-image:url('/assets/images/product-daily-g.svg');">
+                    <span class="product-quota">Limit 0/1</span>
+                    <div class="product-name">Product G</div>
+                </div>
+                <div class="product-info">
+                    <div class="info-row"><span class="info-label">Return Time</span><span class="info-val">2 Days</span></div>
+                    <div class="info-row"><span class="info-label">Deposit</span><span class="info-val">₹4,999</span></div>
+                    <div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">₹29,999</span></div>
+                    <div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">₹59,998</span></div>
+                </div>
+                <div class="buy-wrap">
+                    <button class="btn-buy buyBtn" data-product-id="380">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M1.5 2.75A.75.75 0 0 1 2.25 2h1.11c.9 0 1.68.62 1.88 1.5l.3 1.3h14.2c1.3 0 2.24 1.25 1.87 2.5l-1.6 5.4a2.5 2.5 0 0 1-2.4 1.8H8.6a2.5 2.5 0 0 1-2.44-1.94L4.2 3.83a.44.44 0 0 0-.43-.33H2.25a.75.75 0 0 1-.75-.75Z" fill="currentColor"/><path d="M8.5 21.5a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Zm9 0a1.75 1.75 0 1 0 0-3.5 1.75 1.75 0 0 0 0 3.5Z" fill="currentColor" opacity=".6"/></svg>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ─── VIP PRODUCTS ─── -->
+        <div class="product-list" id="vipBox" style="display:none;">
+            <!-- VIP 1 -->
+            <div class="product">
+                <div class="product-img" style="background-image:url('/assets/images/product-vip-1.svg');">
+                    <span class="product-quota">Limit 0/10</span>
+                    <div class="product-name">VIP 1</div>
+                </div>
+                <div class="product-info">
+                    <div class="info-row"><span class="info-label">Return Time</span><span class="info-val">3 Days</span></div>
+                    <div class="info-row"><span class="info-label">Deposit</span><span class="info-val">₹999.00</span></div>
+                    <div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">₹2,500.00</span></div>
+                    <div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">₹7,500.00</span></div>
+                </div>
+                <div class="buy-wrap">
+                    <button class="btn-buy buyBtn" data-product-id="387">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M2.5 7.5 6 12l4.4-6.2a2 2 0 0 1 3.2 0L18 12l3.5-4.5c.9-1.15 2.7-.1 2.1 1.24l-.05.1-3 8.06c-.3.8-1.06 1.35-1.92 1.35H5.37c-.86 0-1.62-.55-1.92-1.35l-3-8.06-.05-.1C-.2 7.4 1.6 6.35 2.5 7.5Z" fill="currentColor" opacity=".95"/><path d="M4 20.5c0-.55.45-1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1Z" fill="currentColor" opacity=".55"/></svg>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIP 2 -->
+            <div class="product">
+                <div class="product-img" style="background-image:url('/assets/images/product-vip-2.svg');">
+                    <span class="product-quota">Limit 0/10</span>
+                    <div class="product-name">VIP 2</div>
+                </div>
+                <div class="product-info">
+                    <div class="info-row"><span class="info-label">Return Time</span><span class="info-val">2 Days</span></div>
+                    <div class="info-row"><span class="info-label">Deposit</span><span class="info-val">₹1,500.00</span></div>
+                    <div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">₹6,000.00</span></div>
+                    <div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">₹12,000.00</span></div>
+                </div>
+                <div class="buy-wrap">
+                    <button class="btn-buy buyBtn" data-product-id="386">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M2.5 7.5 6 12l4.4-6.2a2 2 0 0 1 3.2 0L18 12l3.5-4.5c.9-1.15 2.7-.1 2.1 1.24l-.05.1-3 8.06c-.3.8-1.06 1.35-1.92 1.35H5.37c-.86 0-1.62-.55-1.92-1.35l-3-8.06-.05-.1C-.2 7.4 1.6 6.35 2.5 7.5Z" fill="currentColor" opacity=".95"/><path d="M4 20.5c0-.55.45-1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1Z" fill="currentColor" opacity=".55"/></svg>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIP 3 -->
+            <div class="product">
+                <div class="product-img" style="background-image:url('/assets/images/product-vip-3.svg');">
+                    <span class="product-quota">Limit 0/10</span>
+                    <div class="product-name">VIP 3</div>
+                </div>
+                <div class="product-info">
+                    <div class="info-row"><span class="info-label">Return Time</span><span class="info-val">2 Days</span></div>
+                    <div class="info-row"><span class="info-label">Deposit</span><span class="info-val">₹3,000.00</span></div>
+                    <div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">₹12,000.00</span></div>
+                    <div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">₹24,000.00</span></div>
+                </div>
+                <div class="buy-wrap">
+                    <button class="btn-buy buyBtn" data-product-id="378">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M2.5 7.5 6 12l4.4-6.2a2 2 0 0 1 3.2 0L18 12l3.5-4.5c.9-1.15 2.7-.1 2.1 1.24l-.05.1-3 8.06c-.3.8-1.06 1.35-1.92 1.35H5.37c-.86 0-1.62-.55-1.92-1.35l-3-8.06-.05-.1C-.2 7.4 1.6 6.35 2.5 7.5Z" fill="currentColor" opacity=".95"/><path d="M4 20.5c0-.55.45-1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1Z" fill="currentColor" opacity=".55"/></svg>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIP 4 -->
+            <div class="product">
+                <div class="product-img" style="background-image:url('/assets/images/product-vip-4.svg');">
+                    <span class="product-quota">Limit 0/1</span>
+                    <div class="product-name">VIP 4</div>
+                </div>
+                <div class="product-info">
+                    <div class="info-row"><span class="info-label">Return Time</span><span class="info-val">1 Days</span></div>
+                    <div class="info-row"><span class="info-label">Deposit</span><span class="info-val">₹6,000.00</span></div>
+                    <div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">₹50,000.00</span></div>
+                    <div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">₹50,000.00</span></div>
+                </div>
+                <div class="buy-wrap">
+                    <button class="btn-buy buyBtn" data-product-id="388">
+                        <svg viewBox="0 0 24 24" fill="none"><path d="M2.5 7.5 6 12l4.4-6.2a2 2 0 0 1 3.2 0L18 12l3.5-4.5c.9-1.15 2.7-.1 2.1 1.24l-.05.1-3 8.06c-.3.8-1.06 1.35-1.92 1.35H5.37c-.86 0-1.62-.55-1.92-1.35l-3-8.06-.05-.1C-.2 7.4 1.6 6.35 2.5 7.5Z" fill="currentColor" opacity=".95"/><path d="M4 20.5c0-.55.45-1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1Z" fill="currentColor" opacity=".55"/></svg>
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ MISSION FAB ═══════════ -->
+<a href="/pages/mission" class="mission-fab" aria-label="Mission">
+    <div class="m-circle">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path opacity="0.5" d="M16 4.00195C18.175 4.01406 19.3529 4.11051 20.1213 4.87889C21 5.75757 21 7.17179 21 10.0002V16.0002C21 18.8286 21 20.2429 20.1213 21.1215C19.2426 22.0002 17.8284 22.0002 15 22.0002H9C6.17157 22.0002 4.75736 22.0002 3.87868 21.1215C3 20.2429 3 18.8286 3 16.0002V10.0002C3 7.17179 3 5.75757 3.87868 4.87889C4.64706 4.11051 5.82497 4.01406 8 4.00195" stroke="#ffffff" stroke-width="1.5"/>
+            <path d="M10.5 14L17 14" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M7 14H7.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M7 10.5H7.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M7 17.5H7.5" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M10.5 10.5H17" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M10.5 17.5H17" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M8 3.5C8 2.67157 8.67157 2 9.5 2H14.5C15.3284 2 16 2.67157 16 3.5V4.5C16 5.32843 15.3284 6 14.5 6H9.5C8.67157 6 8 5.32843 8 4.5V3.5Z" stroke="#ffffff" stroke-width="1.5"/>
+        </svg>
+    </div>
+</a>
+
+<!-- ═══════════ BUY MODAL ═══════════ -->
+<div class="modal-wrap" id="buyModal">
+    <div class="modal">
+        <div class="modal-body" id="buyModalBody">Purchase this product using your available wallet balance? The product activates immediately. No return or reward is included.</div>
+        <div class="modal-foot">
+            <div class="modal-btn cancel" id="cancelBtn">Cancel</div>
+            <div class="modal-btn confirm" id="confirmBtn">Buy with wallet</div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ FOOTER NAV ═══════════ -->
+<nav class="footer">
+    <a href="/pages/home" class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none"><path fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" d="M21.53 11.59 20.75 10.96V21.25H22a.75.75 0 0 1 0 1.5H2a.75.75 0 0 1 0-1.5h1.25V10.96l-.78.63a.75.75 0 1 1-.94-1.17l8.13-6.5a3.75 3.75 0 0 1 4.68 0l8.13 6.5a.75.75 0 1 1-.94 1.17ZM12 6.75a2.75 2.75 0 1 0 0 5.5 2.75 2.75 0 0 0 0-5.5Zm1.75 6.56c-.46-.06-1.03-.06-1.7-.06h-.1c-.66 0-1.24 0-1.7.06-.49.07-.96.22-1.34.6-.39.39-.54.86-.6 1.35-.07.46-.07 1.03-.07 1.7v4.29h7.5v-4.42c0-.62 0-1.15-.06-1.58-.07-.49-.22-.96-.6-1.34-.39-.38-.86-.53-1.35-.6Z"/></svg>
+        Home
+    </a>
+    <a href="/pages/invite" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M2 12c0-3.77 0-5.66 1.17-6.83C4.34 4 6.23 4 10 4h4c3.77 0 5.66 0 6.83 1.17C22 6.34 22 8.23 22 12s0 5.66-1.17 6.83C19.66 20 17.77 20 14 20h-4c-3.77 0-5.66 0-6.83-1.17C2 17.66 2 15.77 2 12Z" fill="currentColor"/><path d="M6.35 7.2a.75.75 0 1 0-.96 1.15l2.6 2.17c1.06.88 1.72 1.44 2.48 1.66.76.23 1.58.23 2.34 0 .76-.22 1.42-.78 2.48-1.66l2.6-2.17a.75.75 0 1 0-.96-1.15l-2.56 2.13c-1.17.98-1.62 1.34-2.08 1.48-.47.14-.96.14-1.42 0-.46-.14-.91-.5-2.08-1.48L6.35 7.2Z" fill="currentColor"/></svg>
+        Share
+    </a>
+    <a href="/pages/spin" class="nav-fab" aria-label="Spin">
+        <span class="fab-circle">
+            <img src="/assets/images/Speener.svg" alt="" width="72" height="72" loading="lazy" decoding="async">
+        </span>
+    </a>
+    <a href="/pages/team" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15.5 7.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" fill="currentColor"/><path opacity=".4" d="M19.5 7.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-15 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0Z" fill="currentColor"/><path d="M18 16.5c0 1.93-2.69 3.5-6 3.5s-6-1.57-6-3.5S8.69 13 12 13s6 1.57 6 3.5Z" fill="currentColor"/><path opacity=".4" d="M22 16.5c0 1.38-1.79 2.5-4 2.5s-4-1.12-4-2.5 1.79-2.5 4-2.5 4 1.12 4 2.5Zm-20 0C2 17.88 3.79 19 6 19s4-1.12 4-2.5S8.21 14 6 14s-4 1.12-4 2.5Z" fill="currentColor"/></svg>
+        Team
+    </a>
+    <a href="/pages/mine" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="4" fill="currentColor"/><path fill="currentColor" opacity=".5" d="M20 17.5C20 19.99 20 22 12 22s-8-2.01-8-4.5C4 15.01 7.58 13 12 13s8 2.01 8 4.5Z"/></svg>
+        Profile
+    </a>
+</nav>
+
+<!-- ═══════════ TOAST ═══════════ -->
+<div id="gToast" role="alert" aria-live="polite"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   TOAST HELPER
+   ═══════════════════════════════════════════════════ */
+(function() {
+    if (window.showToast) return;
+    var hideTimer = null;
+    window.showToast = function(message, type, time) {
+        var toast = document.getElementById('gToast');
+        if (!toast) return;
+        type = type || 'success';
+        time = (typeof time === 'number' && time > 0) ? time : 3;
+        clearTimeout(hideTimer);
+        toast.textContent = message;
+        toast.classList.add('show');
+        hideTimer = setTimeout(function() {
+            toast.classList.remove('show');
+        }, time * 1000);
+    };
+    window.hideToast = function() {
+        var toast = document.getElementById('gToast');
+        if (!toast) return;
+        clearTimeout(hideTimer);
+        toast.classList.remove('show');
+    };
+})();
+</script>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   MAIN LOGIC
+   ═══════════════════════════════════════════════════ */
+document.addEventListener("DOMContentLoaded", function() {
+
+    /* ─── SLIDER ─── */
+    (function() {
+        var track = document.getElementById("slideTrack");
+        if (!track) return;
+        var dots = document.querySelectorAll(".dot");
+        var total = parseInt(track.getAttribute("data-total") || "1", 10) || 1;
+        if (total < 2) return;
+        var idx = 0;
+        function updateDots(real) {
+            dots.forEach(function(d) { d.classList.remove("active"); });
+            if (dots[real]) dots[real].classList.add("active");
+        }
+        setInterval(function() {
+            idx++;
+            track.style.transition = "transform .6s ease";
+            track.style.transform = "translateX(-" + (idx * 100) + "%)";
+            updateDots(idx % total);
+            if (idx === total) {
+                setTimeout(function() {
+                    track.style.transition = "none";
+                    idx = 0;
+                    track.style.transform = "translateX(0)";
+                }, 650);
+            }
+        }, 2500);
+    })();
+
+    /* ─── TABS ─── */
+    (function() {
+        var normalTab = document.getElementById("normalTab");
+        var vipTab = document.getElementById("vipTab");
+        var normalBox = document.getElementById("normalBox");
+        var vipBox = document.getElementById("vipBox");
+        var slider = document.getElementById("tabSlider");
+        if (!normalTab || !vipTab) return;
+
+        normalTab.addEventListener("click", function() {
+            normalTab.classList.add("active");
+            vipTab.classList.remove("active");
+            slider.classList.remove("right");
+            normalBox.style.display = "grid";
+            vipBox.style.display = "none";
+        });
+        vipTab.addEventListener("click", function() {
+            vipTab.classList.add("active");
+            normalTab.classList.remove("active");
+            slider.classList.add("right");
+            normalBox.style.display = "none";
+            vipBox.style.display = "grid";
+        });
+    })();
+
+    /* ─── ADMIN-MANAGED PRODUCT CATALOG ─── */
+    (function() {
+        var dailyBox = document.getElementById("normalBox");
+        var vipBox = document.getElementById("vipBox");
+        if (!dailyBox || !vipBox) return;
+        var images = {
+            daily: [
+                "/assets/images/product-daily-a.svg", "/assets/images/product-daily-b.svg",
+                "/assets/images/product-daily-c.svg", "/assets/images/product-daily-d.svg",
+                "/assets/images/product-daily-f.svg", "/assets/images/product-daily-g.svg"
+            ],
+            vip: [
+                "/assets/images/product-vip-1.svg", "/assets/images/product-vip-2.svg",
+                "/assets/images/product-vip-3.svg", "/assets/images/product-vip-4.svg"
+            ]
+        };
+        function escapeHtml(value) {
+            return String(value == null ? "" : value).replace(/[&<>"']/g, function(ch) {
+                return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch];
+            });
+        }
+        function money(paise) {
+            return "₹" + (Number(paise || 0) / 100).toLocaleString("en-IN", {
+                minimumFractionDigits: 2, maximumFractionDigits: 2
+            });
+        }
+        fetch("/api/products", { credentials:"include", cache:"no-store" })
+            .then(function(response) {
+                if (response.status === 401) {
+                    window.location.replace("/index.html");
+                    throw new Error("Your session expired. Please sign in again.");
+                }
+                if (!response.ok) throw new Error("Could not load products.");
+                return response.json();
+            })
+            .then(function(result) {
+                if (!result.success || !Array.isArray(result.products)) {
+                    throw new Error("Product catalog response was invalid.");
+                }
+                var groups = {daily:[], vip:[]};
+                result.products.forEach(function(product) {
+                    if (groups[product.category]) groups[product.category].push(product);
+                });
+                [[dailyBox, groups.daily, "daily"], [vipBox, groups.vip, "vip"]].forEach(function(group) {
+                    var box = group[0], products = group[1], category = group[2];
+                    box.innerHTML = products.map(function(product, index) {
+                        var image = images[category][index % images[category].length];
+                        var canPurchase = product.purchasedCount < product.purchaseLimit;
+                        return '<article class="product">' +
+                            '<div class="product-img" style="background-image:url(&quot;' + escapeHtml(product.imageUrl || image) + '&quot;)">' +
+                            '<span class="product-quota">Limit ' + escapeHtml(product.purchasedCount) + '/' + escapeHtml(product.purchaseLimit) + '</span>' +
+                            '<div class="product-name">' + escapeHtml(product.name) + '</div></div>' +
+                            '<div class="product-info">' +
+                            '<div class="info-row"><span class="info-label">Return Time</span><span class="info-val">' + escapeHtml(product.durationDays) + (Number(product.durationDays) === 1 ? ' Day' : ' Days') + '</span></div>' +
+                            '<div class="info-row"><span class="info-label">Deposit</span><span class="info-val">' + money(product.pricePaise) + '</span></div>' +
+                            '<div class="info-row"><span class="info-label">Est. Daily</span><span class="info-val green">' + money(product.dailyRewardPaise) + '</span></div>' +
+                            '<div class="info-row"><span class="info-label">Est. Total</span><span class="info-val green">' + money(product.totalRewardPaise) + '</span></div>' +
+                            '</div><div class="buy-wrap"><button class="btn-buy buyBtn" type="button" data-product-id="' + escapeHtml(product.id) +
+                            '" data-product-name="' + escapeHtml(product.name) + '" data-product-price="' + escapeHtml(money(product.pricePaise)) +
+                            '" data-purchased-count="' + escapeHtml(product.purchasedCount) + '" data-purchase-limit="' + escapeHtml(product.purchaseLimit) + '"' +
+                            (!canPurchase ? ' disabled' : '') + '>' +
+                            (canPurchase ? 'Buy with wallet' : 'Purchase limit reached') + '</button></div></article>';
+                    }).join("");
+                    if (!products.length) box.innerHTML = '<p class="empty-products">No products are currently available.</p>';
+                });
+            })
+            .catch(function(error) {
+                console.error(error);
+                dailyBox.textContent = "Product catalog is temporarily unavailable.";
+                vipBox.textContent = "Product catalog is temporarily unavailable.";
+            });
+    })();
+
+    fetch("/api/public/settings", {cache:"no-store"})
+        .then(function(response) {
+            if (!response.ok) throw new Error("Could not load public settings.");
+            return response.json();
+        })
+        .then(function(result) {
+            var settings = result.settings || {};
+            var rechargeMinimum = document.getElementById("welcomeMinRecharge");
+            var withdrawalMinimum = document.getElementById("welcomeMinWithdrawal");
+            if (rechargeMinimum && settings.minimum_recharge_rupees) rechargeMinimum.textContent = "₹" + settings.minimum_recharge_rupees;
+            if (withdrawalMinimum && settings.minimum_withdrawal_rupees) withdrawalMinimum.textContent = "₹" + settings.minimum_withdrawal_rupees;
+            document.querySelectorAll(".quick-chip[href='https://t.me/Kingfisher_supportbot']").forEach(function(link) {
+                if (settings.support_url) link.href = settings.support_url;
+            });
+        })
+        .catch(function(error) { console.error(error); });
+
+    /* ─── BUY FLOW ─── */
+    (function() {
+        var modal = document.getElementById("buyModal");
+        var cancel = document.getElementById("cancelBtn");
+        var confirm = document.getElementById("confirmBtn");
+        var modalBody = document.getElementById("buyModalBody");
+        var selectedProductId = null;
+
+        document.addEventListener("click", function(event) {
+            var btn = event.target.closest(".buyBtn");
+            if (!btn || btn.disabled) return;
+            selectedProductId = btn.getAttribute("data-product-id");
+            modalBody.textContent = "Buy " + btn.dataset.productName + " for " + btn.dataset.productPrice
+                + " from your available wallet balance? It activates immediately. No return or reward is included.";
+            modal.classList.add("show");
+        });
+
+        cancel.addEventListener("click", hideModal);
+        confirm.addEventListener("click", purchaseProduct);
+
+        function hideModal() {
+            modal.classList.remove("show");
+            selectedProductId = null;
+        }
+
+        async function purchaseProduct() {
+            if (!selectedProductId) {
+                showToast("Invalid product selection", "error");
+                return;
+            }
+            confirm.disabled = true;
+            try {
+                var csrfResponse = await fetch("/api/csrf", {credentials:"include"});
+                var csrf = await csrfResponse.json();
+                if (!csrfResponse.ok || !csrf.csrfToken) throw new Error(csrf.message || "Could not start a secure session.");
+                var response = await fetch("/api/products/purchase", {
+                    method:"POST", credentials:"include",
+                    headers:{"Content-Type":"application/json","X-CSRF-Token":csrf.csrfToken},
+                    body:JSON.stringify({productId:selectedProductId})
+                });
+                var result = await response.json();
+                if (response.status === 401) {
+                    window.location.replace("/index.html");
+                    return;
+                }
+                if (!response.ok || result.success !== true) throw new Error(result.message || "Request could not be submitted.");
+                var button = document.querySelector('.buyBtn[data-product-id="' + CSS.escape(selectedProductId) + '"]');
+                if (button) {
+                    var purchasedCount = Number(button.dataset.purchasedCount) + 1;
+                    var purchaseLimit = Number(button.dataset.purchaseLimit);
+                    button.dataset.purchasedCount = String(purchasedCount);
+                    var quota = button.closest(".product").querySelector(".product-quota");
+                    if (quota) quota.textContent = "Limit " + purchasedCount + "/" + purchaseLimit;
+                    if (purchasedCount >= purchaseLimit) {
+                        button.disabled = true;
+                        button.textContent = "Purchase limit reached";
+                    }
+                }
+                hideModal();
+                showToast(result.message, "success", 5);
+            } catch (error) {
+                showToast(error.message || "Request failed, please try again.", "error", 5);
+                console.error(error);
+            } finally {
+                confirm.disabled = false;
+            }
+        }
+    })();
+
+    /* ─── USER INFO (from localStorage) ─── */
+    (function() {
+        try {
+            fetch("/api/session", { credentials: "include" })
+                .then(function(response) {
+                    if (!response.ok) throw new Error("Could not load signed-in profile.");
+                    return response.json();
+                })
+                .then(function(result) {
+                    var name = result.user.name || "User";
+                    var phone = result.user.phone || "";
+                    var avatarEl = document.getElementById("userAvatar");
+                    var nameEl = document.getElementById("userName");
+                    var phoneEl = document.getElementById("userPhone");
+                    if (avatarEl) avatarEl.textContent = name.charAt(0).toUpperCase();
+                    if (nameEl) nameEl.textContent = name;
+                    if (phoneEl && phone) phoneEl.textContent = "+91 " + phone;
+                })
+                .catch(function(error) { console.error(error); });
+        } catch (error) {
+            console.error(error);
+        }
+    })();
+});
+
+/* ─── WELCOME POPUP (global) ─── */
+window.closeWelcome = function() {
+    var popup = document.getElementById("welcomePopup");
+    if (popup) popup.style.display = "none";
+    try { sessionStorage.setItem("welcome_seen", "1"); } catch (e) {}
+};
+
+/* Auto-hide welcome if already seen this session */
+document.addEventListener("DOMContentLoaded", function() {
+    try {
+        if (sessionStorage.getItem("welcome_seen") === "1") {
+            var popup = document.getElementById("welcomePopup");
+            if (popup) popup.style.display = "none";
+        }
+    } catch (e) {}
+});
+</script>
+
+</body>
+</html>

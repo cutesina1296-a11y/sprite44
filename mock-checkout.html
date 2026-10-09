@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="robots" content="noindex,nofollow">
+    <title>Local Test Checkout · Finora</title>
+    <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/customer-ui.css">
+    <style>
+        body { padding: 24px 16px calc(32px + env(safe-area-inset-bottom)) !important; }
+        main { width: min(100%, 440px); margin: 5vh auto; }
+        .card { padding: 24px; border: 1px solid var(--customer-line); border-radius: 22px; background: #fff; box-shadow: 0 18px 44px -28px rgba(58,46,16,.45); }
+        .label { color: var(--customer-muted); font-size: 12px; }
+        h1 { margin: 8px 0 20px; font-size: 22px; }
+        .amount { margin: 8px 0 22px; font-size: 32px; font-weight: 700; color: var(--customer-ink); }
+        .notice { margin: 16px 0; padding: 13px; border: 1px solid #f2d78e; border-radius: 12px; background: #fff8df; color: #765000; font-size: 12px; line-height: 1.6; }
+        .actions { display: grid; gap: 10px; margin-top: 20px; }
+        button, .cancel { width: 100%; padding: 13px 16px; border-radius: 24px; font: inherit; font-weight: 600; text-align: center; cursor: pointer; }
+        button { border: 0; background: linear-gradient(180deg,#34d399 0%,#16a34a 55%,#15803d 100%); color: #fff; }
+        button:disabled { opacity: .6; cursor: wait; }
+        .cancel { display: block; border: 1px solid var(--customer-line); background: #fff; color: var(--customer-ink); text-decoration: none; }
+        .status { min-height: 22px; color: #a13d21; font-size: 13px; }
+        .status.success { color: #23783f; }
+    </style>
+</head>
+<body>
+    <main>
+        <section class="card" aria-labelledby="checkoutTitle">
+            <div class="label">LOCAL MOCK GATEWAY · TEST MODE</div>
+            <h1 id="checkoutTitle">Test checkout</h1>
+            <div class="label">Recharge amount</div>
+            <div class="amount" id="amount">Loading…</div>
+            <div class="notice">This is a local simulation only. No bank, card, UPI or real gateway payment will be made. Completing it adds simulated test balance to your local account.</div>
+            <p class="status" id="status" role="status" aria-live="polite"></p>
+            <div class="actions">
+                <button id="complete" type="button" disabled>Complete test payment</button>
+                <a class="cancel" href="/transactions.html?tab=deposit">Cancel and view requests</a>
+            </div>
+        </section>
+    </main>
+    <script>
+        (function() {
+            "use strict";
+            var transactionId = new URLSearchParams(location.search).get("transactionId");
+            var amount = document.getElementById("amount");
+            var status = document.getElementById("status");
+            var complete = document.getElementById("complete");
+
+            function formatMoney(paise) {
+                return "₹" + (Number(paise || 0) / 100).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+
+            async function loadCheckout() {
+                if (!transactionId || !/^\d+$/.test(transactionId)) {
+                    throw new Error("Invalid local checkout link.");
+                }
+                var response = await fetch("/api/recharge/mock/" + encodeURIComponent(transactionId), {
+                    credentials: "include",
+                    cache: "no-store"
+                });
+                var result = await response.json();
+                if (!response.ok || result.success !== true) {
+                    throw new Error(result.message || "Could not load this local checkout.");
+                }
+                amount.textContent = formatMoney(result.transaction.amountPaise);
+                if (result.transaction.status === "approved") {
+                    complete.disabled = true;
+                    complete.textContent = "Test payment already completed";
+                    status.textContent = "This test payment was already completed.";
+                    status.classList.add("success");
+                } else if (result.transaction.status !== "pending") {
+                    throw new Error("This checkout is no longer pending.");
+                } else {
+                    complete.disabled = false;
+                }
+            }
+
+            complete.addEventListener("click", async function() {
+                if (complete.disabled) return;
+                complete.disabled = true;
+                status.textContent = "Completing local test payment…";
+                status.classList.remove("success");
+                try {
+                    var csrfResponse = await fetch("/api/csrf", { credentials: "include", cache: "no-store" });
+                    var csrf = await csrfResponse.json();
+                    if (!csrfResponse.ok || !csrf.csrfToken) {
+                        throw new Error(csrf.message || "Secure session expired.");
+                    }
+                    var response = await fetch("/api/recharge/mock/" + encodeURIComponent(transactionId) + "/complete", {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-Token": csrf.csrfToken
+                        },
+                        body: "{}"
+                    });
+                    var result = await response.json();
+                    if (!response.ok || result.success !== true) {
+                        throw new Error(result.message || "Could not complete local test checkout.");
+                    }
+                    status.textContent = result.message;
+                    status.classList.add("success");
+                    complete.textContent = "Test payment completed";
+                    setTimeout(function() {
+                        location.href = "/transactions.html?tab=deposit";
+                    }, 900);
+                } catch (error) {
+                    status.textContent = error.message || "Local test checkout failed.";
+                    complete.disabled = false;
+                }
+            });
+
+            loadCheckout().catch(function(error) {
+                amount.textContent = "Unavailable";
+                status.textContent = error.message || "Could not load this local checkout.";
+            });
+        })();
+    </script>
+</body>
+</html>
