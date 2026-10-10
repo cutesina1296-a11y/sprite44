@@ -87,8 +87,7 @@ try {
 let watchPaysCallbackUrlIsValid = false;
 try {
     const parsed = new URL(watchPaysCallbackUrl);
-    watchPaysCallbackUrlIsValid = ["http:", "https:"].includes(parsed.protocol)
-        && (!isProduction || parsed.protocol === "https:")
+    watchPaysCallbackUrlIsValid = parsed.protocol === "https:"
         && parsed.pathname === "/api/recharge/watchpays/callback"
         && !parsed.username && !parsed.password;
 } catch {}
@@ -355,7 +354,7 @@ function createWatchPaysSignature(params, apiKey) {
 
 async function createWatchPaysOrder({ amountPaise, merchantOrderNo }) {
     if (!watchPaysEnabled) {
-        throw new Error("WatchPays is not fully configured. Check the payment provider, credentials, API URL and public HTTPS callback URL.");
+        throw new Error("WatchPays is not fully configured. Check the provider credentials and public HTTPS callback URL.");
     }
     const params = {
         merchant_id: watchPaysMerchantId,
@@ -376,18 +375,18 @@ async function createWatchPaysOrder({ amountPaise, merchantOrderNo }) {
     try {
         result = await response.json();
     } catch {
-        throw new Error("WatchPays returned an invalid response. The recharge request remains pending for review.");
+        throw new Error("WatchPays returned an invalid response.");
     }
     let paymentUrl;
     try {
         paymentUrl = new URL(result.payment_url);
     } catch {
-        throw new Error("WatchPays did not return a valid checkout URL. The recharge request remains pending for review.");
+        throw new Error("WatchPays did not return a valid checkout URL.");
     }
     if (!response.ok || result.success !== true || result.merchant_order_no !== merchantOrderNo
         || typeof result.order_no !== "string" || !result.order_no
         || parseRupees(result.amount) !== amountPaise || paymentUrl.protocol !== "https:") {
-        throw new Error("WatchPays could not confirm the checkout order. The recharge request remains pending for review.");
+        throw new Error("WatchPays could not confirm the checkout order.");
     }
     return { paymentUrl: paymentUrl.toString(), gatewayOrderNo: result.order_no };
 }
@@ -698,37 +697,6 @@ app.put("/api/bank-account", requireCsrf, requireAuth, asyncRoute(async (req, re
     });
 }));
 
-app.post("/api/recharge/watchpays/callback", asyncRoute(async (req, res) => {
-    if (!watchPaysEnabled) return res.status(503).type("text").send("WatchPays is not configured.");
-    const merchantOrderNo = typeof req.body.merchantOrder === "string" ? req.body.merchantOrder.trim() : "";
-    const gatewayOrderNo = typeof req.body.orderNo === "string" ? req.body.orderNo.trim().slice(0, 120) : "";
-    const reportedStatus = typeof req.body.status === "string"
-        ? req.body.status.trim().slice(0, 40).toLowerCase() : "";
-    const callbackAmountPaise = parseRupees(req.body.amount);
-    if (!merchantOrderNo || merchantOrderNo.length > 100 || !gatewayOrderNo || !reportedStatus
-        || callbackAmountPaise === null || callbackAmountPaise <= 0) {
-        return res.status(400).type("text").send("Invalid callback.");
-    }
-    const transaction = await models.WalletTransaction.findOne({
-        type: "recharge", reference: merchantOrderNo
-    }).lean();
-    if (!transaction || !merchantOrderNo.startsWith("watchpays-")) {
-        return res.status(404).type("text").send("Recharge order not found.");
-    }
-    if (transaction.amountPaise !== callbackAmountPaise) {
-        return res.status(400).type("text").send("Recharge amount does not match.");
-    }
-    if (transaction.status === "pending") {
-        const note = reportedStatus === "success"
-            ? `WatchPays reports payment success (gateway order ${gatewayOrderNo}); admin verification required.`
-            : `WatchPays reports status '${reportedStatus}' (gateway order ${gatewayOrderNo}). Admin review required.`;
-        await models.WalletTransaction.updateOne(
-            { id: transaction.id, status: "pending" }, { $set: { note } }
-        );
-    }
-    res.type("text").send("success");
-}));
-
 app.post("/api/recharge", requireCsrf, requireAuth, asyncRoute(async (req, res) => {
     const amountPaise = parseRupees(req.body.amount);
     const method = typeof req.body.method === "string" ? req.body.method.trim().slice(0, 40) : "";
@@ -739,7 +707,7 @@ app.post("/api/recharge", requireCsrf, requireAuth, asyncRoute(async (req, res) 
     if (paymentProvider === "watchpays" && !watchPaysEnabled) {
         return res.status(503).json({
             success: false,
-            message: "WatchPays is not fully configured. Check the payment provider, credentials and public callback URL."
+            message: "WatchPays is not fully configured. Check the provider credentials and public HTTPS callback URL."
         });
     }
     let reference = method;
@@ -787,7 +755,7 @@ app.post("/api/recharge", requireCsrf, requireAuth, asyncRoute(async (req, res) 
         try {
             gateway = await createWatchPaysOrder({ amountPaise, merchantOrderNo });
         } catch (error) {
-            console.error("WatchPays order creation failed:", error.message);
+            console.error("WatchPays order creation failed:", error.name);
             await models.WalletTransaction.updateOne(
                 { id: transactionId, status: "pending" },
                 { $set: { note: "WatchPays checkout could not be confirmed. Verify provider status before admin review." } }
@@ -923,6 +891,40 @@ app.post("/api/recharge/verify", requireCsrf, requireAuth, asyncRoute(async (req
         success: true,
         message: result.alreadyApproved ? "Recharge already confirmed." : "Recharge completed successfully."
     });
+}));
+
+app.post("/api/recharge/watchpays/callback", asyncRoute(async (req, res) => {
+    if (!watchPaysEnabled) return res.status(503).type("text").send("WatchPays is not configured.");
+    const merchantOrderNo = typeof req.body.merchantOrder === "string"
+        ? req.body.merchantOrder.trim() : "";
+    const gatewayOrderNo = typeof req.body.orderNo === "string"
+        ? req.body.orderNo.trim().slice(0, 120) : "";
+    const reportedStatus = typeof req.body.status === "string"
+        ? req.body.status.trim().slice(0, 40).toLowerCase() : "";
+    const callbackAmountPaise = parseRupees(req.body.amount);
+    if (!merchantOrderNo || merchantOrderNo.length > 100 || !gatewayOrderNo
+        || !["success", "failed", "pending"].includes(reportedStatus)
+        || callbackAmountPaise === null || callbackAmountPaise <= 0) {
+        return res.status(400).type("text").send("Invalid callback.");
+    }
+    const transaction = await models.WalletTransaction.findOne({
+        type: "recharge", reference: merchantOrderNo
+    }).lean();
+    if (!transaction || !merchantOrderNo.startsWith("watchpays-")) {
+        return res.status(404).type("text").send("Recharge order not found.");
+    }
+    if (transaction.amountPaise !== callbackAmountPaise) {
+        return res.status(400).type("text").send("Recharge amount does not match.");
+    }
+    if (transaction.status === "pending") {
+        const note = reportedStatus === "success"
+            ? `WatchPays callback reports payment success (gateway order ${gatewayOrderNo}); verify in provider dashboard before approval.`
+            : `WatchPays callback reports status '${reportedStatus}' (gateway order ${gatewayOrderNo}); admin review required.`;
+        await models.WalletTransaction.updateOne(
+            { id: transaction.id, status: "pending" }, { $set: { note } }
+        );
+    }
+    res.type("text").send("success");
 }));
 
 app.post("/api/withdrawal", requireCsrf, requireAuth, asyncRoute(async (req, res) => {
