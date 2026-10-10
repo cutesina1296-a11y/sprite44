@@ -18,3 +18,13 @@ services:
         sync: false
       - key: ADMIN_PASSWORD
         sync: false
+      - key: PAYMENT_PROVIDER
+        value: watchpays
+      - key: WATCHPAYS_MERCHANT_ID
+        sync: false
+      - key: WATCHPAYS_API_KEY
+        sync: false
+      - key: WATCHPAYS_PAYIN_URL
+        value: https://api.watchpays.com/v1/create
+      - key: WATCHPAYS_PAYIN_CALLBACK_URL
+        value: https://sprite44.onrender.com/api/recharge/watchpays/callback
