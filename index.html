@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 
 <title>Login · Finora</title>
-<link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/images/sprite-logo.png" type="image/png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -282,7 +282,7 @@ button,a{-webkit-tap-highlight-color:transparent;}
             <h1 id="heroTitle">Welcome Back</h1>
             <p id="heroSubtitle">Login to your account</p>
         </div>
-        <div class="g-logo" style="background-image:url('/assets/images/kingfisher-logo.svg')"></div>
+        <div class="g-logo" style="background-image:url('/assets/images/sprite-logo.png')"></div>
     </div>
 
     <div class="g-card">
@@ -651,6 +651,11 @@ button,a{-webkit-tap-highlight-color:transparent;}
             const result = await sendRequest(API_LOGIN, { phone, password });
 
             toast(result.message || "Login successful", "success");
+            try {
+                sessionStorage.removeItem("welcome_seen");
+            } catch (error) {
+                console.warn("Could not reset the welcome popup state after login.", error);
+            }
 
             setTimeout(() => {
                 window.location.replace(HOME_URL);

@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 const path = require("node:path");
 const fs = require("node:fs");
@@ -441,7 +441,13 @@ app.get("/api/csrf", asyncRoute(async (req, res) => {
 app.get("/api/public/settings", asyncRoute(async (req, res) => {
     const keys = [
         "site_name", "site_logo_url", "site_banner_url", "invite_banner_url", "site_spinner_url",
-        "minimum_recharge_rupees", "minimum_withdrawal_rupees", "support_url"
+        "minimum_recharge_rupees", "minimum_withdrawal_rupees", "support_url",
+        "welcome_popup_title", "welcome_popup_subtitle",
+        "welcome_popup_signup_reward_label", "welcome_popup_signup_reward_value",
+        "welcome_popup_invite_tracking_label", "welcome_popup_invite_tracking_value",
+        "welcome_popup_min_withdrawal_label", "welcome_popup_min_recharge_label",
+        "welcome_popup_payout_processing_label", "welcome_popup_payout_processing_value",
+        "welcome_popup_cta_text", "welcome_popup_close_label"
     ];
     const settings = await models.SiteSetting.find({ key: { $in: keys } }).select("key value").lean();
     const gateway = getPaymentGatewayConfig();
@@ -471,11 +477,11 @@ async function siteImagePath(settingKey, fallbackFilename) {
 }
 app.get("/site-logo", asyncRoute(async (req, res) => {
     res.set("Cache-Control", "no-store");
-    res.sendFile(await siteImagePath("site_logo_url", "kingfisher-logo.svg"));
+    res.sendFile(await siteImagePath("site_logo_url", "sprite-logo.png"));
 }));
 app.get("/site-banner", asyncRoute(async (req, res) => {
     res.set("Cache-Control", "no-store");
-    res.sendFile(await siteImagePath("site_banner_url", "money-hero.svg"));
+    res.sendFile(await siteImagePath("site_banner_url", "money-hero.png"));
 }));
 
 app.post("/api/register", authLimiter, requireCsrf, asyncRoute(async (req, res) => {
@@ -1564,7 +1570,7 @@ function productValues(body) {
         || dailyRewardPaise === null || dailyRewardPaise < 0
         || totalRewardPaise === null || totalRewardPaise < 0
         || !Number.isInteger(purchaseLimit) || purchaseLimit < 1 || purchaseLimit > 10000
-        || (imageUrl && !/^\/uploads\/media\/[a-f0-9]{32}\.(?:png|jpg|webp)$/.test(imageUrl))) {
+        || (imageUrl && !/^\/(?:uploads\/media\/[a-f0-9]{32}\.(?:png|jpg|webp)|assets\/images\/[a-zA-Z0-9_-]+\.(?:svg|png|jpe?g|webp))$/.test(imageUrl))) {
         return null;
     }
     return { name, category, pricePaise, durationDays, dailyRewardPaise, totalRewardPaise, purchaseLimit, imageUrl };
@@ -1976,6 +1982,37 @@ app.get("/api/admin/settings", asyncRoute(async (req, res) => {
     });
 }));
 
+const welcomePopupSettingKeys = [
+    "welcome_popup_title", "welcome_popup_subtitle",
+    "welcome_popup_signup_reward_label", "welcome_popup_signup_reward_value",
+    "welcome_popup_invite_tracking_label", "welcome_popup_invite_tracking_value",
+    "welcome_popup_min_withdrawal_label", "welcome_popup_min_recharge_label",
+    "welcome_popup_payout_processing_label", "welcome_popup_payout_processing_value",
+    "welcome_popup_cta_text", "welcome_popup_close_label"
+];
+
+app.put("/api/admin/welcome-popup", asyncRoute(async (req, res) => {
+    const values = req.body.values;
+    if (!values || typeof values !== "object" || Array.isArray(values)
+        || welcomePopupSettingKeys.some(key => typeof values[key] !== "string" || values[key].trim().length > 200)) {
+        return res.status(400).json({
+            success: false, message: "Enter valid welcome popup text (up to 200 characters per field)."
+        });
+    }
+    const operations = welcomePopupSettingKeys.map(key => ({
+        updateOne: {
+            filter: { key },
+            update: { $set: { key, value: values[key].trim(), updatedByAdminId: req.session.admin.id } },
+            upsert: true
+        }
+    }));
+    await models.SiteSetting.bulkWrite(operations);
+    await auditAdmin(req.session.admin.id, "update_welcome_popup", "setting", "welcome_popup", {
+        fields: welcomePopupSettingKeys.length
+    });
+    res.json({ success: true });
+}));
+
 app.put("/api/admin/settings/:key", asyncRoute(async (req, res) => {
     const key = req.params.key;
     const value = typeof req.body.value === "string" ? req.body.value.trim() : "";
@@ -2027,17 +2064,21 @@ app.get("/api/admin/audit", asyncRoute(async (req, res) => {
     });
 }));
 
-app.get("/assets/images/kingfisher-logo.svg", asyncRoute(async (req, res) => {
+app.get("/assets/images/sprite-logo.png", asyncRoute(async (req, res) => {
     res.set("Cache-Control", "no-store");
-    res.sendFile(await siteImagePath("site_logo_url", "kingfisher-logo.svg"));
+    res.sendFile(await siteImagePath("site_logo_url", "sprite-logo.png"));
 }));
 app.get("/assets/images/hero.svg", asyncRoute(async (req, res) => {
     res.set("Cache-Control", "no-store");
-    res.sendFile(await siteImagePath("site_banner_url", "money-hero.svg"));
+    res.sendFile(await siteImagePath("site_banner_url", "money-hero.png"));
 }));
+app.get("/assets/images/money-hero.svg", (req, res) => {
+    res.set("Cache-Control", "no-store");
+    res.sendFile(path.join(__dirname, "assets", "images", "money-hero.png"));
+});
 app.get("/assets/images/Speener.svg", asyncRoute(async (req, res) => {
     res.set("Cache-Control", "no-store");
-    res.sendFile(await siteImagePath("site_spinner_url", "Speener.svg"));
+    res.sendFile(await siteImagePath("site_spinner_url", "Speener.png"));
 }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads"), { dotfiles: "deny" }));
 app.use("/assets", express.static(path.join(__dirname, "assets"), { dotfiles: "deny" }));

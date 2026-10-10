@@ -1,11 +1,11 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex,nofollow">
     <title>Admin Console · Finora</title>
-    <link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+    <link rel="icon" href="/assets/images/sprite-logo.png" type="image/png">
     <style>
         :root{font-family:Inter,Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;color:#1d2939;background:#f4f6fa;font-synthesis:none}
         *{box-sizing:border-box}
@@ -78,7 +78,7 @@
 <body>
     <div class="shell hidden" id="app">
         <aside class="sidebar">
-            <div class="brand"><img src="/assets/images/kingfisher-logo.svg" alt=""><div>Finora<small>ADMIN CONSOLE</small></div></div>
+            <div class="brand"><img src="/assets/images/sprite-logo.png" alt=""><div>Finora<small>ADMIN CONSOLE</small></div></div>
             <div class="nav-label">Management</div>
             <nav class="nav" id="navigation">
                 <button class="active" data-view="overview">▦ <span>Overview</span></button>
@@ -214,13 +214,13 @@
                         <div class="media-grid">
                             <div class="media-card">
                                 <h3>App logo</h3>
-                                <img id="siteLogoPreview" src="/assets/images/kingfisher-logo.svg" alt="Current app logo">
+                                <img id="siteLogoPreview" src="/assets/images/sprite-logo.png" alt="Current app logo">
                                 <input id="siteLogoFile" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose app logo">
                                 <button class="btn primary" id="uploadSiteLogo" type="button">Upload logo</button>
                             </div>
                             <div class="media-card">
                                 <h3>App banner</h3>
-                                <img id="siteBannerPreview" src="/assets/images/hero.svg" alt="Current app banner">
+                                <img id="siteBannerPreview" src="/assets/images/money-hero.png" alt="Current app banner">
                                 <input id="siteBannerFile" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose app banner">
                                 <button class="btn primary" id="uploadSiteBanner" type="button">Upload banner</button>
                             </div>
@@ -240,11 +240,30 @@
                             </div>
                             <div class="media-card">
                                 <h3>App spinner</h3>
-                                <img id="siteSpinnerPreview" src="/assets/images/Speener.svg" alt="Current app spinner">
+                                <img id="siteSpinnerPreview" src="/assets/images/Speener.png" alt="Current app spinner">
                                 <input id="siteSpinnerFile" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose app spinner">
                                 <button class="btn primary" id="uploadSiteSpinner" type="button">Upload spinner</button>
                             </div>
                         </div>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-head"><h2>Welcome popup text</h2></div>
+                        <p class="lead">Edit the text shown in the popup after a customer logs in. Recharge and withdrawal amounts are managed in Site settings.</p>
+                        <form id="welcomePopupForm" class="form-grid">
+                            <label>Title<input data-welcome-setting="welcome_popup_title" maxlength="200" required></label>
+                            <label>Subtitle<input data-welcome-setting="welcome_popup_subtitle" maxlength="200" required></label>
+                            <label>Signup reward label<input data-welcome-setting="welcome_popup_signup_reward_label" maxlength="200" required></label>
+                            <label>Signup reward value<input data-welcome-setting="welcome_popup_signup_reward_value" maxlength="200" required></label>
+                            <label>Invite tracking label<input data-welcome-setting="welcome_popup_invite_tracking_label" maxlength="200" required></label>
+                            <label>Invite tracking value<input data-welcome-setting="welcome_popup_invite_tracking_value" maxlength="200" required></label>
+                            <label>Minimum withdrawal label<input data-welcome-setting="welcome_popup_min_withdrawal_label" maxlength="200" required></label>
+                            <label>Minimum recharge label<input data-welcome-setting="welcome_popup_min_recharge_label" maxlength="200" required></label>
+                            <label>Payout processing label<input data-welcome-setting="welcome_popup_payout_processing_label" maxlength="200" required></label>
+                            <label>Payout processing value<input data-welcome-setting="welcome_popup_payout_processing_value" maxlength="200" required></label>
+                            <label>Button text<input data-welcome-setting="welcome_popup_cta_text" maxlength="200" required></label>
+                            <label>Close button accessibility label<input data-welcome-setting="welcome_popup_close_label" maxlength="200" required></label>
+                            <div class="wide"><button class="btn primary" type="submit">Save welcome popup text</button></div>
+                        </form>
                     </div>
                     <div class="panel"><div class="panel-head"><h2>Site settings</h2></div><div class="notice">Settings are saved in the database. Payment and payout credentials must be configured with the provider separately; never enter secret keys here.</div><div class="table-wrap"><table><thead><tr><th>Key</th><th>Value</th><th>Last updated</th><th>Action</th></tr></thead><tbody id="settingsBody"></tbody></table></div></div>
                 </section>
@@ -257,7 +276,7 @@
 
     <div class="overlay" id="authOverlay">
         <section class="dialog">
-            <div class="brand" style="padding:0 0 14px;color:#172033"><img src="/assets/images/kingfisher-logo.svg" alt=""><div>Finora<small>SECURE ADMIN ACCESS</small></div></div>
+            <div class="brand" style="padding:0 0 14px;color:#172033"><img src="/assets/images/sprite-logo.png" alt=""><div>Finora<small>SECURE ADMIN ACCESS</small></div></div>
             <div id="loginPane">
                 <h2>Admin sign in</h2>
                 <p>Use the bootstrap username and password configured on the server.</p>
@@ -562,9 +581,12 @@
         async function loadSettings() {
             const result = await api("/api/admin/settings");
             const values = Object.fromEntries(result.settings.map(setting => [setting.key, setting.value]));
-            $("#siteLogoPreview").src = values.site_logo_url || "/assets/images/kingfisher-logo.svg";
-            $("#siteBannerPreview").src = values.site_banner_url || "/assets/images/hero.svg";
-            $("#siteSpinnerPreview").src = values.site_spinner_url || "/assets/images/Speener.svg";
+            document.querySelectorAll("[data-welcome-setting]").forEach(input => {
+                input.value = values[input.dataset.welcomeSetting] || "";
+            });
+            $("#siteLogoPreview").src = values.site_logo_url || "/assets/images/sprite-logo.png";
+            $("#siteBannerPreview").src = values.site_banner_url || "/assets/images/money-hero.png";
+            $("#siteSpinnerPreview").src = values.site_spinner_url || "/assets/images/Speener.png";
             const inviteBannerPreview = $("#inviteBannerPreviewImage");
             clearImagePreviewObjectUrl(inviteBannerPreview);
             if (values.invite_banner_url) {
@@ -969,6 +991,22 @@
             const input=$(`[data-setting="${CSS.escape(button.dataset.key)}"]`);
             try{await api(`/api/admin/settings/${encodeURIComponent(button.dataset.key)}`,{method:"PUT",body:{value:input.value}});showToast("Setting saved.");await loadSettings();}
             catch(error){showToast(error.message,true);}
+        });
+        $("#welcomePopupForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            const button = event.currentTarget.querySelector("button[type='submit']");
+            button.disabled = true;
+            const values = Object.fromEntries([...event.currentTarget.querySelectorAll("[data-welcome-setting]")]
+                .map(input => [input.dataset.welcomeSetting, input.value]));
+            try {
+                await api("/api/admin/welcome-popup", {method:"PUT", body:{values}});
+                showToast("Welcome popup text saved.");
+                await loadSettings();
+            } catch(error) {
+                showToast(error.message, true);
+            } finally {
+                button.disabled = false;
+            }
         });
         $("#refreshAudit").addEventListener("click",()=>loadAudit().catch(error=>showToast(error.message,true)));
         boot();

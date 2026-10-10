@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>Home · Finora</title>
-<link rel="icon" href="/assets/images/kingfisher-logo.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/images/sprite-logo.png" type="image/png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -741,7 +741,7 @@ a{color:inherit;text-decoration:none;}
 <!-- ═══════════ WELCOME POPUP ═══════════ -->
 <div class="popup-overlay" id="welcomePopup">
     <div class="welcome-card">
-        <button class="welcome-close" onclick="closeWelcome()" aria-label="Close">
+        <button class="welcome-close" id="welcomeClose" onclick="closeWelcome()" aria-label="Close">
             <svg viewBox="0 0 24 24" fill="none">
                 <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
             </svg>
@@ -756,50 +756,50 @@ a{color:inherit;text-decoration:none;}
             <span class="welcome-spark c">
                 <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
             </span>
-            <div class="welcome-title">Finora</div>
-            <div class="welcome-sub">New app launched</div>
+            <div class="welcome-title" id="welcomeTitle">Finora</div>
+            <div class="welcome-sub" id="welcomeSubtitle">New app launched</div>
         </div>
         <div class="welcome-body">
             <div class="info-list">
                 <div class="wl-row">
                     <span class="lbl">
                         <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="M12.75 6.5a.75.75 0 0 0-1.5 0v.58c-1.3.2-2.3 1.2-2.3 2.48 0 1.5 1.36 2.35 2.85 2.7 1.32.32 1.7.72 1.7 1.24 0 .55-.55 1.1-1.5 1.1-.86 0-1.44-.42-1.6-.9a.75.75 0 0 0-1.42.48c.32.95 1.14 1.6 2.27 1.8v.52a.75.75 0 0 0 1.5 0v-.53c1.36-.23 2.25-1.24 2.25-2.47 0-1.6-1.42-2.42-2.85-2.76-1.36-.33-1.7-.7-1.7-1.18 0-.5.52-1.03 1.5-1.03.8 0 1.35.36 1.55.8a.75.75 0 1 0 1.37-.6c-.35-.8-1.08-1.35-2.12-1.55V6.5Z" fill="currentColor"/></svg>
-                        Signup reward
+                        <span id="welcomeSignupRewardLabel">Signup reward</span>
                     </span>
-                    <span class="val">Not enabled</span>
+                    <span class="val" id="welcomeSignupRewardValue">Not enabled</span>
                 </div>
                 <div class="wl-row">
                     <span class="lbl">
                         <svg viewBox="0 0 24 24" fill="none"><path d="M15.5 7.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" fill="currentColor"/><path opacity=".4" d="M19.5 7.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-15 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 0 0-5 0Z" fill="currentColor"/><path d="M18 16.5c0 1.93-2.69 3.5-6 3.5s-6-1.57-6-3.5S8.69 13 12 13s6 1.57 6 3.5Z" fill="currentColor"/></svg>
-                        Invite tracking
+                        <span id="welcomeInviteTrackingLabel">Invite tracking</span>
                     </span>
-                    <span class="val">Active</span>
+                    <span class="val" id="welcomeInviteTrackingValue">Active</span>
                 </div>
                 <div class="wl-row">
                     <span class="lbl">
                         <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M22 12c0 2.83 0 4.24-.88 5.12-.88.88-2.29.88-5.12.88H8c-2.83 0-4.24 0-5.12-.88C2 16.24 2 14.83 2 12s0-4.24.88-5.12C3.76 6 5.17 6 8 6h8c2.83 0 4.24 0 5.12.88.88.88.88 2.29.88 5.12Z" fill="currentColor"/><path d="M2 10h20v2H2v-2Zm3 4.5c0-.41.34-.75.75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z" fill="currentColor"/></svg>
-                        Min withdrawal
+                        <span id="welcomeMinWithdrawalLabel">Min withdrawal</span>
                     </span>
                     <span class="val" id="welcomeMinWithdrawal">₹170</span>
                 </div>
                 <div class="wl-row">
                     <span class="lbl">
                         <svg viewBox="0 0 24 24" fill="none"><path d="M20.9 10c.94 0 1.41 0 1.7.29.29.29.29.76.29 1.71v.5c0 .94 0 1.42-.29 1.71-.29.29-.76.29-1.7.29V10Z" fill="currentColor"/><path opacity=".5" d="M21.14 10c0-1.18.04-2.45-.71-3.35-.75-.75-1.7-1.08-2.87-1.24C16.16 5.25 14.7 5.25 12.87 5.25h-2.12c-1.84 0-3.29 0-4.43.16-1.17.16-2.12.49-2.87 1.24-.75.75-1.08 1.7-1.24 2.87-.16 1.14-.16 2.6-.16 4.43v.11c0 1.84 0 3.29.16 4.43.16 1.17.49 2.12 1.24 2.87.75.75 1.7 1.08 2.87 1.24 1.14.16 2.59.16 4.43.16h2.12c1.84 0 3.29 0 4.43-.16 1.17-.16 2.12-.49 2.87-1.24.75-.9.71-2.17.71-3.35H18.2c-2.27 0-4.21-1.74-4.21-4s1.94-4 4.21-4h2.94Z" fill="currentColor"/><path d="M17.97 15.07a1.07 1.07 0 1 0 0-2.14 1.07 1.07 0 0 0 0 2.14Z" fill="currentColor"/></svg>
-                        Min Recharge
+                        <span id="welcomeMinRechargeLabel">Min Recharge</span>
                     </span>
                     <span class="val" id="welcomeMinRecharge">₹295</span>
                 </div>
                 <div class="wl-row">
                     <span class="lbl">
                         <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="M12 6.25a.75.75 0 0 1 .75.75v4.7l3.02 1.8a.75.75 0 1 1-.77 1.29l-3.38-2a.75.75 0 0 1-.37-.65V7c0-.41.34-.75.75-.75Z" fill="currentColor"/></svg>
-                        Payout processing
+                        <span id="welcomePayoutProcessingLabel">Payout processing</span>
                     </span>
-                    <span class="val">Manual review only</span>
+                    <span class="val" id="welcomePayoutProcessingValue">Manual review only</span>
                 </div>
             </div>
             <a href="https://t.me/+JF8Yn62LV7tmZTY1" target="_blank" rel="noopener" class="welcome-btn" onclick="closeWelcome()">
                 <svg viewBox="0 0 24 24" fill="none"><path d="M21.8 4.4 18.6 19.5c-.24 1.06-.87 1.32-1.76.82l-4.87-3.59-2.35 2.26c-.26.26-.48.48-.98.48l.35-4.96 9.03-8.16c.4-.35-.08-.54-.6-.2L6.28 13.18l-4.8-1.5c-1.05-.33-1.07-1.05.22-1.55l18.78-7.24c.87-.32 1.63.2 1.35 1.5Z" fill="currentColor"/></svg>
-                Join Telegram
+                <span id="welcomeCtaText">Join Telegram</span>
             </a>
         </div>
     </div>
@@ -865,7 +865,7 @@ a{color:inherit;text-decoration:none;}
         <div class="product-list" id="normalBox">
             <!-- Product A -->
             <div class="product">
-                <div class="product-img" style="background-image:url('/assets/images/product-daily-a.svg');">
+                <div class="product-img" style="background-image:url('/assets/images/product-sprite-1.png');">
                     <span class="product-quota">Limit 0/5</span>
                     <div class="product-name">Product A</div>
                 </div>
@@ -885,7 +885,7 @@ a{color:inherit;text-decoration:none;}
 
             <!-- Product B -->
             <div class="product">
-                <div class="product-img" style="background-image:url('/assets/images/product-daily-b.svg');">
+                <div class="product-img" style="background-image:url('/assets/images/product-sprite-2.png');">
                     <span class="product-quota">Limit 0/10</span>
                     <div class="product-name">Product B</div>
                 </div>
@@ -905,7 +905,7 @@ a{color:inherit;text-decoration:none;}
 
             <!-- Product C -->
             <div class="product">
-                <div class="product-img" style="background-image:url('/assets/images/product-daily-c.svg');">
+                <div class="product-img" style="background-image:url('/assets/images/product-sprite-3.png');">
                     <span class="product-quota">Limit 0/10</span>
                     <div class="product-name">Product C</div>
                 </div>
@@ -925,7 +925,7 @@ a{color:inherit;text-decoration:none;}
 
             <!-- Product D -->
             <div class="product">
-                <div class="product-img" style="background-image:url('/assets/images/product-daily-d.svg');">
+                <div class="product-img" style="background-image:url('/assets/images/product-sprite-4.png');">
                     <span class="product-quota">Limit 0/10</span>
                     <div class="product-name">Product D</div>
                 </div>
@@ -945,7 +945,7 @@ a{color:inherit;text-decoration:none;}
 
             <!-- Product F -->
             <div class="product">
-                <div class="product-img" style="background-image:url('/assets/images/product-daily-f.svg');">
+                <div class="product-img" style="background-image:url('/assets/images/product-sprite-5.png');">
                     <span class="product-quota">Limit 0/5</span>
                     <div class="product-name">Product F</div>
                 </div>
@@ -965,7 +965,7 @@ a{color:inherit;text-decoration:none;}
 
             <!-- Product G -->
             <div class="product">
-                <div class="product-img" style="background-image:url('/assets/images/product-daily-g.svg');">
+                <div class="product-img" style="background-image:url('/assets/images/product-sprite-6.png');">
                     <span class="product-quota">Limit 0/1</span>
                     <div class="product-name">Product G</div>
                 </div>
@@ -988,7 +988,7 @@ a{color:inherit;text-decoration:none;}
         <div class="product-list" id="vipBox" style="display:none;">
             <!-- VIP 1 -->
             <div class="product">
-                <div class="product-img" style="background-image:url('/assets/images/product-vip-1.svg');">
+                <div class="product-img" style="background-image:url('/assets/images/product-vip-new-1.png');">
                     <span class="product-quota">Limit 0/10</span>
                     <div class="product-name">VIP 1</div>
                 </div>
@@ -1008,7 +1008,7 @@ a{color:inherit;text-decoration:none;}
 
             <!-- VIP 2 -->
             <div class="product">
-                <div class="product-img" style="background-image:url('/assets/images/product-vip-2.svg');">
+                <div class="product-img" style="background-image:url('/assets/images/product-vip-new-2.png');">
                     <span class="product-quota">Limit 0/10</span>
                     <div class="product-name">VIP 2</div>
                 </div>
@@ -1028,7 +1028,7 @@ a{color:inherit;text-decoration:none;}
 
             <!-- VIP 3 -->
             <div class="product">
-                <div class="product-img" style="background-image:url('/assets/images/product-vip-3.svg');">
+                <div class="product-img" style="background-image:url('/assets/images/product-vip-new-3.png');">
                     <span class="product-quota">Limit 0/10</span>
                     <div class="product-name">VIP 3</div>
                 </div>
@@ -1048,7 +1048,7 @@ a{color:inherit;text-decoration:none;}
 
             <!-- VIP 4 -->
             <div class="product">
-                <div class="product-img" style="background-image:url('/assets/images/product-vip-4.svg');">
+                <div class="product-img" style="background-image:url('/assets/images/product-vip-new-4.png');">
                     <span class="product-quota">Limit 0/1</span>
                     <div class="product-name">VIP 4</div>
                 </div>
@@ -1217,13 +1217,13 @@ document.addEventListener("DOMContentLoaded", function() {
         if (!dailyBox || !vipBox) return;
         var images = {
             daily: [
-                "/assets/images/product-daily-a.svg", "/assets/images/product-daily-b.svg",
-                "/assets/images/product-daily-c.svg", "/assets/images/product-daily-d.svg",
-                "/assets/images/product-daily-f.svg", "/assets/images/product-daily-g.svg"
+                "/assets/images/product-sprite-1.png", "/assets/images/product-sprite-2.png",
+                "/assets/images/product-sprite-3.png", "/assets/images/product-sprite-4.png",
+                "/assets/images/product-sprite-5.png", "/assets/images/product-sprite-6.png"
             ],
             vip: [
-                "/assets/images/product-vip-1.svg", "/assets/images/product-vip-2.svg",
-                "/assets/images/product-vip-3.svg", "/assets/images/product-vip-4.svg"
+                "/assets/images/product-vip-new-1.png", "/assets/images/product-vip-new-2.png",
+                "/assets/images/product-vip-new-3.png", "/assets/images/product-vip-new-4.png"
             ]
         };
         function escapeHtml(value) {
@@ -1294,6 +1294,27 @@ document.addEventListener("DOMContentLoaded", function() {
             var withdrawalMinimum = document.getElementById("welcomeMinWithdrawal");
             if (rechargeMinimum && settings.minimum_recharge_rupees) rechargeMinimum.textContent = "₹" + settings.minimum_recharge_rupees;
             if (withdrawalMinimum && settings.minimum_withdrawal_rupees) withdrawalMinimum.textContent = "₹" + settings.minimum_withdrawal_rupees;
+            var popupText = {
+                welcome_popup_title: "welcomeTitle",
+                welcome_popup_subtitle: "welcomeSubtitle",
+                welcome_popup_signup_reward_label: "welcomeSignupRewardLabel",
+                welcome_popup_signup_reward_value: "welcomeSignupRewardValue",
+                welcome_popup_invite_tracking_label: "welcomeInviteTrackingLabel",
+                welcome_popup_invite_tracking_value: "welcomeInviteTrackingValue",
+                welcome_popup_min_withdrawal_label: "welcomeMinWithdrawalLabel",
+                welcome_popup_min_recharge_label: "welcomeMinRechargeLabel",
+                welcome_popup_payout_processing_label: "welcomePayoutProcessingLabel",
+                welcome_popup_payout_processing_value: "welcomePayoutProcessingValue",
+                welcome_popup_cta_text: "welcomeCtaText"
+            };
+            Object.keys(popupText).forEach(function(key) {
+                var element = document.getElementById(popupText[key]);
+                if (element && typeof settings[key] === "string") element.textContent = settings[key];
+            });
+            var closeButton = document.getElementById("welcomeClose");
+            if (closeButton && typeof settings.welcome_popup_close_label === "string") {
+                closeButton.setAttribute("aria-label", settings.welcome_popup_close_label);
+            }
             document.querySelectorAll(".quick-chip[href='https://t.me/Kingfisher_supportbot']").forEach(function(link) {
                 if (settings.support_url) link.href = settings.support_url;
             });

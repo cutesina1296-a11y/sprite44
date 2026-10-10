@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 const mongoose = require("mongoose");
 const models = require("./models");
@@ -139,13 +139,25 @@ async function initializeMongoDB() {
 
     const initialSettings = [
         ["site_name", "Finora"],
-        ["site_logo_url", "/assets/images/kingfisher-logo.svg"],
-        ["site_banner_url", "/assets/images/money-hero.svg"],
+        ["site_logo_url", "/assets/images/sprite-logo.png"],
+        ["site_banner_url", "/assets/images/money-hero.png"],
         ["invite_banner_url", ""],
-        ["site_spinner_url", "/assets/images/Speener.svg"],
+        ["site_spinner_url", "/assets/images/Speener.png"],
         ["support_url", "https://t.me/Kingfisher_supportbot"],
         ["minimum_recharge_rupees", "295"],
         ["minimum_withdrawal_rupees", "170"],
+        ["welcome_popup_title", "Finora"],
+        ["welcome_popup_subtitle", "New app launched"],
+        ["welcome_popup_signup_reward_label", "Signup reward"],
+        ["welcome_popup_signup_reward_value", "Not enabled"],
+        ["welcome_popup_invite_tracking_label", "Invite tracking"],
+        ["welcome_popup_invite_tracking_value", "Active"],
+        ["welcome_popup_min_withdrawal_label", "Min withdrawal"],
+        ["welcome_popup_min_recharge_label", "Min Recharge"],
+        ["welcome_popup_payout_processing_label", "Payout processing"],
+        ["welcome_popup_payout_processing_value", "Manual review only"],
+        ["welcome_popup_cta_text", "Join Telegram"],
+        ["welcome_popup_close_label", "Close"],
         ["maintenance_mode", "false"]
     ];
     await models.SiteSetting.bulkWrite(initialSettings.map(([key, value]) => ({
@@ -157,7 +169,15 @@ async function initializeMongoDB() {
     })));
     await models.SiteSetting.updateOne(
         { key: "site_banner_url", value: "/assets/images/hero.svg" },
-        { $set: { value: "/assets/images/money-hero.svg" } }
+        { $set: { value: "/assets/images/money-hero.png" } }
+    );
+    await models.SiteSetting.updateOne(
+        { key: "site_banner_url", value: "/assets/images/money-hero.svg" },
+        { $set: { value: "/assets/images/money-hero.png" } }
+    );
+    await models.SiteSetting.updateOne(
+        { key: "site_spinner_url", value: "/assets/images/Speener.svg" },
+        { $set: { value: "/assets/images/Speener.png" } }
     );
 
     const adminUsername = (process.env.ADMIN_USERNAME || "").trim();
