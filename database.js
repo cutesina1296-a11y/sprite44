@@ -143,7 +143,7 @@ async function initializeMongoDB() {
         ["site_banner_url", "/assets/images/money-hero.png"],
         ["invite_banner_url", ""],
         ["site_spinner_url", "/assets/images/Speener.png"],
-        ["support_url", "https://t.me/Kingfisher_supportbot"],
+        ["support_url", "https://t.me/spritesupport65"],
         ["minimum_recharge_rupees", "295"],
         ["minimum_withdrawal_rupees", "170"],
         ["welcome_popup_title", "Finora"],
@@ -167,6 +167,10 @@ async function initializeMongoDB() {
             upsert: true
         }
     })));
+    await models.SiteSetting.updateOne(
+        { key: "support_url", value: "https://t.me/Kingfisher_supportbot" },
+        { $set: { value: "https://t.me/spritesupport65" } }
+    );
     await models.SiteSetting.updateOne(
         { key: "site_banner_url", value: "/assets/images/hero.svg" },
         { $set: { value: "/assets/images/money-hero.png" } }
