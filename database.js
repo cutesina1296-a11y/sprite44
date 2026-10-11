@@ -148,8 +148,8 @@ async function initializeMongoDB() {
         ["minimum_withdrawal_rupees", "170"],
         ["welcome_popup_title", "Finora"],
         ["welcome_popup_subtitle", "New app launched"],
-        ["welcome_popup_signup_reward_label", "Signup reward"],
-        ["welcome_popup_signup_reward_value", "Not enabled"],
+        ["welcome_popup_signup_reward_label", "Sign up"],
+        ["welcome_popup_signup_reward_value", "₹40"],
         ["welcome_popup_invite_tracking_label", "Invite tracking"],
         ["welcome_popup_invite_tracking_value", "Active"],
         ["welcome_popup_min_withdrawal_label", "Min withdrawal"],
@@ -174,6 +174,14 @@ async function initializeMongoDB() {
     await models.SiteSetting.updateOne(
         { key: "welcome_popup_payout_processing_value", value: "Manual review only" },
         { $set: { value: "06:00 - 23:30" } }
+    );
+    await models.SiteSetting.updateOne(
+        { key: "welcome_popup_signup_reward_value", value: "₹40 added on signup" },
+        { $set: { value: "₹40" } }
+    );
+    await models.SiteSetting.updateOne(
+        { key: "welcome_popup_signup_reward_label", value: "refer 3 active member" },
+        { $set: { value: "Sign up" } }
     );
     await models.SiteSetting.updateOne(
         { key: "support_url", value: "https://t.me/Kingfisher_supportbot" },

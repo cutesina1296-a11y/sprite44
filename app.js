@@ -11,6 +11,7 @@ const rateLimit = require("express-rate-limit");
 const session = require("express-session");
 const helmet = require("helmet");
 const { models, nextId, withTransaction } = require("./database");
+const signupBonusPaise = 4000;
 
 const spinPrizes = [
     { code: "cash_5", label: "₹5", type: "cash", value: 5, amountPaise: 500, weight: 22, wheelIndices: [0, 4] },
@@ -516,13 +517,25 @@ app.post("/api/register", authLimiter, requireCsrf, asyncRoute(async (req, res) 
         return res.status(400).json({ success: false, message: "This invite code is not valid." });
     }
     try {
-        await models.User.create({
-            id: await nextId("users"),
-            name,
-            phone,
-            passwordHash: await bcrypt.hash(password, 12),
-            referralCode: await createReferralCode(),
-            referredByUserId: referrer ? referrer.id : null
+        await withTransaction(async dbSession => {
+            const [user] = await models.User.create([{
+                id: await nextId("users", dbSession),
+                name,
+                phone,
+                passwordHash: await bcrypt.hash(password, 12),
+                balancePaise: signupBonusPaise,
+                referralCode: await createReferralCode(),
+                referredByUserId: referrer ? referrer.id : null
+            }], { session: dbSession });
+            await models.WalletTransaction.create([{
+                id: await nextId("wallet_transactions", dbSession),
+                userId: user.id,
+                type: "adjustment",
+                amountPaise: signupBonusPaise,
+                status: "approved",
+                note: "Signup bonus",
+                reviewedAt: new Date()
+            }], { session: dbSession });
         });
     } catch (error) {
         if (error.code === 11000 && (error.keyPattern?.phone || error.keyValue?.phone)) {
@@ -533,7 +546,9 @@ app.post("/api/register", authLimiter, requireCsrf, asyncRoute(async (req, res) 
         }
         throw error;
     }
-    res.status(201).json({ success: true, message: "Account created successfully." });
+    res.status(201).json({
+        success: true, message: "Account created successfully. ₹40 signup bonus added to your wallet."
+    });
 }));
 
 app.post("/api/login", authLimiter, requireCsrf, asyncRoute(async (req, res) => {
