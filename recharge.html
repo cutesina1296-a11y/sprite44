@@ -9,7 +9,6 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-        <link rel="preload" as="image" href="/assets/images/money-hero.png">
         <link rel="preload" as="image" href="/assets/images/coin.svg">
         <style>
             body {
@@ -139,23 +138,6 @@
                 background: rgba(255,255,255,.07);
                 left: -50px;
                 bottom: -60px
-            }
-
-            .rc-hero-img {
-                position: absolute;
-                right: -6px;
-                bottom: -14px;
-                width: 178px;
-                height: auto;
-                z-index: 1;
-                filter: drop-shadow(0 14px 22px rgba(0,0,0,.28));
-                pointer-events: none;
-                animation: heroFloat 3.6s ease-in-out infinite
-            }
-
-            @keyframes heroFloat {
-                0%,100% { transform: translateY(0) }
-                50% { transform: translateY(-7px) }
             }
 
             .rc-spark {
@@ -696,7 +678,6 @@
         <!-- ═══ HERO ═══ -->
         <div class="rc-hero-wrap">
             <div class="rc-hero">
-                <img class="rc-hero-img" src="/assets/images/money-hero.png" alt="" loading="eager">
                 <span class="rc-spark s1">
                     <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
                 </span>
