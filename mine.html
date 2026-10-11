@@ -637,7 +637,7 @@
                         <span class="ms-val" id="statRecharge">₹0</span>
                     </div>
                     <div class="ms">
-                        <span class="ms-lbl">Approved Rewards</span>
+                        <span class="ms-lbl">Total revenue</span>
                         <span class="ms-val" id="statRevenue">₹0</span>
                     </div>
                 </div>
@@ -845,7 +845,7 @@
                         return response.json();
                     })
                     .then(function(wallet) {
-                        userBalance = wallet.balancePaise / 100;
+                        userBalance = wallet.availableBalancePaise / 100;
                         userRecharge = wallet.approvedRechargesPaise / 100;
                         userRevenue = wallet.approvedRewardsPaise / 100;
                         var formattedBalance = userBalance.toLocaleString("en-IN", {

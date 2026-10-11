@@ -150,7 +150,13 @@ const userProductSchema = new Schema({
     durationDays: { type: Number, required: true, min: 1 },
     purchasedAt: { type: Date, required: true, default: Date.now },
     expiresAt: { type: Date, required: true },
-    status: { type: String, required: true, enum: ["active", "expired"], default: "active" }
+    status: { type: String, required: true, enum: ["active", "expired"], default: "active" },
+    spinUsedAt: { type: Date, default: null },
+    spinResultCode: {
+        type: String,
+        enum: ["cash_5", "cash_10", "cash_15", "cash_50", "locked"],
+        default: null
+    }
 }, { versionKey: false });
 userProductSchema.index({ userId: 1, status: 1, expiresAt: 1 });
 

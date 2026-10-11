@@ -922,7 +922,7 @@
                         })
                         .then(function(wallet) {
                             document.getElementById("heroBalance").textContent =
-                                (wallet.balancePaise / 100).toLocaleString("en-IN", { minimumFractionDigits:2, maximumFractionDigits:2 });
+                                (wallet.availableBalancePaise / 100).toLocaleString("en-IN", { minimumFractionDigits:2, maximumFractionDigits:2 });
                             minRecharge = wallet.minimumRecharge;
                             document.querySelector(".rc-notes .rc-note span").textContent =
                                 "Minimum deposit amount is ₹" + minRecharge + ".";

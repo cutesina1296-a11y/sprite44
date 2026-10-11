@@ -284,7 +284,8 @@
 
             #wheelRot {
                 transform-origin: 150px 150px;
-                transform: rotate(0deg)
+                transform: rotate(0deg);
+                transition: transform 4.6s cubic-bezier(.12,.72,.12,1)
             }
 
             .bulb { animation: tw 1.5s ease-in-out infinite }
@@ -497,11 +498,11 @@
             .spinbtn:active { transform: scale(.98) }
 
             .spinbtn.off {
-                background: linear-gradient(120deg,#86efac,#22c55e,#16a34a);
+                background: linear-gradient(110deg,#72e8a2 0%,#39d778 48%,#12a34a 100%);
                 animation: none;
-                box-shadow: 0 10px 22px -14px rgba(22,101,52,.55);
-                cursor: not-allowed;
-                border-color: rgba(255,255,255,.3)
+                box-shadow: 0 10px 22px -14px rgba(22,101,52,.55),inset 0 1px 0 rgba(255,255,255,.45);
+                cursor: pointer;
+                border-color: rgba(255,255,255,.42)
             }
 
             .spinbtn.off::before { display: none }
@@ -1212,7 +1213,7 @@
             <header class="hero">
                 <div class="htxt">
                     <h1>Spin Rewards</h1>
-                    <p>Rewards are currently unavailable</p>
+                    <p>Get one spin with every plan purchase</p>
                 </div>
                 <button class="hhis" type="button" id="histBtn">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1234,7 +1235,7 @@
                     <div class="track" id="track"></div>
                 </div>
             </div>
-            <p class="reward-status" role="status">Spins are disabled. The wheel prizes are illustrative only; no spin is consumed and no reward is credited.</p>
+            <p class="reward-status" role="status">Every plan purchase gives one spin. Cash prizes are credited to your wallet.</p>
 
             <!-- ═══ WHEEL ═══ -->
             <div class="wheelwrap fx" id="wheelWrap" style="animation-delay:.1s">
@@ -1320,14 +1321,14 @@
                             <circle cx="150" cy="216" r="8.6" fill="var(--br)"/>
                             <circle cx="147" cy="212.6" r="2.8" fill="rgba(255,255,255,.55)"/>
                             <text x="150" y="219.8" text-anchor="middle" font-family="Poppins,sans-serif" font-size="8.8" font-weight="800" fill="#fff">₹</text>
-                            <text x="150" y="239" text-anchor="middle" font-family="Poppins,sans-serif" font-size="12.5" font-weight="800" fill="#A06800">₹500</text>
+                            <text x="150" y="239" text-anchor="middle" font-family="Poppins,sans-serif" font-size="12.5" font-weight="800" fill="#A06800">₹5</text>
                             <text x="150" y="252" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.8" font-weight="700" fill="#9a8748" letter-spacing=".7">CASH</text>
                         </g>
                         <g>
                             <circle cx="90.6" cy="191.4" r="8.6" fill="var(--br)"/>
                             <circle cx="87.6" cy="188" r="2.8" fill="rgba(255,255,255,.55)"/>
                             <text x="90.6" y="195.2" text-anchor="middle" font-family="Poppins,sans-serif" font-size="8.8" font-weight="800" fill="#fff">₹</text>
-                            <text x="90.6" y="214.4" text-anchor="middle" font-family="Poppins,sans-serif" font-size="12.5" font-weight="800" fill="#A06800">₹1000</text>
+                            <text x="90.6" y="214.4" text-anchor="middle" font-family="Poppins,sans-serif" font-size="12.5" font-weight="800" fill="#A06800">₹10</text>
                             <text x="90.6" y="227.4" text-anchor="middle" font-family="Poppins,sans-serif" font-size="6.8" font-weight="700" fill="#9a8748" letter-spacing=".7">CASH</text>
                         </g>
                         <g>
@@ -1515,8 +1516,8 @@
                     </div>
                 </div>
                 <div class="pbody">
-                    <h3 id="winTitle">Jackpot unlocked!</h3>
-                    <p id="winMsg">Prize processing is not enabled on this site yet.</p>
+                    <h3 id="winTitle">Reward credited!</h3>
+                    <p id="winMsg">Cash reward credited to your wallet.</p>
                     <div class="pbal">
                         <span class="bi">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -1563,7 +1564,7 @@
                             <circle cx="12" cy="12" r="9"/>
                             <path d="M12 7v5l3 2"/>
                         </svg>
-                        Reward history is unavailable until spins are configured.
+                        Your spin rewards will appear here.
                     </div>
                 </div>
             </div>
@@ -1576,7 +1577,7 @@
 
         <script>
             /* ══════════════════════════════════════════════════════════════
-               LUCKY SPIN — Demo mode (no backend required)
+               LUCKY SPIN — Server-authoritative rewards
                ══════════════════════════════════════════════════════════════ */
             (function() {
                 'use strict';
@@ -1587,44 +1588,8 @@
 
                 var spinning = false;
                 var currentRot = 0;
-                var chances = 3;
+                var chances = 0;
                 var wallet = 0;
-
-                /* ─── PRIZE POOL (index matches wheel slot) ─── */
-                /* Wheel slots from index 0 to 7 going clockwise from top:
-                   0: ₹5      (top)
-                   1: ₹10     (top-right)
-                   2: ₹15     (right)
-                   3: ₹50     (bottom-right)
-                   4: ₹500    (bottom)
-                   5: ₹1000   (bottom-left)
-                   6: iPhone 17 (left)
-                   7: Locked  (top-left)
-                */
-                var PRIZES = [
-                    { label: "₹5",       type: "cash",     value: 5    },
-                    { label: "₹10",      type: "cash",     value: 10   },
-                    { label: "₹15",      type: "cash",     value: 15   },
-                    { label: "₹50",      type: "cash",     value: 50   },
-                    { label: "₹500",     type: "cash",     value: 500  },
-                    { label: "₹1000",    type: "cash",     value: 1000 },
-                    { label: "iPhone 17",type: "physical", value: 0    },
-                    { label: "Locked",   type: "lose",     value: 0    }
-                ];
-
-                /* Weighted random — chhote prizes zyada baar, bade prizes kam */
-                var WEIGHTS = [22, 18, 15, 10, 6, 3, 1, 25];
-
-                function pickPrizeIndex() {
-                    var total = WEIGHTS.reduce(function(a, b) { return a + b; }, 0);
-                    var r = Math.random() * total;
-                    var acc = 0;
-                    for (var i = 0; i < WEIGHTS.length; i++) {
-                        acc += WEIGHTS[i];
-                        if (r < acc) return i;
-                    }
-                    return 0;
-                }
 
                 var wheelRot = document.getElementById('wheelRot');
                 var wheelWrap = document.getElementById('wheelWrap');
@@ -1635,7 +1600,6 @@
                 var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
                 /* ─── LOAD WALLET & SPINS ─── */
-                wallet = 0;
                 chances = 0;
 
                 function money(n) {
@@ -1649,10 +1613,10 @@
 
                 function syncUI() {
                     if (spinsLeft) spinsLeft.textContent = pad2(chances);
-                    if (balVal) balVal.textContent = "Unavailable";
+                    if (balVal) balVal.textContent = CUR + money(wallet);
                     if (!spinning) {
                         btn.classList.remove("off");
-                        btnTxt.textContent = canSpin() ? "SPIN NOW" : "REWARDS UNAVAILABLE";
+                        btnTxt.textContent = canSpin() ? "SPIN NOW" : "BUY A PLAN TO SPIN";
                         if (!canSpin()) btn.classList.add("off");
                     }
                 }
@@ -1755,8 +1719,8 @@
                         cur.textContent = CUR;
                         amt.textContent = money(value);
                         document.getElementById('winTag').textContent = 'You won';
-                        document.getElementById('winTitle').textContent = 'Jackpot unlocked!';
-                        document.getElementById('winMsg').textContent = 'Prize processing is not enabled on this site yet.';
+                        document.getElementById('winTitle').textContent = 'Reward credited!';
+                        document.getElementById('winMsg').textContent = 'Cash reward credited to your wallet.';
                     } else if (type === 'physical') {
                         cur.style.display = 'none';
                         wrap.classList.add('txt');
@@ -1812,7 +1776,7 @@
                     return pad2(d.getDate()) + ' ' + mo + ' ' + d.getFullYear() + ', ' + pad2(h) + ':' + pad2(d.getMinutes()) + ' ' + ap;
                 }
 
-                function prependRecord(prize) {
+                function prependRecord(prize, createdAt) {
                     var list = document.getElementById('recList');
                     if (!list) return;
                     var empty = document.getElementById('recEmpty');
@@ -1824,7 +1788,7 @@
                     var isLose = type === 'lose';
 
                     var val = type === 'cash' ? (CUR + money(value)) : (isLose ? '—' : label);
-                    var stt = type === 'physical' ? 'pending' : (isLose ? 'failed' : 'credited');
+                    var stt = isLose ? 'No prize' : 'Credited';
 
                     var row = document.createElement('div');
                     row.className = 'rrow';
@@ -1840,7 +1804,7 @@
                     rn.textContent = label || 'Spin reward';
                     var rt = document.createElement('div');
                     rt.className = 'rt';
-                    rt.textContent = nowStr();
+                    rt.textContent = createdAt ? new Date(createdAt).toLocaleString() : nowStr();
                     rm.appendChild(rn);
                     rm.appendChild(rt);
 
@@ -1850,8 +1814,8 @@
                     rv.className = 'rv' + (isLose ? ' muted' : '');
                     rv.textContent = isLose ? '—' : ('+' + val);
                     var pl = document.createElement('span');
-                    pl.className = 'pill ' + stt;
-                    pl.textContent = stt.charAt(0).toUpperCase() + stt.slice(1);
+                    pl.className = 'pill ' + (isLose ? 'failed' : 'credited');
+                    pl.textContent = stt;
                     rr.appendChild(rv);
                     rr.appendChild(pl);
 
@@ -1862,9 +1826,81 @@
                 }
 
                 /* ─── THE SPIN ─── */
-                function doSpin() {
+                async function loadSpinState() {
+                    var response = await fetch('/api/spin', { credentials: 'include', cache: 'no-store' });
+                    var result = await response.json();
+                    if (response.status === 401) {
+                        window.location.replace('/index.html');
+                        return;
+                    }
+                    if (!response.ok || !result.success) {
+                        throw new Error(result.message || 'Could not load spin rewards.');
+                    }
+                    chances = result.spinsAvailable;
+                    wallet = result.balancePaise / 100;
+                    syncUI();
+                    var history = Array.isArray(result.history) ? result.history : [];
+                    history.slice().reverse().forEach(function(item) {
+                        prependRecord(item, item.createdAt);
+                    });
+                }
+
+                async function doSpin(event) {
                     if (spinning) return;
-                    showToast('Prize spins are not configured yet. No spin or reward was used.', 'error');
+                    if (!canSpin()) {
+                        if (event.currentTarget === btn) window.location.href = '/home.html';
+                        else showToast('Buy any plan to unlock one spin.', 'error');
+                        return;
+                    }
+                    spinning = true;
+                    wheelWrap.classList.add('busy');
+                    btn.classList.add('off');
+                    btnTxt.textContent = 'SPINNING...';
+                    try {
+                        var csrfResponse = await fetch('/api/csrf', { credentials: 'include', cache: 'no-store' });
+                        var csrf = await csrfResponse.json();
+                        if (!csrfResponse.ok || !csrf.csrfToken) {
+                            throw new Error(csrf.message || 'Your session expired. Refresh and try again.');
+                        }
+                        var response = await fetch('/api/spin', {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-Token': csrf.csrfToken
+                            },
+                            body: '{}'
+                        });
+                        var result = await response.json();
+                        if (!response.ok || !result.success) {
+                            if (response.status === 401) {
+                                window.location.replace('/index.html');
+                                return;
+                            }
+                            throw new Error(result.message || 'The spin could not be completed.');
+                        }
+                        var normalized = ((currentRot % 360) + 360) % 360;
+                        var targetAngle = (360 - result.prize.wheelIndex * STEP) % 360;
+                        var delta = 5 * 360 + targetAngle - normalized;
+                        if (delta < 360) delta += 360;
+                        currentRot += delta;
+                        wheelRot.style.transition = REDUCED ? 'none' : 'transform ' + SPIN_MS + 'ms cubic-bezier(.12,.72,.12,1)';
+                        wheelRot.style.transform = 'rotate(' + currentRot + 'deg)';
+                        startTicks(SPIN_MS);
+                        window.setTimeout(function() {
+                            wallet = result.balancePaise / 100;
+                            chances = result.spinsAvailable;
+                            finish(result.prize);
+                        }, REDUCED ? 0 : SPIN_MS);
+                    } catch (error) {
+                        spinning = false;
+                        wheelWrap.classList.remove('busy');
+                        syncUI();
+                        showToast(error.message || 'The spin could not be completed.', 'error');
+                        loadSpinState().catch(function(loadError) {
+                            console.error('Could not refresh spin state:', loadError);
+                        });
+                    }
                 }
 
                 function finish(prize) {
@@ -1881,7 +1917,7 @@
                 document.getElementById('hub').addEventListener('click', doSpin);
 
                 /* ─── MARQUEE WINNERS ─── */
-                var M = ["Prize announcements will appear here when the reward service is available."];
+                var M = ["Buy a plan to unlock one spin."];
                 var tr = document.getElementById('track');
                 if (tr) {
                     var frag = document.createDocumentFragment();
@@ -1906,6 +1942,10 @@
 
                 /* ─── INIT ─── */
                 syncUI();
+                loadSpinState().catch(function(error) {
+                    console.error('Could not load spin state:', error);
+                    showToast(error.message || 'Could not load spin rewards.', 'error');
+                });
 
             })();
         </script>

@@ -3,7 +3,7 @@
 const path = require("node:path");
 const fs = require("node:fs");
 const {
-    createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, timingSafeEqual
+    createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomInt, timingSafeEqual
 } = require("node:crypto");
 const bcrypt = require("bcryptjs");
 const express = require("express");
@@ -11,6 +11,15 @@ const rateLimit = require("express-rate-limit");
 const session = require("express-session");
 const helmet = require("helmet");
 const { models, nextId, withTransaction } = require("./database");
+
+const spinPrizes = [
+    { code: "cash_5", label: "₹5", type: "cash", value: 5, amountPaise: 500, weight: 22, wheelIndices: [0, 4] },
+    { code: "cash_10", label: "₹10", type: "cash", value: 10, amountPaise: 1000, weight: 18, wheelIndices: [1, 5] },
+    { code: "cash_15", label: "₹15", type: "cash", value: 15, amountPaise: 1500, weight: 15, wheelIndices: [2] },
+    { code: "cash_50", label: "₹50", type: "cash", value: 50, amountPaise: 5000, weight: 10, wheelIndices: [3] },
+    { code: "locked", label: "Locked", type: "lose", value: 0, amountPaise: 0, weight: 25, wheelIndices: [7] }
+];
+const totalSpinPrizeWeight = spinPrizes.reduce((total, prize) => total + prize.weight, 0);
 
 const isProduction = process.env.NODE_ENV === "production";
 const dataDirectory = path.join(__dirname, ".private");
@@ -633,7 +642,7 @@ app.post("/api/products/purchase", requireCsrf, requireAuth, asyncRoute(async (r
     res.status(201).json({
         success: true,
         ...outcome,
-        message: `${outcome.productName} is active. ₹${(outcome.pricePaise / 100).toFixed(2)} was deducted from the internal wallet. Product purchase does not activate any return or reward.`
+        message: `${outcome.productName} is active. ₹${(outcome.pricePaise / 100).toFixed(2)} was deducted from the internal wallet. One spin has been added for this plan purchase.`
     });
 }));
 
@@ -958,21 +967,102 @@ app.post("/api/withdrawal", requireCsrf, requireAuth, asyncRoute(async (req, res
             amountPaise, status: "pending", reference: payoutReference,
             note: "Awaiting payout review"
         }], { session: dbSession });
-        return { transactionId };
+        return {
+            transactionId,
+            availableBalancePaise: Math.max(0, user.balancePaise - user.reservedWithdrawalPaise)
+        };
     });
     if (result.error) return res.status(400).json({ success: false, message: result.error });
     res.status(202).json({
-        success: true, transactionId: result.transactionId,
-        message: "Withdrawal request submitted for admin review. No payout has been sent yet."
+        success: true,
+        transactionId: result.transactionId,
+        availableBalancePaise: result.availableBalancePaise,
+        message: "Withdrawal submitted successfully."
     });
 }));
 
-app.post("/api/spin", requireCsrf, requireAuth, (req, res) => {
-    res.status(503).json({
-        success: false,
-        message: "Prize spins are not configured. No spin or reward was used."
+app.get("/api/spin", requireAuth, asyncRoute(async (req, res) => {
+    const userId = req.session.user.id;
+    const [spinsAvailable, user, history] = await Promise.all([
+        models.UserProduct.countDocuments({ userId, spinUsedAt: null }),
+        models.User.findOne({ id: userId }).select("balancePaise reservedWithdrawalPaise").lean(),
+        models.UserProduct.find({ userId, spinUsedAt: { $ne: null } })
+            .sort({ spinUsedAt: -1 }).limit(30).select("spinResultCode spinUsedAt").lean()
+    ]);
+    res.set("Cache-Control", "no-store");
+    res.json({
+        success: true,
+        spinsAvailable,
+        balancePaise: Math.max(0, user.balancePaise - user.reservedWithdrawalPaise),
+        history: history.map(item => {
+            const prize = spinPrizes.find(candidate => candidate.code === item.spinResultCode);
+            return prize ? {
+                type: prize.type,
+                label: prize.label,
+                value: prize.value,
+                createdAt: item.spinUsedAt
+            } : null;
+        }).filter(Boolean)
     });
-});
+}));
+
+app.post("/api/spin", requireCsrf, requireAuth, asyncRoute(async (req, res) => {
+    const result = await withTransaction(async dbSession => {
+        const roll = randomInt(totalSpinPrizeWeight);
+        let weight = 0;
+        const prize = spinPrizes.find(candidate => {
+            weight += candidate.weight;
+            return roll < weight;
+        });
+        const usedAt = new Date();
+        const productPurchase = await models.UserProduct.findOneAndUpdate(
+            { userId: req.session.user.id, spinUsedAt: null },
+            { $set: { spinUsedAt: usedAt, spinResultCode: prize.code } },
+            { sort: { id: 1 }, new: false, session: dbSession }
+        ).lean();
+        if (!productPurchase) return { error: "Buy a plan first to get one spin per purchase.", status: 409 };
+
+        let user;
+        if (prize.amountPaise > 0) {
+            user = await models.User.findOneAndUpdate(
+                { id: req.session.user.id },
+                { $inc: { balancePaise: prize.amountPaise } },
+                { new: true, session: dbSession }
+            ).select("balancePaise").lean();
+            if (!user) return { error: "Your account could not be found.", status: 404 };
+            await models.WalletTransaction.create([{
+                id: await nextId("wallet_transactions", dbSession),
+                userId: req.session.user.id,
+                type: "adjustment",
+                amountPaise: prize.amountPaise,
+                status: "approved",
+                reference: `spin-${productPurchase.id}`,
+                note: `Spin reward for plan purchase #${productPurchase.id}: ${prize.label}`,
+                reviewedAt: usedAt
+            }], { session: dbSession });
+        } else {
+            user = await models.User.findOne({ id: req.session.user.id })
+                .select("balancePaise").session(dbSession).lean();
+            if (!user) return { error: "Your account could not be found.", status: 404 };
+        }
+        const spinsAvailable = await models.UserProduct.countDocuments({
+            userId: req.session.user.id,
+            spinUsedAt: null
+        }).session(dbSession);
+        return {
+            prize: {
+                type: prize.type,
+                label: prize.label,
+                value: prize.value,
+                wheelIndex: prize.wheelIndices[randomInt(prize.wheelIndices.length)]
+            },
+            balancePaise: user.balancePaise,
+            spinsAvailable
+        };
+    });
+    if (result.error) return res.status(result.status).json({ success: false, message: result.error });
+    res.json({ success: true, ...result });
+}));
 
 app.get("/api/products", requireAuth, asyncRoute(async (req, res) => {
     const products = await models.Product.find({ active: true }).sort({ category: 1, id: 1 }).lean();
@@ -1036,6 +1126,9 @@ app.get("/api/wallet", requireAuth, asyncRoute(async (req, res) => {
         success: true,
         balancePaise: user ? user.balancePaise : 0,
         pendingWithdrawalsPaise: user ? user.reservedWithdrawalPaise : 0,
+        availableBalancePaise: user
+            ? Math.max(0, user.balancePaise - user.reservedWithdrawalPaise)
+            : 0,
         approvedRechargesPaise: approvedRecharges[0]?.total || 0,
         approvedRewardsPaise: approvedRewards[0]?.total || 0,
         bankAccount: bankAccount || null,
@@ -1335,7 +1428,7 @@ app.get("/api/admin/users", asyncRoute(async (req, res) => {
         success: true,
         users: rows.map(user => ({
             id: user.id, name: user.name, phone: user.phone, status: user.status,
-            balancePaise: user.balancePaise, createdAt: user.createdAt,
+            balancePaise: Math.max(0, user.balancePaise - user.reservedWithdrawalPaise), createdAt: user.createdAt,
             bankConfigured: bankSet.has(user.id)
         })),
         total, page, pageSize: limit

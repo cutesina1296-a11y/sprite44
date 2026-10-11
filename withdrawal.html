@@ -9,7 +9,6 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-        <link rel="preload" as="image" href="/assets/images/money-hero.png">
         <style>
             body {
                 --g-primary: #f5b400;
@@ -788,7 +787,6 @@
         <!-- ═══ HERO ═══ -->
         <div class="rc-hero-wrap">
             <div class="rc-hero">
-                <img class="rc-hero-img" src="/assets/images/money-hero.png" alt="" loading="eager">
                 <span class="rc-spark s1">
                     <svg viewBox="0 0 24 24" fill="none"><path d="m12 2 2.9 6.26 6.6.77-4.9 4.6 1.32 6.62L12 17.02 6.08 20.25 7.4 13.63 2.5 9.03l6.6-.77L12 2Z" fill="currentColor"/></svg>
                 </span>
@@ -1095,6 +1093,10 @@
                             return;
                         }
                         if (!response.ok || result.success !== true) throw new Error(result.message || "Request could not be submitted.");
+                        userBalance = result.availableBalancePaise / 100;
+                        balanceDisplay.textContent = userBalance.toLocaleString("en-IN", {
+                            minimumFractionDigits:0, maximumFractionDigits:2
+                        });
                         showToast(result.message || "Withdrawal request sent for manual review.", "success", 5);
                         submitBtn.textContent = "Request pending review";
                         submitBtn.disabled = true;
