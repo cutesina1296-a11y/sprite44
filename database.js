@@ -117,7 +117,7 @@ async function initializeMongoDB() {
     }
 
     const initialMissions = [
-        ["3 team members", "Reach 3 team members", 3, 50],
+        ["3 team members", "Reach 3 team members", 3, 4000],
         ["5 team members", "Reach 5 team members", 5, 120],
         ["10 team members", "Reach 10 team members", 10, 300],
         ["20 team members", "Reach 20 team members", 20, 700],
@@ -136,6 +136,10 @@ async function initializeMongoDB() {
             });
         }
     }
+    await models.Mission.updateOne(
+        { name: "3 team members", targetMembers: 3, rewardPaise: 5000 },
+        { $set: { rewardPaise: 400000 } }
+    );
 
     const initialSettings = [
         ["site_name", "Finora"],
@@ -150,8 +154,8 @@ async function initializeMongoDB() {
         ["welcome_popup_subtitle", "New app launched"],
         ["welcome_popup_signup_reward_label", "Sign up"],
         ["welcome_popup_signup_reward_value", "₹40"],
-        ["welcome_popup_invite_tracking_label", "Invite tracking"],
-        ["welcome_popup_invite_tracking_value", "Active"],
+        ["welcome_popup_invite_tracking_label", "3 active members"],
+        ["welcome_popup_invite_tracking_value", "₹4,000"],
         ["welcome_popup_min_withdrawal_label", "Min withdrawal"],
         ["welcome_popup_min_recharge_label", "Min Recharge"],
         ["welcome_popup_payout_processing_label", "Withdrawal time"],
@@ -182,6 +186,17 @@ async function initializeMongoDB() {
     await models.SiteSetting.updateOne(
         { key: "welcome_popup_signup_reward_label", value: "refer 3 active member" },
         { $set: { value: "Sign up" } }
+    );
+    await models.SiteSetting.updateOne(
+        { key: "welcome_popup_invite_tracking_label", value: "Invite tracking" },
+        { $set: { value: "3 active members" } }
+    );
+    await models.SiteSetting.updateOne(
+        {
+            key: "welcome_popup_invite_tracking_value",
+            value: { $in: ["Active", "Mission reward after review", "₹50 after review"] }
+        },
+        { $set: { value: "₹4,000" } }
     );
     await models.SiteSetting.updateOne(
         { key: "support_url", value: "https://t.me/Kingfisher_supportbot" },
