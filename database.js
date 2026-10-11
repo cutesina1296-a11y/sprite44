@@ -154,8 +154,8 @@ async function initializeMongoDB() {
         ["welcome_popup_invite_tracking_value", "Active"],
         ["welcome_popup_min_withdrawal_label", "Min withdrawal"],
         ["welcome_popup_min_recharge_label", "Min Recharge"],
-        ["welcome_popup_payout_processing_label", "Payout processing"],
-        ["welcome_popup_payout_processing_value", "Manual review only"],
+        ["welcome_popup_payout_processing_label", "Withdrawal time"],
+        ["welcome_popup_payout_processing_value", "06:00 - 23:30"],
         ["welcome_popup_cta_text", "Join Telegram"],
         ["welcome_popup_close_label", "Close"],
         ["maintenance_mode", "false"]
@@ -167,6 +167,14 @@ async function initializeMongoDB() {
             upsert: true
         }
     })));
+    await models.SiteSetting.updateOne(
+        { key: "welcome_popup_payout_processing_label", value: "Payout processing" },
+        { $set: { value: "Withdrawal time" } }
+    );
+    await models.SiteSetting.updateOne(
+        { key: "welcome_popup_payout_processing_value", value: "Manual review only" },
+        { $set: { value: "06:00 - 23:30" } }
+    );
     await models.SiteSetting.updateOne(
         { key: "support_url", value: "https://t.me/Kingfisher_supportbot" },
         { $set: { value: "https://t.me/spritesupport65" } }
