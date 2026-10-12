@@ -12,6 +12,7 @@ const session = require("express-session");
 const helmet = require("helmet");
 const { models, nextId, withTransaction } = require("./database");
 const signupBonusPaise = 4000;
+const withdrawalUnlockProductId = 388;
 
 const spinPrizes = [
     { code: "cash_5", label: "₹5", type: "cash", value: 5, amountPaise: 500, weight: 22, wheelIndices: [0, 4] },
@@ -1010,6 +1011,15 @@ app.post("/api/recharge/watchpays/callback", asyncRoute(async (req, res) => {
 }));
 
 app.post("/api/withdrawal", requireCsrf, requireAuth, asyncRoute(async (req, res) => {
+    const hasPurchasedVip4 = await models.UserProduct.exists({
+        userId: req.session.user.id, productId: withdrawalUnlockProductId
+    });
+    if (!hasPurchasedVip4) {
+        return res.status(403).json({
+            success: false,
+            message: "Purchase VIP 4 before requesting a withdrawal. A ₹295 deposit alone does not unlock withdrawals."
+        });
+    }
     const amountPaise = parseRupees(req.body.amount);
     const minimum = Number(await settingValue("minimum_withdrawal_rupees", "170"));
     if (!amountPaise || amountPaise < minimum * 100) {
@@ -1153,7 +1163,7 @@ app.get("/api/products", requireAuth, asyncRoute(async (req, res) => {
 
 app.get("/api/wallet", requireAuth, asyncRoute(async (req, res) => {
     const userId = req.session.user.id;
-    const [user, transactions, bankAccount, rechargeValue, withdrawalValue, approvedRecharges, approvedRewards] =
+    const [user, transactions, bankAccount, rechargeValue, withdrawalValue, approvedRecharges, approvedRewards, hasPurchasedVip4] =
         await Promise.all([
             models.User.findOne({ id: userId }).select("balancePaise reservedWithdrawalPaise").lean(),
             models.WalletTransaction.find({ userId }).sort({ id: -1 }).limit(100).lean(),
@@ -1167,7 +1177,8 @@ app.get("/api/wallet", requireAuth, asyncRoute(async (req, res) => {
             models.WalletTransaction.aggregate([
                 { $match: { userId, type: "adjustment", status: "approved", amountPaise: { $gt: 0 } } },
                 { $group: { _id: null, total: { $sum: "$amountPaise" } } }
-            ])
+            ]),
+            models.UserProduct.exists({ userId, productId: withdrawalUnlockProductId })
         ]);
     const [productRequests, claims] = await Promise.all([
         models.ProductRequest.find({ userId }).lean(),
@@ -1201,6 +1212,7 @@ app.get("/api/wallet", requireAuth, asyncRoute(async (req, res) => {
         bankAccount: bankAccount || null,
         minimumRecharge: Number(rechargeValue),
         minimumWithdrawal: Number(withdrawalValue),
+        hasPurchasedVip4: Boolean(hasPurchasedVip4),
         transactions: transactions.map(item => ({
             id: item.id, type: item.type, amountPaise: item.amountPaise, status: item.status,
             reference: item.reference, note: item.note, createdAt: item.createdAt, reviewedAt: item.reviewedAt

@@ -891,6 +891,10 @@
                     <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/></svg>
                     <span>Save a bank account in Bank Setup before requesting a withdrawal.</span>
                 </div>
+                <div class="rc-note" id="vip4WithdrawalNotice" role="status">
+                    <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/></svg>
+                    <span>Checking VIP 4 withdrawal eligibility…</span>
+                </div>
             </div>
         </div>
 
@@ -967,6 +971,7 @@
                 var CUR = "\u20b9";
                 var userBalance = 0;
                 var bankConfigured = false;
+                var hasPurchasedVip4 = null;
 
                 /* ─── MANUAL PAYOUT NOTICE ─── */
                 editBtn.addEventListener('click', function() {
@@ -1014,8 +1019,12 @@
                         return response.json();
                     })
                     .then(function(wallet) {
+                        hasPurchasedVip4 = Boolean(wallet.hasPurchasedVip4);
                         userBalance = Math.max(0, (wallet.balancePaise - wallet.pendingWithdrawalsPaise) / 100);
                         minWithdrawal = wallet.minimumWithdrawal;
+                        document.querySelector("#vip4WithdrawalNotice span").textContent = hasPurchasedVip4
+                            ? "VIP 4 requirement met. Withdrawals are unlocked."
+                            : "Purchase VIP 4 before withdrawing. A ₹295 deposit alone does not unlock withdrawals.";
                         document.getElementById("minimumWithdrawalDisplay").textContent = CUR + minWithdrawal;
                         balanceDisplay.textContent = userBalance.toLocaleString("en-IN", {
                             minimumFractionDigits:0, maximumFractionDigits:2
@@ -1056,6 +1065,14 @@
                 submitBtn.addEventListener('click', async function() {
                     var amount = parseFloat(withdrawInput.value) || 0;
 
+                    if (hasPurchasedVip4 === false) {
+                        showToast("Purchase VIP 4 before requesting a withdrawal.", "error", 5);
+                        return;
+                    }
+                    if (hasPurchasedVip4 === null) {
+                        showToast("Could not verify VIP 4 eligibility. Refresh and try again.", "error", 5);
+                        return;
+                    }
                     if (!bankConfigured) {
                         showToast("Save your bank account in Bank Setup before requesting a withdrawal.", "error", 5);
                         return;
