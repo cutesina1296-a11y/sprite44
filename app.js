@@ -489,7 +489,7 @@ app.get("/api/csrf", asyncRoute(async (req, res) => {
 app.get("/api/public/settings", asyncRoute(async (req, res) => {
     const keys = [
         "site_name", "site_logo_url", "site_banner_url", "invite_banner_url", "site_spinner_url",
-        "minimum_withdrawal_rupees", "support_url",
+        "minimum_recharge_rupees", "minimum_withdrawal_rupees", "support_url",
         "welcome_popup_title", "welcome_popup_subtitle",
         "welcome_popup_signup_reward_label", "welcome_popup_signup_reward_value",
         "welcome_popup_invite_tracking_label", "welcome_popup_invite_tracking_value",
@@ -783,7 +783,8 @@ app.put("/api/bank-account", requireCsrf, requireAuth, asyncRoute(async (req, re
 app.post("/api/recharge", requireCsrf, requireAuth, asyncRoute(async (req, res) => {
     const amountPaise = parseRupees(req.body.amount);
     const method = typeof req.body.method === "string" ? req.body.method.trim().slice(0, 40) : "";
-    if (!amountPaise || amountPaise <= 0 || !method) {
+    const minimum = Number(await settingValue("minimum_recharge_rupees", "295"));
+    if (!amountPaise || amountPaise < minimum * 100 || !method) {
         return res.status(400).json({ success: false, message: "Enter a valid amount and payment channel." });
     }
     if (paymentProvider === "watchpays" && !watchPaysEnabled) {
@@ -1162,11 +1163,12 @@ app.get("/api/products", requireAuth, asyncRoute(async (req, res) => {
 
 app.get("/api/wallet", requireAuth, asyncRoute(async (req, res) => {
     const userId = req.session.user.id;
-    const [user, transactions, bankAccount, withdrawalValue, approvedRecharges, approvedRewards, hasPurchasedVip4] =
+    const [user, transactions, bankAccount, rechargeValue, withdrawalValue, approvedRecharges, approvedRewards, hasPurchasedVip4] =
         await Promise.all([
             models.User.findOne({ id: userId }).select("balancePaise reservedWithdrawalPaise").lean(),
             models.WalletTransaction.find({ userId }).sort({ id: -1 }).limit(100).lean(),
             models.BankAccount.findOne({ userId }).select("accountLast4 ifsc").lean(),
+            settingValue("minimum_recharge_rupees", "295"),
             settingValue("minimum_withdrawal_rupees", "170"),
             models.WalletTransaction.aggregate([
                 { $match: { userId, type: "recharge", status: "approved" } },
@@ -1208,6 +1210,7 @@ app.get("/api/wallet", requireAuth, asyncRoute(async (req, res) => {
         approvedRechargesPaise: approvedRecharges[0]?.total || 0,
         approvedRewardsPaise: approvedRewards[0]?.total || 0,
         bankAccount: bankAccount || null,
+        minimumRecharge: Number(rechargeValue),
         minimumWithdrawal: Number(withdrawalValue),
         hasPurchasedVip4: Boolean(hasPurchasedVip4),
         transactions: transactions.map(item => ({
@@ -2228,7 +2231,7 @@ app.put("/api/admin/settings/:key", asyncRoute(async (req, res) => {
     if (!/^[a-z][a-z0-9_]{1,63}$/.test(key) || value.length > 500) {
         return res.status(400).json({ success: false, message: "Invalid setting key or value." });
     }
-    if (key === "minimum_withdrawal_rupees") {
+    if (["minimum_recharge_rupees", "minimum_withdrawal_rupees"].includes(key)) {
         const numericValue = Number(value);
         if (!Number.isFinite(numericValue) || numericValue < 0 || numericValue > 10000000) {
             return res.status(400).json({

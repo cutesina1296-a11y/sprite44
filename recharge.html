@@ -730,7 +730,7 @@
                     <span class="dot-i">
                         <svg viewBox="0 0 24 24" fill="none"><path d="M12 7.2a1.3 1.3 0 1 0 0 2.6 1.3 1.3 0 0 0 0-2.6Zm-1.1 4.6h2.2v6.4h-2.2v-6.4Z" fill="currentColor"/></svg>
                     </span>
-                    Deposit any amount
+                    Minimum recharge: ₹295
                 </div>
                 <div class="rc-presets" id="amountGrid">
                     <div class="rc-pill amount-item active" data-value="900">
@@ -807,7 +807,7 @@
             <div class="rc-notes">
                 <div class="rc-note">
                     <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/></svg>
-                    <span>You can deposit any amount. Payment provider limits may apply.</span>
+                    <span>Minimum deposit amount is ₹295.</span>
                 </div>
                 <div class="rc-note">
                     <svg viewBox="0 0 24 24" fill="none"><path opacity=".5" d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" fill="currentColor"/><path d="m10.8 15.6-3-3 1.1-1.15 1.9 1.9 4.3-4.3L16.2 10l-5.4 5.6Z" fill="currentColor"/></svg>
@@ -887,6 +887,7 @@
                 var paymentInput = document.getElementById('payment_method');
                 var rechargeBtn = document.getElementById('rechargeBtn');
                 var editBtn = document.getElementById('editBtn');
+                var minRecharge = 295;
                 var CUR = "\u20b9";
 
                 /* ─── BALANCE FROM SERVER ─── */
@@ -903,6 +904,9 @@
                         .then(function(wallet) {
                             document.getElementById("heroBalance").textContent =
                                 (wallet.availableBalancePaise / 100).toLocaleString("en-IN", { minimumFractionDigits:2, maximumFractionDigits:2 });
+                            minRecharge = wallet.minimumRecharge;
+                            document.querySelector(".rc-notes .rc-note span").textContent =
+                                "Minimum deposit amount is ₹" + minRecharge + ".";
                         })
                         .catch(function(error) { console.error(error); });
                 })();
@@ -1112,8 +1116,8 @@
                     var amount = parseFloat(amountInput.value) || 0;
                     var method = paymentInput.value;
 
-                    if (!amount || amount <= 0) {
-                        showToast("Enter a valid deposit amount.", "error");
+                    if (!amount || amount < minRecharge) {
+                        showToast("Minimum recharge is " + CUR + minRecharge, "error");
                         return;
                     }
                     if (!method) {

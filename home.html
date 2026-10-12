@@ -776,9 +776,9 @@ a{color:inherit;text-decoration:none;}
                 <div class="wl-row">
                     <span class="lbl">
                         <svg viewBox="0 0 24 24" fill="none"><path d="M20.9 10c.94 0 1.41 0 1.7.29.29.29.29.76.29 1.71v.5c0 .94 0 1.42-.29 1.71-.29.29-.76.29-1.7.29V10Z" fill="currentColor"/><path opacity=".5" d="M21.14 10c0-1.18.04-2.45-.71-3.35-.75-.75-1.7-1.08-2.87-1.24C16.16 5.25 14.7 5.25 12.87 5.25h-2.12c-1.84 0-3.29 0-4.43.16-1.17.16-2.12.49-2.87 1.24-.75.75-1.08 1.7-1.24 2.87-.16 1.14-.16 2.6-.16 4.43v.11c0 1.84 0 3.29.16 4.43.16 1.17.49 2.12 1.24 2.87.75.75 1.7 1.08 2.87 1.24 1.14.16 2.59.16 4.43.16h2.12c1.84 0 3.29 0 4.43-.16 1.17-.16 2.12-.49 2.87-1.24.75-.9.71-2.17.71-3.35H18.2c-2.27 0-4.21-1.74-4.21-4s1.94-4 4.21-4h2.94Z" fill="currentColor"/><path d="M17.97 15.07a1.07 1.07 0 1 0 0-2.14 1.07 1.07 0 0 0 0 2.14Z" fill="currentColor"/></svg>
-                        <span>Deposit amount</span>
+                        <span id="welcomeMinRechargeLabel">Min Recharge</span>
                     </span>
-                    <span class="val" id="welcomeMinRecharge">Any amount</span>
+                    <span class="val" id="welcomeMinRecharge">₹295</span>
                 </div>
                 <div class="wl-row">
                     <span class="lbl">
@@ -1265,7 +1265,9 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .then(function(result) {
             var settings = result.settings || {};
+            var rechargeMinimum = document.getElementById("welcomeMinRecharge");
             var withdrawalMinimum = document.getElementById("welcomeMinWithdrawal");
+            if (rechargeMinimum && settings.minimum_recharge_rupees) rechargeMinimum.textContent = "₹" + settings.minimum_recharge_rupees;
             if (withdrawalMinimum && settings.minimum_withdrawal_rupees) withdrawalMinimum.textContent = "₹" + settings.minimum_withdrawal_rupees;
             var popupText = {
                 welcome_popup_title: "welcomeTitle",
@@ -1275,6 +1277,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 welcome_popup_invite_tracking_label: "welcomeInviteTrackingLabel",
                 welcome_popup_invite_tracking_value: "welcomeInviteTrackingValue",
                 welcome_popup_min_withdrawal_label: "welcomeMinWithdrawalLabel",
+                welcome_popup_min_recharge_label: "welcomeMinRechargeLabel",
                 welcome_popup_payout_processing_label: "welcomePayoutProcessingLabel",
                 welcome_popup_payout_processing_value: "welcomePayoutProcessingValue",
                 welcome_popup_cta_text: "welcomeCtaText"
