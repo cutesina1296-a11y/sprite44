@@ -225,33 +225,70 @@ function requireCsrf(req, res, next) {
     next();
 }
 
+function credentialVersionMatches(identity, account) {
+    const sessionVersion = Number.isSafeInteger(identity.credentialVersion) ? identity.credentialVersion : 0;
+    const accountVersion = Number.isSafeInteger(account.credentialVersion) ? account.credentialVersion : 0;
+    return sessionVersion === accountVersion;
+}
+
+async function destroySession(req, res) {
+    await new Promise((resolve, reject) => req.session.destroy(error => error ? reject(error) : resolve()));
+    res.clearCookie("kingfisher.sid", {
+        httpOnly: true, secure: isProduction, sameSite: "strict"
+    });
+}
+
+async function restoreAdminSession(req) {
+    const admin = await models.Admin.findOne({ id: req.session.admin.id })
+        .select("credentialVersion").lean();
+    if (!admin || !credentialVersionMatches(req.session.admin, admin)) return false;
+    delete req.session.user;
+    delete req.session.impersonation;
+    req.session.csrfToken = createCsrfToken();
+    await new Promise((resolve, reject) => req.session.save(error => error ? reject(error) : resolve()));
+    return true;
+}
+
 const requireAuth = asyncRoute(async (req, res, next) => {
     if (!req.session.user) {
         return res.status(401).json({ success: false, message: "Please log in first." });
     }
-    const user = await models.User.findOne({ id: req.session.user.id }).select("status").lean();
-    if (!user || user.status !== "active") {
+    const user = await models.User.findOne({ id: req.session.user.id })
+        .select("status credentialVersion").lean();
+    const accountUnavailable = !user || user.status !== "active";
+    if (accountUnavailable || !credentialVersionMatches(req.session.user, user)) {
         if (req.session.impersonation && req.session.admin) {
-            delete req.session.user;
-            delete req.session.impersonation;
-            req.session.csrfToken = createCsrfToken();
-            return res.status(401).json({
-                success: false,
-                message: "This user account is unavailable. Admin access has been restored."
-            });
+            if (await restoreAdminSession(req)) {
+                return res.status(401).json({
+                    success: false,
+                    message: accountUnavailable
+                        ? "This user account is unavailable. Admin access has been restored."
+                        : "This user session is no longer valid. Admin access has been restored."
+                });
+            }
         }
-        await new Promise((resolve, reject) => req.session.destroy(error => error ? reject(error) : resolve()));
-        return res.status(401).json({ success: false, message: "This account is unavailable." });
+        await destroySession(req, res);
+        return res.status(401).json({
+            success: false,
+            message: accountUnavailable ? "This account is unavailable." : "This session is no longer valid."
+        });
     }
     next();
 });
 
-function requireAdmin(req, res, next) {
+const requireAdmin = asyncRoute(async (req, res, next) => {
     if (!req.session.admin) {
         return res.status(401).json({ success: false, message: "Admin login required." });
     }
+    const admin = await models.Admin.findOne({ id: req.session.admin.id })
+        .select("credentialVersion passwordChangeRequired").lean();
+    if (!admin || !credentialVersionMatches(req.session.admin, admin)) {
+        await destroySession(req, res);
+        return res.status(401).json({ success: false, message: "Admin session expired. Please log in again." });
+    }
+    req.adminAccount = admin;
     next();
-}
+});
 
 async function auditAdmin(adminId, action, entityType, entityId, details, session = null) {
     const audit = {
@@ -565,7 +602,9 @@ app.post("/api/login", authLimiter, requireCsrf, asyncRoute(async (req, res) => 
         return res.status(401).json({ success: false, message: "Invalid mobile number or password." });
     }
     await new Promise((resolve, reject) => req.session.regenerate(error => error ? reject(error) : resolve()));
-    req.session.user = { id: user.id, name: user.name, phone: user.phone };
+    req.session.user = {
+        id: user.id, name: user.name, phone: user.phone, credentialVersion: user.credentialVersion || 0
+    };
     req.session.csrfToken = createCsrfToken();
     await new Promise((resolve, reject) => req.session.save(error => error ? reject(error) : resolve()));
     res.json({ success: true, message: "Login successful.", csrfToken: req.session.csrfToken });
@@ -575,9 +614,22 @@ app.get("/api/session", asyncRoute(async (req, res) => {
     res.set("Cache-Control", "no-store");
     if (!req.session.user) return res.status(401).json({ success: false, message: "Not logged in." });
     const user = await models.User.findOne({ id: req.session.user.id })
-        .select("id name phone status balancePaise referralCode").lean();
-    if (!user || user.status !== "active") {
-        return res.status(401).json({ success: false, message: "This account is unavailable." });
+        .select("id name phone status balancePaise referralCode credentialVersion").lean();
+    const accountUnavailable = !user || user.status !== "active";
+    if (accountUnavailable || !credentialVersionMatches(req.session.user, user)) {
+        if (req.session.impersonation && req.session.admin && await restoreAdminSession(req)) {
+            return res.status(401).json({
+                success: false,
+                message: accountUnavailable
+                    ? "This user account is unavailable. Admin access has been restored."
+                    : "This user session is no longer valid. Admin access has been restored."
+            });
+        }
+        await destroySession(req, res);
+        return res.status(401).json({
+            success: false,
+            message: accountUnavailable ? "This account is unavailable." : "This session is no longer valid."
+        });
     }
     res.json({
         success: true,
@@ -1254,8 +1306,11 @@ app.get("/api/admin/session", asyncRoute(async (req, res) => {
         });
     }
     const admin = await models.Admin.findOne({ id: req.session.admin.id })
-        .select("username displayUsername passwordChangeRequired").lean();
-    if (!admin) return res.status(401).json({ success: false });
+        .select("username displayUsername passwordChangeRequired credentialVersion").lean();
+    if (!admin || !credentialVersionMatches(req.session.admin, admin)) {
+        await destroySession(req, res);
+        return res.status(401).json({ success: false });
+    }
     const username = admin.displayUsername || admin.username;
     res.json({
         success: true,
@@ -1277,7 +1332,9 @@ app.post("/api/admin/login", adminLimiter, requireCsrf, asyncRoute(async (req, r
     }
     const adminName = admin.displayUsername || admin.username;
     await new Promise((resolve, reject) => req.session.regenerate(error => error ? reject(error) : resolve()));
-    req.session.admin = { id: admin.id, username: adminName };
+    req.session.admin = {
+        id: admin.id, username: adminName, credentialVersion: admin.credentialVersion || 0
+    };
     req.session.csrfToken = createCsrfToken();
     await new Promise((resolve, reject) => req.session.save(error => error ? reject(error) : resolve()));
     await models.Admin.updateOne({ id: admin.id }, { $set: { lastLoginAt: new Date() } });
@@ -1329,17 +1386,41 @@ app.post("/api/admin/change-password", requireCsrf, requireAdmin, asyncRoute(asy
     if (newPassword.length < 12 || newPassword.length > 128) {
         return res.status(400).json({ success: false, message: "New password must be 12 to 128 characters." });
     }
-    await models.Admin.updateOne({ id: req.session.admin.id }, {
-        $set: { passwordHash: await bcrypt.hash(newPassword, 12), passwordChangeRequired: false }
+    const passwordHash = await bcrypt.hash(newPassword, 12);
+    const result = await withTransaction(async dbSession => {
+        const updatedAdmin = await models.Admin.findOneAndUpdate(
+            { id: req.session.admin.id, passwordHash: admin.passwordHash },
+            { $set: { passwordHash, passwordChangeRequired: false }, $inc: { credentialVersion: 1 } },
+            { new: true, session: dbSession }
+        ).select("id username displayUsername credentialVersion").lean();
+        if (!updatedAdmin) {
+            return { error: "The password changed in another session. Please sign in again.", status: 409 };
+        }
+        await models.Session.deleteMany({ "data.admin.id": updatedAdmin.id }, { session: dbSession });
+        return updatedAdmin;
     });
+    if (result.error) return res.status(result.status).json({ success: false, message: result.error });
+    const adminName = result.displayUsername || result.username;
+    await new Promise((resolve, reject) => req.session.regenerate(error => error ? reject(error) : resolve()));
+    req.session.admin = {
+        id: result.id, username: adminName, credentialVersion: result.credentialVersion
+    };
+    req.session.csrfToken = createCsrfToken();
+    await new Promise((resolve, reject) => req.session.save(error => error ? reject(error) : resolve()));
     await auditAdmin(req.session.admin.id, "change_password", "admin", req.session.admin.id, {});
-    res.json({ success: true, message: "Admin password updated." });
+    res.json({ success: true, message: "Admin password updated.", csrfToken: req.session.csrfToken });
 }));
 
 app.use("/api/admin", (req, res, next) => {
     if (["GET", "HEAD", "OPTIONS"].includes(req.method)) return next();
     requireCsrf(req, res, next);
 }, requireAdmin, (req, res, next) => {
+    if (req.adminAccount.passwordChangeRequired) {
+        return res.status(403).json({
+            success: false,
+            message: "Change the initial admin password before using the admin panel."
+        });
+    }
     if (req.session.impersonation) {
         return res.status(403).json({
             success: false,
@@ -1553,7 +1634,8 @@ app.patch("/api/admin/users/:id/status", asyncRoute(async (req, res) => {
 
 app.post("/api/admin/users/:id/impersonate", asyncRoute(async (req, res) => {
     const userId = Number.parseInt(req.params.id, 10);
-    const target = await models.User.findOne({ id: userId }).select("id name status").lean();
+    const target = await models.User.findOne({ id: userId })
+        .select("id name status credentialVersion").lean();
     if (!Number.isSafeInteger(userId) || !target) {
         return res.status(404).json({ success: false, message: "User not found." });
     }
@@ -1569,7 +1651,9 @@ app.post("/api/admin/users/:id/impersonate", asyncRoute(async (req, res) => {
     await new Promise((resolve, reject) => req.session.regenerate(error => error ? reject(error) : resolve()));
     const startedAt = new Date().toISOString();
     req.session.admin = admin;
-    req.session.user = { id: target.id, name: target.name };
+    req.session.user = {
+        id: target.id, name: target.name, credentialVersion: target.credentialVersion || 0
+    };
     req.session.impersonation = { userId: target.id, startedAt };
     req.session.csrfToken = createCsrfToken();
     await auditAdmin(admin.id, "start_user_support_access", "user", target.id, { startedAt });
@@ -1605,10 +1689,18 @@ app.post("/api/admin/users/:id/reset-password", asyncRoute(async (req, res) => {
             success: false, message: "User password must be 8 to 128 characters."
         });
     }
-    const result = await models.User.updateOne(
-        { id: userId }, { $set: { passwordHash: await bcrypt.hash(password, 12) } }
-    );
-    if (!result.matchedCount) return res.status(404).json({ success: false, message: "User not found." });
+    const passwordHash = await bcrypt.hash(password, 12);
+    const result = await withTransaction(async dbSession => {
+        const updatedUser = await models.User.updateOne(
+            { id: userId },
+            { $set: { passwordHash }, $inc: { credentialVersion: 1 } },
+            { session: dbSession }
+        );
+        if (!updatedUser.matchedCount) return { error: "User not found.", status: 404 };
+        await models.Session.deleteMany({ "data.user.id": userId }, { session: dbSession });
+        return { success: true };
+    });
+    if (result.error) return res.status(result.status).json({ success: false, message: result.error });
     await auditAdmin(req.session.admin.id, "reset_user_password", "user", userId, {});
     res.json({
         success: true, message: "User password reset. Share the temporary password securely."
@@ -2241,16 +2333,13 @@ app.get("/about.html", asyncRoute(async (req, res) => sendPage(req, res, "about.
 const serveProtectedPage = page => asyncRoute(async (req, res) => {
     if (req.session.impersonation && !req.session.user) return res.redirect(302, "/admin/");
     if (!req.session.user) return res.redirect(302, "/index.html");
-    const user = await models.User.findOne({ id: req.session.user.id }).select("status").lean();
-    if (!user || user.status !== "active") {
+    const user = await models.User.findOne({ id: req.session.user.id })
+        .select("status credentialVersion").lean();
+    if (!user || user.status !== "active" || !credentialVersionMatches(req.session.user, user)) {
         if (req.session.impersonation && req.session.admin) {
-            delete req.session.user;
-            delete req.session.impersonation;
-            req.session.csrfToken = createCsrfToken();
-            await new Promise((resolve, reject) => req.session.save(error => error ? reject(error) : resolve()));
-            return res.redirect(302, "/admin/");
+            if (await restoreAdminSession(req)) return res.redirect(302, "/admin/");
         }
-        await new Promise((resolve, reject) => req.session.destroy(error => error ? reject(error) : resolve()));
+        await destroySession(req, res);
         return res.redirect(302, "/index.html");
     }
     await sendPage(req, res, page);

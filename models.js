@@ -14,6 +14,7 @@ const userSchema = new Schema({
     name: { type: String, required: true },
     phone: { type: String, required: true, unique: true },
     passwordHash: { type: String, required: true },
+    credentialVersion: { type: Number, required: true, default: 0 },
     balancePaise: { type: Number, required: true, default: 0 },
     reservedWithdrawalPaise: { type: Number, required: true, default: 0 },
     status: { type: String, required: true, default: "active", enum: ["active", "suspended"] },
@@ -27,6 +28,7 @@ const adminSchema = new Schema({
     username: { type: String, required: true, lowercase: true },
     displayUsername: { type: String, required: true },
     passwordHash: { type: String, required: true },
+    credentialVersion: { type: Number, required: true, default: 0 },
     passwordChangeRequired: { type: Boolean, required: true, default: true },
     lastLoginAt: { type: Date, default: null }
 }, { timestamps: true, versionKey: false });
