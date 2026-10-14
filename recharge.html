@@ -953,16 +953,10 @@
 
                 /* ─── AMOUNT SELECTION ─── */
                 gridItems.forEach(function(item) {
-                    item.addEventListener('click', async function() {
+                    item.addEventListener('click', function() {
                         gridItems.forEach(function(i) { i.classList.remove('active'); });
                         this.classList.add('active');
                         amountInput.value = this.dataset.value;
-                        if (gatewayStateReady) await gatewayStateReady;
-                        if (gatewayState.enabled) {
-                            window.goPayment();
-                        } else {
-                            showToast("Payment gateway is not configured yet.", "error");
-                        }
                     });
                 });
 
@@ -1106,6 +1100,7 @@
 
                 window.goPayment = async function() {
                     if (submitting) return;
+                    if (gatewayStateReady) await gatewayStateReady;
                     if (lockIfNeeded(true)) return;
 
                     if (!amountInput.value.trim()) {
@@ -1144,7 +1139,7 @@
                         }
                         if (!response.ok || result.success !== true) throw new Error(result.message || "Request could not be submitted.");
 
-                        if (gatewayState.enabled && result.gateway === "razorpay") {
+                        if (result.gateway === "razorpay") {
                             var gatewayResult = await handleGatewayCheckout({
                                 keyId: result.keyId,
                                 amount: result.amount,
@@ -1160,11 +1155,11 @@
                             showToast(gatewayResult.message || "Recharge completed successfully.", "success", 5);
                             return;
                         }
-                        if (gatewayState.enabled && result.gateway === "mock") {
+                        if (result.gateway === "mock") {
                             window.location.href = result.paymentUrl;
                             return;
                         }
-                        if (gatewayState.enabled && result.gateway === "watchpays") {
+                        if (result.gateway === "watchpays") {
                             var paymentUrl = new URL(result.paymentUrl);
                             if (paymentUrl.protocol !== "https:") throw new Error("WatchPays returned an invalid checkout URL.");
                             window.location.assign(paymentUrl.href);
