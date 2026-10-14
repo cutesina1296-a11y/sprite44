@@ -149,7 +149,7 @@ async function initializeMongoDB() {
         ["site_spinner_url", "/assets/images/Speener.png"],
         ["support_url", "https://t.me/spritesupport65"],
         ["minimum_recharge_rupees", "295"],
-        ["minimum_withdrawal_rupees", "170"],
+        ["minimum_withdrawal_rupees", "190"],
         ["welcome_popup_title", "Finora"],
         ["welcome_popup_subtitle", "New app launched"],
         ["welcome_popup_signup_reward_label", "Sign up"],
@@ -174,6 +174,10 @@ async function initializeMongoDB() {
     await models.SiteSetting.updateOne(
         { key: "welcome_popup_payout_processing_label", value: "Payout processing" },
         { $set: { value: "Withdrawal time" } }
+    );
+    await models.SiteSetting.updateOne(
+        { key: "minimum_withdrawal_rupees", value: "170" },
+        { $set: { value: "190" } }
     );
     await models.SiteSetting.updateOne(
         { key: "welcome_popup_payout_processing_value", value: "Manual review only" },
