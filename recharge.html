@@ -775,26 +775,28 @@
             <!-- PAYMENT CHANNEL -->
             <div class="rc-sec">Payment Channel</div>
             <div class="rc-channels" id="channelList">
-                <div class="rc-chan channel-item active" data-value="Manual channel A" data-name="Manual channel A">
+                <div class="rc-chan channel-item active" data-value="PAY-A" data-name="PAY-A">
                     <div class="rc-chan-ic">
                         <svg viewBox="0 0 24 24" fill="none"><path d="M13.5 2 4 13.4h6.2L9.6 22 20 10.4h-6.4L13.5 2Z" fill="currentColor"/></svg>
                     </div>
                     <div class="rc-chan-info">
-                        <div class="rc-chan-name">Manual channel A</div>
+                        <div class="rc-chan-name">PAY-A</div>
+                        <div class="rc-chan-sub"><svg viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="3" fill="currentColor"/></svg>Online · Fast &amp; secure</div>
                     </div>
                     <div class="rc-chan-radio"></div>
                 </div>
-                <div class="rc-chan channel-item" data-value="Manual channel B" data-name="Manual channel B">
+                <div class="rc-chan channel-item" data-value="PAY-B" data-name="PAY-B">
                     <div class="rc-chan-ic">
                         <svg viewBox="0 0 24 24" fill="none"><path d="M13.5 2 4 13.4h6.2L9.6 22 20 10.4h-6.4L13.5 2Z" fill="currentColor"/></svg>
                     </div>
                     <div class="rc-chan-info">
-                        <div class="rc-chan-name">Manual channel B</div>
+                        <div class="rc-chan-name">PAY-B</div>
+                        <div class="rc-chan-sub"><svg viewBox="0 0 8 8" aria-hidden="true"><circle cx="4" cy="4" r="3" fill="currentColor"/></svg>Online · Fast &amp; secure</div>
                     </div>
                     <div class="rc-chan-radio"></div>
                 </div>
             </div>
-            <input type="hidden" id="payment_method" value="Manual channel A">
+            <input type="hidden" id="payment_method" value="PAY-A">
 
             <!-- INSTRUCTIONS -->
             <div class="rc-sec">
@@ -1027,7 +1029,7 @@
                     } else {
                         channelList.hidden = false;
                         if (channelHeading) channelHeading.hidden = false;
-                        paymentInput.value = "Manual channel A";
+                        paymentInput.value = "PAY-A";
                         rechargeBtn.innerHTML = '<img class="coin" src="/assets/images/coin.svg" alt="">Recharge Now';
                     }
                 }
