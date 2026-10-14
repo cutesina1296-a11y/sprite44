@@ -67,12 +67,23 @@ const walletTransactionSchema = new Schema({
     status: { type: String, required: true, enum: ["pending", "processing", "approved", "rejected"] },
     reference: { type: String, default: "" },
     note: { type: String, default: "" },
+    spinEligibleAt: { type: Date, default: null },
+    spinUsedAt: { type: Date, default: null },
+    spinResultCode: {
+        type: String,
+        enum: ["cash_5", "cash_300", "cash_500", "cash_10", "cash_15", "cash_50", "deposit_100", "deposit_300", "locked"],
+        default: null
+    },
     createdByAdminId: { type: Number, default: null },
     reviewedByAdminId: { type: Number, default: null },
     reviewedAt: { type: Date, default: null }
 }, { timestamps: { createdAt: true, updatedAt: false }, versionKey: false });
 walletTransactionSchema.index({ status: 1, createdAt: -1 });
 walletTransactionSchema.index({ userId: 1, type: 1, status: 1, id: -1 });
+walletTransactionSchema.index(
+    { userId: 1, spinEligibleAt: 1, spinUsedAt: 1, amountPaise: 1 },
+    { partialFilterExpression: { type: "recharge", status: "approved" } }
+);
 
 const siteSettingSchema = new Schema({
     key: { type: String, required: true, unique: true },
@@ -156,7 +167,7 @@ const userProductSchema = new Schema({
     spinUsedAt: { type: Date, default: null },
     spinResultCode: {
         type: String,
-        enum: ["cash_5", "cash_10", "cash_15", "cash_50", "locked"],
+        enum: ["cash_5", "cash_300", "cash_500", "cash_10", "cash_15", "cash_50", "locked"],
         default: null
     }
 }, { versionKey: false });
