@@ -193,9 +193,26 @@
             }
 
             .rc-bal-label {
-                font-size: 13.5px;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                padding: 6px 11px;
+                border: 1px solid rgba(255,255,255,.28);
+                border-radius: 999px;
+                background: rgba(4,74,43,.24);
+                font-size: 12px;
                 font-weight: 600;
-                opacity: .95
+                opacity: .98;
+                letter-spacing: .1px
+            }
+
+            .rc-bal-label::before {
+                content: "";
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: #fde68a;
+                box-shadow: 0 0 0 3px rgba(253,230,138,.16)
             }
 
             .rc-bal-amt {
@@ -242,13 +259,17 @@
                 border: 1px solid var(--line);
                 border-radius: 16px;
                 padding: 12px 14px;
-                min-width: 0
+                min-width: 0;
+                gap: 10px;
+                transition: transform .16s ease,box-shadow .16s ease
             }
 
+            .stat:hover { transform: translateY(-1px); box-shadow: 0 8px 18px -14px rgba(21,128,61,.45) }
+
             .stat .st-ic {
-                width: 40px;
-                height: 40px;
-                border-radius: 14px;
+                width: 42px;
+                height: 42px;
+                border-radius: 15px;
                 background: var(--g-soft);
                 display: flex;
                 align-items: center;
@@ -289,16 +310,16 @@
                 background: #fff;
                 border: 1px solid var(--line);
                 border-radius: 20px;
-                padding: 14px 14px 0;
+                padding: 15px 15px 0;
                 text-decoration: none;
                 color: var(--ink);
-                box-shadow: 0 10px 22px -18px rgba(214,143,0,.5);
-                transition: transform .12s,box-shadow .12s
+                box-shadow: 0 10px 24px -18px rgba(21,128,61,.45);
+                transition: transform .16s ease,box-shadow .16s ease,border-color .16s ease
             }
 
             .lv-card:active { transform: translateY(1px) }
 
-            .lv-card.lead { border-color: rgba(245,180,0,.55) }
+            .lv-card.lead { border-color: rgba(22,163,74,.42); box-shadow: 0 12px 26px -19px rgba(21,128,61,.7) }
 
             .lv-head {
                 display: flex;
@@ -363,7 +384,13 @@
                 font-size: 9.5px;
                 font-weight: 600;
                 color: var(--muted);
-                letter-spacing: .2px
+                letter-spacing: .2px;
+                display: inline-block;
+                margin-top: 4px;
+                padding: 3px 7px;
+                border-radius: 999px;
+                background: var(--g-soft);
+                white-space: nowrap
             }
 
             .lv-foot {
@@ -414,9 +441,12 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background: var(--g-tint);
-                color: var(--g-primary)
+                background: var(--g-soft);
+                color: var(--g-deep);
+                transition: transform .16s ease,background-color .16s ease
             }
+
+            .lv-card:hover .lv-go { transform: translateX(2px); background: var(--g-tint) }
 
             .lv-go svg {
                 width: 13px;
@@ -429,8 +459,8 @@
                 border: 1px solid var(--line);
                 border-radius: 22px;
                 margin-top: 14px;
-                padding: 18px;
-                box-shadow: 0 10px 24px -16px rgba(214,143,0,.3)
+                padding: 18px 20px;
+                box-shadow: 0 12px 28px -20px rgba(21,128,61,.38)
             }
 
             .rw-block {
@@ -454,10 +484,10 @@
             .rw-title {
                 font-size: 16px;
                 font-weight: 700;
-                color: var(--g-primary);
+                color: var(--g-deep);
                 padding-bottom: 4px;
                 margin-bottom: 8px;
-                border-bottom: 2px solid var(--g-soft);
+                border-bottom: 2px solid var(--line);
                 display: inline-block
             }
 
@@ -497,6 +527,18 @@
             .rw-art svg {
                 width: 100%;
                 height: 100%
+            }
+
+            @media (max-width: 360px) {
+                .rc-hero { padding-left: 14px; padding-right: 14px }
+                .rc-body { padding: 0 10px }
+                .stats-card { padding: 12px 10px; gap: 6px }
+                .stat { padding: 10px 8px; gap: 7px }
+                .stat .st-ic { width: 36px; height: 36px; border-radius: 12px }
+                .stat .st-val { font-size: 16px }
+                .lv-card { padding-left: 12px; padding-right: 12px }
+                .lv-foot { gap: 8px }
+                .rw-art { width: 68px; height: 68px }
             }
 
             /* ─── FOOTER NAV ─── */
@@ -668,7 +710,6 @@
                 </div>
 
                 <div class="rc-bal">
-                    <div class="rc-bal-label">Commission feature unavailable</div>
                     <div class="rc-bal-amt">
                         <span class="cur">₹</span>
                         <span id="commissionAmt">0</span>
@@ -812,8 +853,8 @@
             <div class="reward-card">
                 <div class="rw-block">
                     <div class="rw-info">
-                        <div class="rw-title">Reward Description</div>
-                        <div class="rw-text">If your friend upgrades to VIP1 or above, you will receive generous rewards.</div>
+                        <div class="rw-title">Commission status</div>
+                        <div class="rw-text">Referral commissions are disabled. Team recharge totals are shown for tracking only.</div>
                     </div>
                     <div class="rw-art">
                         <svg viewBox="0 0 64 64" fill="none">

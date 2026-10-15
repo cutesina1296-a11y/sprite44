@@ -15,10 +15,10 @@ const signupBonusPaise = 4000;
 const withdrawalUnlockProductId = 388;
 
 const spinPrizes = [
-    { code: "cash_5", label: "₹5", type: "cash", value: 5, amountPaise: 500, weight: 22, wheelIndices: [0, 4] },
-    { code: "cash_10", label: "₹10", type: "cash", value: 10, amountPaise: 1000, weight: 18, wheelIndices: [1, 5] },
-    { code: "cash_15", label: "₹15", type: "cash", value: 15, amountPaise: 1500, weight: 15, wheelIndices: [2] },
-    { code: "cash_50", label: "₹50", type: "cash", value: 50, amountPaise: 5000, weight: 10, wheelIndices: [3] },
+    { code: "cash_5", label: "₹100", type: "cash", value: 100, amountPaise: 10000, weight: 22, wheelIndices: [0, 4] },
+    { code: "cash_10", label: "₹150", type: "cash", value: 150, amountPaise: 15000, weight: 18, wheelIndices: [1, 5] },
+    { code: "cash_15", label: "₹200", type: "cash", value: 200, amountPaise: 20000, weight: 15, wheelIndices: [2] },
+    { code: "cash_50", label: "₹500", type: "cash", value: 500, amountPaise: 50000, weight: 10, wheelIndices: [3] },
     { code: "locked", label: "Locked", type: "lose", value: 0, amountPaise: 0, weight: 25, wheelIndices: [7] }
 ];
 const totalSpinPrizeWeight = spinPrizes.reduce((total, prize) => total + prize.weight, 0);
@@ -398,6 +398,12 @@ function createWatchPaysSignature(params, apiKey) {
         .concat(`key=${apiKey}`)
         .join("&");
     return createHash("md5").update(signString, "utf8").digest("hex");
+}
+
+function verifyWatchPaysCallbackSignature(params, signature) {
+    if (typeof signature !== "string" || !/^[a-f0-9]{32}$/i.test(signature)) return false;
+    const expected = createWatchPaysSignature(params, watchPaysApiKey);
+    return timingSafeEqual(Buffer.from(expected, "hex"), Buffer.from(signature, "hex"));
 }
 
 async function createWatchPaysOrder({ amountPaise, merchantOrderNo }) {
@@ -901,11 +907,12 @@ app.post("/api/recharge/mock/:id/complete", requireCsrf, requireAuth, asyncRoute
         if (transaction.status !== "pending") {
             return { error: "This test checkout is no longer pending.", status: 409 };
         }
+        const approvedAt = new Date();
         const updated = await models.WalletTransaction.updateOne(
             { id: transaction.id, userId: req.session.user.id, status: "pending" },
             { $set: {
                 status: "approved", note: "Local test payment completed; no real payment",
-                reviewedAt: new Date()
+                reviewedAt: approvedAt,
             } },
             { session: dbSession }
         );
@@ -952,11 +959,12 @@ app.post("/api/recharge/verify", requireCsrf, requireAuth, asyncRoute(async (req
         if (transaction.status !== "pending" || transaction.reference !== orderId) {
             return { error: "Payment order does not match this recharge record.", status: 409 };
         }
+        const approvedAt = new Date();
         const update = await models.WalletTransaction.updateOne(
             { id: transactionId, status: "pending", reference: orderId },
             { $set: {
                 status: "approved", reference: paymentId,
-                note: "Razorpay payment confirmed", reviewedAt: new Date()
+                note: "Razorpay payment confirmed", reviewedAt: approvedAt,
             } },
             { session: dbSession }
         );
@@ -976,37 +984,94 @@ app.post("/api/recharge/verify", requireCsrf, requireAuth, asyncRoute(async (req
     });
 }));
 
-app.post("/api/recharge/watchpays/callback", asyncRoute(async (req, res) => {
+app.post("/api/recharge/watchpays/callback", express.urlencoded({ extended: false, limit: "10kb" }), asyncRoute(async (req, res) => {
     if (!watchPaysEnabled) return res.status(503).type("text").send("WatchPays is not configured.");
-    const merchantOrderNo = typeof req.body.merchantOrder === "string"
-        ? req.body.merchantOrder.trim() : "";
-    const gatewayOrderNo = typeof req.body.orderNo === "string"
-        ? req.body.orderNo.trim().slice(0, 120) : "";
+    const signature = typeof req.body.signature === "string"
+        ? req.body.signature.trim()
+        : typeof req.body.sign === "string" ? req.body.sign.trim() : "";
+    const signedParams = Object.fromEntries(Object.entries(req.body).filter(([key, value]) =>
+        !["signature", "sign", "api_key"].includes(key)
+        && ["string", "number", "boolean"].includes(typeof value)
+    ));
+    if (!verifyWatchPaysCallbackSignature(signedParams, signature)) {
+        return res.status(403).type("text").send("Invalid callback signature.");
+    }
+    const merchantId = signedParams.merchant_id || signedParams.merchantId;
+    if (merchantId && String(merchantId) !== watchPaysMerchantId) {
+        return res.status(403).type("text").send("Callback merchant does not match.");
+    }
+    const merchantOrderNoValue = signedParams.merchantOrder || signedParams.merchant_order_no;
+    const gatewayOrderNoValue = signedParams.orderNo || signedParams.order_no;
+    const merchantOrderNo = typeof merchantOrderNoValue === "string"
+        ? merchantOrderNoValue.trim() : "";
+    const gatewayOrderNo = typeof gatewayOrderNoValue === "string"
+        ? gatewayOrderNoValue.trim().slice(0, 120) : "";
     const reportedStatus = typeof req.body.status === "string"
         ? req.body.status.trim().slice(0, 40).toLowerCase() : "";
-    const callbackAmountPaise = parseRupees(req.body.amount);
+    const callbackAmountPaise = parseRupees(signedParams.amount);
     if (!merchantOrderNo || merchantOrderNo.length > 100 || !gatewayOrderNo
         || !["success", "failed", "pending"].includes(reportedStatus)
         || callbackAmountPaise === null || callbackAmountPaise <= 0) {
         return res.status(400).type("text").send("Invalid callback.");
     }
     const transaction = await models.WalletTransaction.findOne({
-        type: "recharge", reference: merchantOrderNo
+        type: "recharge", $or: [{ reference: merchantOrderNo }, { reference: gatewayOrderNo }]
     }).lean();
-    if (!transaction || !merchantOrderNo.startsWith("watchpays-")) {
+    if (!transaction || !merchantOrderNo.startsWith("watchpays-")
+        || transaction.reference !== merchantOrderNo && transaction.reference !== gatewayOrderNo) {
         return res.status(404).type("text").send("Recharge order not found.");
     }
     if (transaction.amountPaise !== callbackAmountPaise) {
         return res.status(400).type("text").send("Recharge amount does not match.");
     }
-    if (transaction.status === "pending") {
-        const note = reportedStatus === "success"
-            ? `WatchPays callback reports payment success (gateway order ${gatewayOrderNo}); verify in provider dashboard before approval.`
-            : `WatchPays callback reports status '${reportedStatus}' (gateway order ${gatewayOrderNo}); admin review required.`;
-        await models.WalletTransaction.updateOne(
-            { id: transaction.id, status: "pending" }, { $set: { note } }
-        );
+    if (transaction.status === "approved") return res.type("text").send("success");
+    if (reportedStatus !== "success") {
+        if (transaction.status === "pending") {
+            await models.WalletTransaction.updateOne(
+                { id: transaction.id, status: "pending", reference: merchantOrderNo },
+                { $set: { note: `WatchPays callback reports status '${reportedStatus}' (gateway order ${gatewayOrderNo}).` } }
+            );
+        }
+        return res.type("text").send("success");
     }
+
+    const result = await withTransaction(async dbSession => {
+        const pendingRecharge = await models.WalletTransaction.findOne({
+            id: transaction.id, type: "recharge", reference: merchantOrderNo
+        }).session(dbSession).lean();
+        if (!pendingRecharge) return { error: "Recharge order no longer matches.", status: 409 };
+        if (pendingRecharge.status === "approved") return { alreadyApproved: true };
+        if (pendingRecharge.status !== "pending") {
+            return { error: "Recharge is no longer pending.", status: 409 };
+        }
+        if (pendingRecharge.amountPaise !== callbackAmountPaise) {
+            return { error: "Recharge amount does not match.", status: 400 };
+        }
+        const approvedAt = new Date();
+        const update = await models.WalletTransaction.updateOne(
+            { id: pendingRecharge.id, status: "pending", reference: merchantOrderNo },
+            { $set: {
+                status: "approved",
+                reference: gatewayOrderNo,
+                note: "WatchPays payment confirmed; balance credited automatically",
+                reviewedAt: approvedAt,
+            } },
+            { session: dbSession }
+        );
+        if (update.modifiedCount !== 1) {
+            return { error: "Recharge has already been processed.", status: 409 };
+        }
+        const credited = await models.User.updateOne(
+            { id: pendingRecharge.userId },
+            { $inc: { balancePaise: pendingRecharge.amountPaise } },
+            { session: dbSession }
+        );
+        if (credited.modifiedCount !== 1) {
+            return { error: "Recharge account could not be found.", status: 404 };
+        }
+        return { alreadyApproved: false };
+    });
+    if (result.error) return res.status(result.status).type("text").send(result.error);
     res.type("text").send("success");
 }));
 
@@ -1021,7 +1086,7 @@ app.post("/api/withdrawal", requireCsrf, requireAuth, asyncRoute(async (req, res
         });
     }
     const amountPaise = parseRupees(req.body.amount);
-    const minimum = Number(await settingValue("minimum_withdrawal_rupees", "170"));
+    const minimum = Number(await settingValue("minimum_withdrawal_rupees", "190"));
     if (!amountPaise || amountPaise < minimum * 100) {
         return res.status(400).json({ success: false, message: "Enter a valid withdrawal amount." });
     }
@@ -1169,7 +1234,7 @@ app.get("/api/wallet", requireAuth, asyncRoute(async (req, res) => {
             models.WalletTransaction.find({ userId }).sort({ id: -1 }).limit(100).lean(),
             models.BankAccount.findOne({ userId }).select("accountLast4 ifsc").lean(),
             settingValue("minimum_recharge_rupees", "295"),
-            settingValue("minimum_withdrawal_rupees", "170"),
+            settingValue("minimum_withdrawal_rupees", "190"),
             models.WalletTransaction.aggregate([
                 { $match: { userId, type: "recharge", status: "approved" } },
                 { $group: { _id: null, total: { $sum: "$amountPaise" } } }
