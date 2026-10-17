@@ -314,6 +314,10 @@ function parseRupees(value) {
     return Number.isSafeInteger(paise) ? paise : null;
 }
 
+function normalizePhone(value) {
+    return typeof value === "string" ? value.trim() : "";
+}
+
 function encryptBankAccount(accountNumber) {
     const iv = randomBytes(12);
     const cipher = createCipheriv("aes-256-gcm", bankEncryptionKey, iv);
@@ -540,7 +544,7 @@ app.get("/site-banner", asyncRoute(async (req, res) => {
 
 app.post("/api/register", authLimiter, requireCsrf, asyncRoute(async (req, res) => {
     const name = typeof req.body.name === "string" ? req.body.name.trim() : "";
-    const phone = typeof req.body.phone === "string" ? req.body.phone : "";
+    const phone = normalizePhone(req.body.phone);
     const password = typeof req.body.password === "string" ? req.body.password : "";
     const referralCode = typeof req.body.referralCode === "string"
         ? req.body.referralCode.trim().toUpperCase() : "";
@@ -596,7 +600,7 @@ app.post("/api/register", authLimiter, requireCsrf, asyncRoute(async (req, res) 
 }));
 
 app.post("/api/login", authLimiter, requireCsrf, asyncRoute(async (req, res) => {
-    const phone = typeof req.body.phone === "string" ? req.body.phone : "";
+    const phone = normalizePhone(req.body.phone);
     const password = typeof req.body.password === "string" ? req.body.password : "";
     if (!/^\d{10}$/.test(phone) || !password || password.length > 64) {
         return res.status(400).json({ success: false, message: "Enter a valid mobile number and password." });
